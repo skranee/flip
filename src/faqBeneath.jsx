@@ -5,6 +5,7 @@ import kick from './imgs/kick.png'
 import tiktok from './imgs/tiktok.png'
 import twitch from './imgs/twitch.png'
 import x from './imgs/x.png'
+import discord from './imgs/discord.png'
 import ban from './imgs/ban.png'
 
 function FaqBeneath () {
@@ -70,6 +71,13 @@ function FaqBeneath () {
                     alt=''
                     style={{marginLeft: 100}}
                     onClick={() => handleNavigate('https://www.tiktok.com/@mm2flip')}
+                />
+                <img
+                    className='socialsLogo'
+                    src={discord}
+                    alt=''
+                    style={{marginLeft: 125}}
+                    onClick={() => handleNavigate('https://discord.gg/mm2flip')}
                 />
             </div>
             <img className='banFaq' src={ban} alt=''/>

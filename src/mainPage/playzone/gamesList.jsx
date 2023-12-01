@@ -78,13 +78,28 @@ function GamesList () {
 
     useEffect(() => {
         if(globalStore.titleAll === 'Joinable') {
-            setGamesCopy(games.filter(item => item.status === 'Joinable'))
+            if(globalStore.titleHL === 'High To Low') {
+                setGamesCopy(games.slice().sort((a,b) => b.bet - a.bet).filter(item => item.status === 'Joinable'))
+            }
+            else if (globalStore.titleHL === 'Low To High') {
+                setGamesCopy(games.slice().sort((a,b) => a.bet - b.bet).filter(item => item.status === 'Joinable'))
+            }
         }
         else if(globalStore.titleAll === 'Ongoing') {
-            setGamesCopy(games.filter(item => item.status === 'Ongoing'))
+            if(globalStore.titleHL === 'High To Low') {
+                setGamesCopy(games.slice().sort((a,b) => b.bet - a.bet).filter(item => item.status === 'Ongoing'))
+            }
+            else if (globalStore.titleHL === 'Low To High') {
+                setGamesCopy(games.slice().sort((a,b) => a.bet - b.bet).filter(item => item.status === 'Ongoing'))
+            }
         }
         else if(globalStore.titleAll === 'All') {
-            setGamesCopy(games.filter(item => item.status))
+            if(globalStore.titleHL === 'High To Low') {
+                setGamesCopy(games.slice().sort((a,b) => b.bet - a.bet).filter(item => item.status))
+            }
+            else if (globalStore.titleHL === 'Low To High') {
+                setGamesCopy(games.slice().sort((a,b) => a.bet - b.bet).filter(item => item.status))
+            }
         }
     }, [globalStore.titleAll, games])
 
