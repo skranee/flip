@@ -77,23 +77,15 @@ function GamesList () {
     }, [globalStore.titleHL, games]);
 
     useEffect(() => {
-        if(globalStore.titleAll === 'Joinable') {
+        if(globalStore.titleAll !== 'All') {
             if(globalStore.titleHL === 'High To Low') {
-                setGamesCopy(games.slice().sort((a,b) => b.bet - a.bet).filter(item => item.status === 'Joinable'))
+                setGamesCopy(games.slice().sort((a,b) => b.bet - a.bet).filter(item => item.status === globalStore.titleAll))
             }
             else if (globalStore.titleHL === 'Low To High') {
-                setGamesCopy(games.slice().sort((a,b) => a.bet - b.bet).filter(item => item.status === 'Joinable'))
+                setGamesCopy(games.slice().sort((a,b) => a.bet - b.bet).filter(item => item.status === globalStore.titleAll))
             }
         }
-        else if(globalStore.titleAll === 'Ongoing') {
-            if(globalStore.titleHL === 'High To Low') {
-                setGamesCopy(games.slice().sort((a,b) => b.bet - a.bet).filter(item => item.status === 'Ongoing'))
-            }
-            else if (globalStore.titleHL === 'Low To High') {
-                setGamesCopy(games.slice().sort((a,b) => a.bet - b.bet).filter(item => item.status === 'Ongoing'))
-            }
-        }
-        else if(globalStore.titleAll === 'All') {
+        else {
             if(globalStore.titleHL === 'High To Low') {
                 setGamesCopy(games.slice().sort((a,b) => b.bet - a.bet).filter(item => item.status))
             }
