@@ -51,7 +51,7 @@ function LoginModal () {
 
     return (
         <div className='backgroundModal' onClick={() => handleBlur()}>
-            <div className='loginModal' onClick={(event) => event.stopPropagation()}>
+            <div className='modalWindow' onClick={(event) => event.stopPropagation()}>
                 <p className='logTitle'>Login with username</p>
                 <input
                     type='text'
@@ -63,7 +63,7 @@ function LoginModal () {
                     onChange={(event) => handleChange(event.target.value)}
                 />
                 <label className={`custom-checkbox ${checked ? 'checked' : ''}`}>
-                    <input type="checkbox" checked={checked} onChange={handleCheckboxChange} />
+                    <input type="checkbox" checked={checked} onChange={handleCheckboxChange} style={{display: 'none'}}/>
                 </label>
                 <p className='agreement'> I agree with
                     <a

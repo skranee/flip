@@ -6,6 +6,7 @@ import tiktok from './imgs/tiktok.png'
 import twitch from './imgs/twitch.png'
 import x from './imgs/x.png'
 import discord from './imgs/discord.png'
+import youtube from './imgs/youtube.png'
 import ban from './imgs/ban.png'
 
 function FaqBeneath () {
@@ -18,72 +19,81 @@ function FaqBeneath () {
 
     return (
         <div className='faq'>
-            <img className='logoFaq' src={logo} alt=''/>
-            <a className='underLogoText'>{underLogo}</a>
-            <a className='gmailFaq'>{gmailSupport}</a>
+            <div className='logoContainer'>
+                <img className='logoFaq' src={logo} alt=''/>
+                <a className='underLogoText'>{underLogo}</a>
+                <a className='gmailFaq'>{gmailSupport}</a>
+            </div>
             <div className='optionsFaq'>
                 <a>Rewards</a>
-                <a className='underOptions' style={{marginTop: 55}}>Level Rewards</a>
+                <a className='underOptions'>Level Rewards</a>
                 <a className='underOptions'>Leaderboard</a>
             </div>
-            <div className='optionsFaq' style={{marginLeft: '8%'}}>
+            <div className='optionsFaq'>
                 <a>Games</a>
                 <a className='underOptions'>Coin Flip</a>
             </div>
-            <div className='optionsFaq' style={{marginLeft: '16%'}}>
+            <div className='optionsFaq'>
                 <a>Other</a>
                 <a className='underOptions'>Terms Of<br />Service</a>
-                <a className='underOptions' style={{marginTop: 65}}>Refund Policy</a>
-                <a className='underOptions' style={{marginTop: 95}}>Provably Fair</a>
+                <a className='underOptions'>Refund Policy</a>
+                <a className='underOptions'>Provably Fair</a>
             </div>
-            <div  className='optionsFaq' style={{marginLeft: '24%'}}>
+            <div  className='optionsFaq'>
                 <a>Socials</a>
-                <img
-                    className='socialsLogo'
-                    src={inst}
-                    alt=''
-                    onClick={() => handleNavigate('https://www.instagram.com/mm2flip/')}
-                />
-                <img
-                    className='socialsLogo'
-                    src={kick}
-                    alt=''
-                    style={{marginLeft: 25}}
-                    onClick={() => handleNavigate('https://kick.com/mm2flip')}
-                />
-                <img
-                    className='socialsLogo'
-                    src={x}
-                    alt=''
-                    style={{marginLeft: 50}}
-                    onClick={() => handleNavigate('https://twitter.com/mm2_flip')}
-                />
-                <img
-                    className='socialsLogo'
-                    src={twitch}
-                    alt=''
-                    style={{marginLeft: 75}}
-                    onClick={() => handleNavigate('https://www.twitch.tv/mm2flip')}
-                />
-                <img
-                    className='socialsLogo'
-                    src={tiktok}
-                    alt=''
-                    style={{marginLeft: 100}}
-                    onClick={() => handleNavigate('https://www.tiktok.com/@mm2flip')}
-                />
-                <img
-                    className='socialsLogo'
-                    src={discord}
-                    alt=''
-                    style={{marginLeft: 125}}
-                    onClick={() => handleNavigate('https://discord.gg/mm2flip')}
-                />
+                <div className='socialsFaq'>
+                    <img
+                        className='socialsLogo'
+                        src={inst}
+                        alt=''
+                        onClick={() => handleNavigate('https://www.instagram.com/mm2flip/')}
+                    />
+                    <img
+                        className='socialsLogo'
+                        src={kick}
+                        alt=''
+                        onClick={() => handleNavigate('https://kick.com/mm2flip')}
+                    />
+                    <img
+                        className='socialsLogo'
+                        src={x}
+                        alt=''
+                        onClick={() => handleNavigate('https://twitter.com/mm2flipofficial')}
+                    />
+                    <img
+                        className='socialsLogo'
+                        src={twitch}
+                        alt=''
+                        onClick={() => handleNavigate('https://www.twitch.tv/mm2flip')}
+                    />
+                    <img
+                        className='socialsLogo'
+                        src={tiktok}
+                        alt=''
+                        onClick={() => handleNavigate('https://www.tiktok.com/@mm2flip')}
+                    />
+                    <img
+                        className='socialsLogo'
+                        src={discord}
+                        alt=''
+                        onClick={() => handleNavigate('https://discord.gg/mm2flip')}
+                    />
+                    <img
+                        className='socialsLogo'
+                        src={youtube}
+                        alt=''
+                        onClick={() => handleNavigate('https://www.youtube.com/@mm2flip')}
+                    />
+                </div>
             </div>
-            <img className='banFaq' src={ban} alt=''/>
-            <a className='banTextFaq'>18+ Only</a>
-            <a className='banTextFaq_2'>Game responsibly</a>
-            <a className='copyrightFaq'>© Copyright 2023 mm2flip</a>
+            <div className='banContainer'>
+                <img src={ban} alt=''/>
+                <div className='banRight'>
+                    <a className='banTextFaq'>18+ Only</a>
+                    <a className='banTextFaq_2'>Game responsibly</a>
+                </div>
+                <a className='copyrightFaq'>© Copyright 2023 mm2flip</a>
+            </div>
         </div>
     )
 }

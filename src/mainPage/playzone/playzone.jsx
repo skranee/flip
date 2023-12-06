@@ -6,21 +6,22 @@ import {observer} from "mobx-react";
 function Playzone () {
 
     return (
-        <div>
+        <div className='playZone'>
             <PlayPanel />
-            <button className='btnPlaceBet'>
-                PLACE BET
-            </button>
-            <p className='splitBtns'>|</p>
-            <button className='btnPlaceBet' style={{left: '55%', background: '#8F8F8F'}} >
-                BET ITEMS
-            </button>
-            <button
-                className='btnPlaceBet'
-                style={{width: '13%', background: '#192432', left: '69.5%'}}
-            >
-                HISTORY
-            </button>
+            <div className='btnsPanel'>
+                <button className='btnPlaceBet'>
+                    PLACE BET
+                </button>
+                <button className='btnPlaceBet' style={{background: '#8F8F8F'}} >
+                    BET ITEMS
+                </button>
+                <button
+                    className='btnPlaceBet'
+                    style={{background: '#192432'}}
+                >
+                    HISTORY
+                </button>
+            </div>
 
             <GamesList />
         </div>

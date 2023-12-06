@@ -12,13 +12,15 @@ function MessageList({messages}) {
     return (
         <ul className='messageSpace'>
             {messages.map((item, index) => (
-                <li className='chatMessage' key={index} style={{top: `${index * 8}%`}}>
+                <li className='chatMessage' key={index}>
                     <img className='imageMessage' src={item.user.avatar} alt=''/>
-                    <div className='user_time'>
-                        <a>{item.user.name}</a>
-                        <a style={{left: '50%'}}> {item.time} </a>
+                    <div className='messageBox'>
+                        <div className='user_time'>
+                            <a>{item.user.name}</a>
+                            <a> {item.time} </a>
+                        </div>
+                        <a className='message'>{item.message}</a>
                     </div>
-                    <a className='message'>{item.message}</a>
                     <div ref={bottomRef}></div>
                 </li>
             ))}

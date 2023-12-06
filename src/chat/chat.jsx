@@ -1,10 +1,10 @@
 import React, {useEffect, useRef, useState} from 'react'
 import { MdOutlineChat } from "react-icons/md/index.esm";
-import { IoClose } from "react-icons/io5/index.esm";
 import usFlag from '../imgs/us_flag.png'
 import { VscSend } from "react-icons/vsc/index.esm";
 import {players} from "../mainPage/playzone/gamesInfo";
 import MessageList from "./messageList";
+import {BiArrowToRight} from "react-icons/bi";
 
 function Chat() {
     const [chatOpened, setChatOpened] = useState(false);
@@ -82,22 +82,22 @@ function Chat() {
 
     return (
         <div>
-            <div className='chatIcon' onClick={handleChat}>
-                <MdOutlineChat style={{marginTop: 7}}/>
-            </div>
+            {!chatOpened &&
+                <div className='chatIcon' onClick={handleChat}>
+                    <MdOutlineChat style={{marginTop: 7}}/>
+                </div>
+            }
             {chatOpened ? <div className='chatSpace'>
                 <div className='chatUpperPanel'>
-                    <MdOutlineChat className='chatIconUpper'/>
-                    <a className='chatTitle'>Chat</a>
+                    <div className='chatText'>
+                        <MdOutlineChat className='chatIconUpper'/>
+                        <a className='chatTitle'>Chat</a>
+                    </div>
                     <div className='langChoice'>
-                        <a style={{marginLeft: 7}}>EN</a>
+                        <a>EN</a>
                         <img src={usFlag} alt='' className='langFlag'/>
                     </div>
-                    <button className='closeChat' onClick={() => handleChat()}>
-                        <IoClose
-                            style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)'}}
-                        />
-                    </button>
+                    <BiArrowToRight style={{fontSize: '1.3em', cursor: "pointer"}} onClick={handleChat}/>
                 </div>
                 <MessageList messages={messages} />
                 <div className='sendContainer'>

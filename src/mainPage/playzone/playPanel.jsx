@@ -4,6 +4,7 @@ import { RiArrowDownSLine } from "react-icons/ri/index.esm";
 import { RiArrowUpSLine } from "react-icons/ri/index.esm";
 import DropdownSortAll from "./dropdownSortAll";
 import DropdownSortHL from "./dropdownSortHL";
+import {observer} from "mobx-react";
 function PlayPanel () { //observable?
     const {globalStore} = useContext(Context)
     const [openSortHL, setOpenSortHL] = useState(false)
@@ -21,7 +22,7 @@ function PlayPanel () { //observable?
         }
     }, [openSortAll]);
 
-    const paramsHL = ['High To Low', 'Low To High']
+    const paramsHL = ['Sort', 'High To Low', 'Low To High']
     const paramsAll = ['All', 'Ongoing', 'Joinable']
 
     const handleOpenHL = () => {
@@ -35,27 +36,31 @@ function PlayPanel () { //observable?
     return (
         <div className='playPanel'>
             <div className='gamesInfo'>
-                All Games <br />
-                {globalStore.gamesAll}
+                <a>
+                    All Games <br />
+                    {globalStore.gamesAll}
+                </a>
+                <a>
+                    Joinable Games <br />
+                    {globalStore.gamesJoin}
+                </a>
             </div>
-            <div className='gamesInfo' style={{left: '10%'}}>
-                Joinable Games <br />
-                {globalStore.gamesJoin}
-            </div>
-            <div className='sortParams' onClick={handleOpenHL}>
-                {!openSortHL ? <RiArrowDownSLine className='arrowPlayPanel' /> :
-                    <RiArrowUpSLine className='arrowPlayPanel' />}
-                {openSortHL ? <DropdownSortHL params={paramsHL} /> : <div />}
-                <p className='sortFields' >{globalStore.titleHL}</p>
-            </div>
-            <div className='sortParams' style={{left: '53%'}} onClick={handleOpenAll}>
-                {!openSortAll ? <RiArrowDownSLine className='arrowPlayPanel' /> :
-                    <RiArrowUpSLine className='arrowPlayPanel' />}
-                {openSortAll ? <DropdownSortAll params={paramsAll}/> : <div />}
-                <p className='sortFields' >{globalStore.titleAll}</p>
+            <div className='sortParamsSpace'>
+                <div className='sortParams' onClick={handleOpenHL}>
+                    <p className='sortFields' >{globalStore.titleHL}</p>
+                    {!openSortHL ? <RiArrowDownSLine className='arrowPlayPanel' /> :
+                        <RiArrowUpSLine className='arrowPlayPanel' />}
+                    {openSortHL ? <DropdownSortHL params={paramsHL} /> : <div />}
+                </div>
+                <div className='sortParams' onClick={handleOpenAll}>
+                    <p className='sortFields' >{globalStore.titleAll}</p>
+                    {!openSortAll ? <RiArrowDownSLine className='arrowPlayPanel' /> :
+                        <RiArrowUpSLine className='arrowPlayPanel' />}
+                    {openSortAll ? <DropdownSortAll params={paramsAll}/> : <div />}
+                </div>
             </div>
         </div>
     )
 }
 
-export default PlayPanel;
+export default observer(PlayPanel);

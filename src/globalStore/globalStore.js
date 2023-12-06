@@ -1,4 +1,5 @@
 import {makeAutoObservable} from "mobx";
+import {Game} from "../mainPage/playzone/gamesList";
 
 export default class GlobalStore {
     logOpen = false;
@@ -6,12 +7,14 @@ export default class GlobalStore {
     gamesAll = 8;
     titleHL = 'Sort';
     titleAll = 'All';
+    viewOpen = false;
+    gameInfo = null;
 
     constructor() {
         makeAutoObservable(this)
     }
 
-    setLogOpen (bool) {
+    setLogOpen(bool) {
         this.logOpen = bool;
     }
 
@@ -29,5 +32,13 @@ export default class GlobalStore {
 
     setTitleAll(title) {
         this.titleAll = title;
+    }
+
+    setViewOpen(bool) {
+        this.viewOpen = bool;
+    }
+
+    setGameInfo(obj) {
+        this.gameInfo = obj;
     }
 }
