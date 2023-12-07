@@ -6,6 +6,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Righteous&display=swap');/*Righteous 400*/
 @import url('https://fonts.googleapis.com/css2?family=Sora:wght@600&display=swap');/*Sora 600*/
 @import url('https://fonts.googleapis.com/css2?family=Sora&display=swap');/*Sora 400*/
+@import url('https://fonts.googleapis.com/css2?family=Tilt+Neon&display=swap');/*Tilt Neon 400*/
 
 body {
   margin: 0;
@@ -458,13 +459,14 @@ code {
   flex-basis: 100%;
   flex-wrap: nowrap;
   width: 92.7%;
-  height: 130px;
+  height: 30px;
 }
 
 .gamesSelector {
   display: flex;
   align-items: center;
   align-self: flex-start;
+  min-height: 30px;
   height: 30px;
   width: 92.2%;
   box-sizing: border-box;
@@ -484,14 +486,14 @@ code {
 
 .gamePad {
   color: #FFFFFF;
-  font-size: 1.8vw;
+  font-size: 1.8em;
 }
 
 .gameName {
   color: #FFFFFF;
   font-family: 'Poppins', sans-serif;
   font-weight: 700;
-  font-size: 1.1vw;
+  font-size: 1.1em;
 }
 
 .dropdownArrowDiv {
@@ -500,6 +502,24 @@ code {
   align-items: center;
   flex-basis: 50%;
   height: 100%;
+}
+
+@media (max-width: 1200px) {
+  .gamePad {
+    font-size: 1.25em;
+  }
+  .gameName {
+    font-size: 0.85em;
+  }
+}
+
+@media (max-width: 992px) {
+  .gamePad {
+    font-size: 1.4em;
+  }
+  .gameName {
+    font-size: 0.9em;
+  }
 }
 
 @media (max-width: 768px) {
@@ -551,6 +571,7 @@ code {
   animation: dropDown 0.2s;
   list-style-type: none;
   margin: 0;
+  z-index: 1;
 }
 
 .gamesTitle {
@@ -838,15 +859,6 @@ code {
   order: 0;
 }
 
-@media (max-width: 768px) {
-  .searchContainer, .btnsPanel {
-    flex-basis: 100%;
-  }
-  .btnPlaceBet {
-    font-size: 1em;
-  }
-}
-
 .itemSearch {
   position: relative;
   top: 43%;
@@ -860,6 +872,7 @@ code {
   border-radius: 10px 0 10px 0;
   padding-left: 5px;
   padding-right: 5px;
+  width: 90%;
 }
 
 .itemSearch:focus {
@@ -874,7 +887,7 @@ code {
   height: 30px;
   font-family: 'Poppins', sans-serif;
   font-weight: 500;
-  font-size: 0.67em;
+  font-size: 1em;
   color: #FFFFFF;
   text-align: center;
   border: none;
@@ -888,6 +901,27 @@ code {
 
 .btnPlaceBet:active {
   transform: translateY(0.5px);
+}
+
+@media (max-width: 1200px) {
+  .btnPlaceBet {
+    font-size: 0.85em;
+  }
+}
+
+@media (max-width: 992px) {
+  .btnPlaceBet {
+    font-size: 0.67em;
+  }
+}
+
+@media (max-width: 768px) {
+  .searchContainer, .btnsPanel {
+    flex-basis: 100%;
+  }
+  .btnPlaceBet {
+    font-size: 0.9em;
+  }
 }
 
 .gamesListSpace {
@@ -1130,6 +1164,7 @@ code {
     font-size: 1.1em;
   }
   .betParams {
+    /**/
   }
   .betAmount {
     font-size: 1em;
@@ -1151,7 +1186,7 @@ code {
 }
 
 .faq {
-  position: absolute;
+  position: relative;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -1160,6 +1195,7 @@ code {
   gap: 10px;
   row-gap: 35px;
   background-color: #111827;
+  margin-top: 10vh;
   margin-left: 17.5%;
   width: 65%;
   height: 40%;
@@ -1305,16 +1341,22 @@ code {
 
 .chatSpace {
   position: fixed;
+  right: 0;
+  top: 70px;
+  height: 100%;
+  width: 16%;
+  background-color: #192432;
+}
+
+.chatInner {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
   right: 0;
-  top: 10%;
-  height: 90%;
-  width: 16%;
-  border-radius: 10px 0 0 0;
-  background-color: #192432;
+  top: 70px;
+  height: 90vh;
+  width: 100%;
 }
 
 .chatUpperPanel {
@@ -1396,8 +1438,8 @@ code {
   background-color: #111827;
   width: 90%;
   height: 55px;
-  bottom: 1.3%;
   left: 5%;
+  margin-bottom: 0;
   border-radius: 15px;
 }
 
@@ -1455,7 +1497,7 @@ code {
   overflow-y: auto;
   overflow-x: hidden;
   padding-left: 5%;
-  flex-basis: 80%;
+  flex-basis: 90%;
   width: 95%;
   list-style: none;
 }
@@ -1607,31 +1649,59 @@ code {
 }
 
 .noGames {
-  position: absolute;
+  position: relative;
   font-family: 'Raleway', sans-serif;
   font-size: 25px;
   color: #FFFFFF;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  margin: 0 auto;
+}
+
+.modalWindowGame {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  height: fit-content;
+  width: 60%;
+  min-width: 290px;
+  max-width: 1000px;
+  background-color: #212C3B;
+  border-radius: 10px;
+  padding: 15px 2%;
+  box-sizing: border-box;
+  transition: all 0.3s ease-out;
+  overflow-y: auto;
+  max-height: 100vh;
+}
+
+@media (max-width: 768px) {
+  .modalWindowGame {
+    height: 45%;
+    width: 95%;
+  }
 }
 
 .lobbyPlayerContainer {
-  position: absolute;
-  left: 19%;
-  top: 19%;
-  width: 30%;
-  height: 80%;
-  transform: translate(-50%, 0);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 35%;
+  height: 95%;
+  row-gap: 15px;
+}
+
+.lobbyUpperInfo {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 10px;
 }
 
 .lobbyAvatar {
-  position: absolute;
-  top: 10%;
-  left: 30%;
   height: 90px;
   width: 90px;
-  transform: translate(-50%, -50%);
   border-radius: 50%;
   border: solid 3px #FFFFFF;
   background-color: #292a33;
@@ -1640,18 +1710,236 @@ code {
   box-shadow: 0 0 25px 5px rgba(237, 237, 237, 0.35);
 }
 
+.lobbyAvatar2 {
+  height: 90px;
+  width: 90px;
+  border-radius: 50%;
+  border: solid 3px rgba(255, 0, 0, 0.4);
+  background-color: #292a33;
+  -webkit-box-shadow: 0 0 25px 5px rgba(255, 0, 0, 0.4);
+  -moz-box-shadow: 0 0 25px 5px rgba(255, 0, 0, 0.4);
+  box-shadow: 0 0 25px 5px rgba(255, 0, 0, 0.4);
+}
+
+@media (max-width: 1200px) {
+  .lobbyAvatar, .lobbyAvatar2 {
+    height: 80px;
+    width: 80px;
+  }
+}
+
+@media (max-width: 992px) {
+  .lobbyAvatar, .lobbyAvatar2 {
+    height: 71px;
+    width: 71px;
+  }
+}
+
+@media (max-width: 768px) {
+  .lobbyAvatar, .lobbyAvatar2 {
+    height: 55px;
+    width: 55px;
+  }
+}
+
+.usernameWorth {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-self: flex-start;
+  text-align: center;
+}
+
 .lobbyUsername {
-  position: absolute;
-  left: 55%;
-  top: 0;
-  color: #FFFFFF;
-  font-family: 'Raleway', sans-serif;
-  font-size: 27px;
+  color: #d2d4d9;
+  font-family: 'Righteous', sans-serif;
+  font-size: 1.8em;
 }
 
 .lobbyWorthText {
-  position: absolute;
+  font-size: 1.1em;
+  font-family: 'Tilt Neon', sans-serif;
+  color: #d2d4d9;
+}
 
+.lobbyWorth {
+  font-size: 1em;
+  font-family: 'Tilt Neon', sans-serif;
+  color: #d2d4d9;
+}
+
+@media (max-width: 1200px) {
+  .lobbyUsername {
+    font-size: 1.6em;
+  }
+  .lobbyWorthText {
+    font-size: 1em;
+  }
+  .lobbyWorth {
+    font-size: 0.93em;
+  }
+}
+
+@media (max-width: 992px) {
+  .lobbyUsername {
+    font-size: 1.4em;
+  }
+  .lobbyWorthText {
+    font-size: 0.9em;
+  }
+  .lobbyWorth {
+    font-size: 0.85em;
+  }
+}
+
+@media (max-width: 768px) {
+  .modalWindowGame {
+    align-items: flex-end;
+  }
+  .lobbyPlayerContainer {
+    justify-content: flex-end;
+  }
+  .lobbyUsername {
+    font-size: 1.2em;
+  }
+  .lobbyWorthText {
+    font-size: 0.8em;
+  }
+  .lobbyWorth {
+    font-size: 0.78em;
+  }
+}
+
+.lobbyPlayerBet {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0 5px;
+  align-items: center;
+  width: 90%;
+  height: 30px;
+  background-color: #111827;
+  border-radius: 5px;
+  font-family: 'Poppins', sans-serif;
+  color: #d2d4d9;
+  font-size: 1.1em;
+}
+
+@media (max-width: 768px) {
+  .lobbyPlayerBet {
+    font-size: 1em;
+  }
+}
+
+.lobbyItemsListContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: nowrap;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  list-style: none;
+  padding: 1px 5px;
+  flex-basis: 40%;
+}
+
+.lobbyItemsListContainer::-webkit-scrollbar {
+  width: 4px;
+}
+
+.lobbyItemsListContainer::-webkit-scrollbar-thumb {
+  background-color: #3b4963;
+  border-radius: 6px;
+}
+
+.lobbyItemsListContainer::-webkit-scrollbar-track {
+  background-color: #111827;
+  border-radius: 6px;
+}
+
+.lobbyItemsListContainer::-webkit-scrollbar-thumb:hover {
+  background-color: #334057;
+}
+
+.lobbyItemContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap;
+  width: 100%;
+  min-height: 45px;
+  height: 45px;
+  padding: 1px 5px;
+  border-radius: 3px;
+  background-color: #2b394d;
+}
+
+.lobbyItemImage {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  border: solid 2px #111827;
+  background-color: #292B35;
+}
+
+.lobbyItemName {
+  color: #d2d4d9;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.2em;
+  text-align: center;
+}
+
+.lobbyItemCost {
+  color: #d2d4d9;
+  font-family: 'Tilt Neon', sans-serif;
+  font-size: 1.1em;
+}
+
+@media (max-width: 1200px) {
+  .lobbyItemImage {
+    height: 38px;
+    width: 38px;
+  }
+  .lobbyItemName {
+    font-size: 1em;
+  }
+  .lobbyItemCost {
+    font-size: 0.9em;
+  }
+}
+
+@media (max-width: 992px) {
+  .lobbyItemContainer {
+    min-height: 37px;
+    height: 37px;
+  }
+  .lobbyItemImage {
+    height: 33px;
+    width: 33px;
+  }
+  .lobbyItemName {
+    font-size: 0.9em;
+  }
+  .lobbyItemCost {
+    font-size: 0.8em;
+  }
+}
+
+@media (max-width: 768px) {
+  .lobbyItemImage {
+    height: 27px;
+    width: 27px;
+  }
+  .lobbyItemName {
+    font-size: 0.7em;
+  }
+  .lobbyItemCost {
+    font-size: 0.65em;
+  }
 }
 
 

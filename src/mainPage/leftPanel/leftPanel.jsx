@@ -36,14 +36,14 @@ function LeftPanel () {
                                 <p className='titleField'>GAMES</p>
                                 <BiArrowToLeft className='closePanel' onClick={closePanel} />
                             </div>
-                            <div className='gameSelDD'>
+                            <div className='gameSelDD' onClick={handleDropdown}>
                                 <div className='gamesSelector'>
                                     <div className='gsLeft'>
                                         <CgGames className='gamePad' />
                                         <a className='gameName'> Games </a>
                                     </div>
                                     <div className='dropdownArrowDiv'>
-                                        <div className='dropdownGames' onClick={handleDropdown}>
+                                        <div className='dropdownGames'>
                                             {dropdownOpen ? <BiSolidUpArrow className='dropdownArrow' />
                                                 : <BiSolidDownArrow className='dropdownArrow' />}
                                         </div>

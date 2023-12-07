@@ -88,30 +88,32 @@ function Chat() {
                 </div>
             }
             {chatOpened ? <div className='chatSpace'>
-                <div className='chatUpperPanel'>
-                    <div className='chatText'>
-                        <MdOutlineChat className='chatIconUpper'/>
-                        <a className='chatTitle'>Chat</a>
+                <div className='chatInner'>
+                    <div className='chatUpperPanel'>
+                        <div className='chatText'>
+                            <MdOutlineChat className='chatIconUpper'/>
+                            <a className='chatTitle'>Chat</a>
+                        </div>
+                        <div className='langChoice'>
+                            <a>EN</a>
+                            <img src={usFlag} alt='' className='langFlag'/>
+                        </div>
+                        <BiArrowToRight style={{fontSize: '1.3em', cursor: "pointer"}} onClick={handleChat}/>
                     </div>
-                    <div className='langChoice'>
-                        <a>EN</a>
-                        <img src={usFlag} alt='' className='langFlag'/>
+                    <MessageList messages={messages} />
+                    <div className='sendContainer'>
+                        <input
+                            className='inputSend'
+                            type='text'
+                            value={mes}
+                            placeholder='Type here...'
+                            onChange={(event) => handleChange(event.target.value)}
+                            onKeyDown={(event) => handleKeyDown(event)}
+                        />
+                        <button disabled={btnDisabled} className='btnSend' onClick={() => handleSend()}>
+                            <VscSend />
+                        </button>
                     </div>
-                    <BiArrowToRight style={{fontSize: '1.3em', cursor: "pointer"}} onClick={handleChat}/>
-                </div>
-                <MessageList messages={messages} />
-                <div className='sendContainer'>
-                    <input
-                        className='inputSend'
-                        type='text'
-                        value={mes}
-                        placeholder='Type here...'
-                        onChange={(event) => handleChange(event.target.value)}
-                        onKeyDown={(event) => handleKeyDown(event)}
-                    />
-                    <button disabled={btnDisabled} className='btnSend' onClick={() => handleSend()}>
-                        <VscSend />
-                    </button>
                 </div>
             </div> : <div />}
         </div>

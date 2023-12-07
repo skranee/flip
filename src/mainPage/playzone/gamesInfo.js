@@ -14,105 +14,108 @@ import travellersAxe from '../../imgs/TravellersAxe.png';
 export const items = [ //should add some fields to items such as rarity, float, etc...
     {
         image: ewScythe,
-        name: 'ewScythe'
+        name: 'ewScythe',
+        cost: 123
     },
     {
         image: hallowScythe,
-        name: 'Hallow Scythe'
+        name: 'Hallow Scythe',
+        cost: 4234
     },
     {
         image: harvester,
-        name: 'harvester'
+        name: 'harvester',
+        cost: 312
     },
     {
         image: iceBreaker,
-        name: 'Ice Breaker'
+        name: 'Ice Breaker',
+        cost: 523
     },
     {
         image: icePiercer,
-        name: 'Ice Piercer'
+        name: 'Ice Piercer',
+        cost: 1313
     },
     {
         image: swirlyAxe,
-        name: 'Swirly Axe'
+        name: 'Swirly Axe',
+        cost: 444
     },
     {
         image: travellersAxe,
-        name: 'Travellers Axe'
+        name: 'Travellers Axe',
+        cost: 3213
     },
 ]
 
-class player {
-    avatar
-    name
-    bet
-    items
-    worth
+class Player {
+    avatar;
+    name;
+    bet;
+    items;
+    worth;
 
     constructor(obj) {
         this.avatar = obj.avatar;
         this.name = obj.name;
-        this.bet = obj.bet;
         this.items = obj.items;
+        this.bet = this.calcBet()
         this.worth = obj.worth;
+    }
+
+    calcBet() {
+        return this.items.reduce((a, b) => a + b.cost, 0)
     }
 }
 
 export const players = [
-    {
+    new Player({
         avatar: av1,
         name: 'skranee',
-        bet: 432,
         items: [items[1], items[0], items[3]],
         worth: 321
-    },
-    {
+    }),
+    new Player({
         avatar: av2,
         name: 'player2',
-        bet: 412,
         items: [items[2], items[4], items[5]],
         worth: 221
-    },
-    {
+    }),
+    new Player({
         avatar: av3,
         name: 'player3',
-        bet: 232,
         items: items,
         worth: 4444
-    },
-    {
+    }),
+    new Player({
         avatar: av4,
         name: 'player4',
-        bet: 253,
         items: [items[1], items[0], items[3]],
         worth: 234
-    },
-    {
+    }),
+    new Player({
         avatar: av4,
         name: 'player5',
-        bet: 111,
         items: [items[1], items[0], items[3]],
         worth: 11
-    },
-    {
+    }),
+    new Player({
         avatar: av3,
         name: 'player6',
-        bet: 421,
         items: [items[1], items[0], items[3]],
         worth: 332
-    },
-    {
+    }),
+    new Player({
         avatar: av2,
         name: 'player7',
-        bet: 142,
         items: [items[1], items[0], items[3]],
         worth: 4541
-    },
-    {
+    }),
+    new Player({
         avatar: av1,
         name: 'player8',
-        bet: 144,
         items: [items[1], items[0], items[3]],
         worth: 4
-    }
+    })
 ]

@@ -1,5 +1,4 @@
 import {makeAutoObservable} from "mobx";
-import {Game} from "../mainPage/playzone/gamesList";
 
 export default class GlobalStore {
     logOpen = false;
