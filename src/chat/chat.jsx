@@ -18,7 +18,7 @@ function Chat() {
     const socket = useRef()
 
     useEffect(() => {
-        socket.current = new WebSocket('ws://localhost:5000')
+        socket.current = new WebSocket('ws://localhost:4000')
 
         socket.current.onopen = () => {
             setConnected(true);

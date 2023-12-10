@@ -1,10 +1,12 @@
 import React from "react";
 
 function ItemsList({items}) {
+
+
     return (
         <ul className='lobbyItemsListContainer'>
             {items.map((item, index) => (
-                <li className='lobbyItemContainer'>
+                <li className='lobbyItemContainer' key={index}>
                     <img src={item.image} className='lobbyItemImage' alt=''/>
                     <a className='lobbyItemName'>{item.name}</a>
                     <a className='lobbyItemCost'>{item.cost}R$</a>

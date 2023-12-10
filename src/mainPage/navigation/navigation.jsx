@@ -4,6 +4,7 @@ import {Context} from "../../index";
 
 function NavigationPanel () {
     const {globalStore} = useContext(Context)
+    const {store} = useContext(Context)
     const handleLogin = () => {
         globalStore.setLogOpen(true);
     }
@@ -12,9 +13,16 @@ function NavigationPanel () {
     return (
         <div className='navigation'>
             <img src={logoNav} className='logoNavigation' alt='' />
-            <button className='loginBtn' onClick={() => handleLogin()}>
-                Login
-            </button>
+            {store.isAuth ?
+                <div className='loggedNavContainer'>
+                    <img src={localStorage.getItem('avatarUrl')} className='avatarNav' alt=''/>
+                    <a className='profileNavText'>{localStorage.getItem('username')}</a>
+                </div>
+            :
+                <button className='loginBtn' onClick={() => handleLogin()}>
+                    Login
+                </button>
+            }
         </div>
     )
 }

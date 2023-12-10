@@ -192,6 +192,33 @@ code {
   cursor: pointer;
 }
 
+.loggedNavContainer {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  align-items: center;
+  width: fit-content;
+  padding: 0 5px;
+  height: 70%;
+  margin-right: 15px;
+  cursor: pointer;
+}
+
+.avatarNav {
+  width: 45px;
+  height: 45px;
+  background-color: #292a33;
+  border: solid 2px darkgray;
+  border-radius: 50%;
+}
+
+.profileNavText {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 1.2em;
+  color: #FFFFFF;
+}
+
 .loginBtn {
   background-color: #FF2D2D;
   width: 7.5%;
@@ -363,12 +390,51 @@ code {
   margin-bottom: 10px;
 }
 
+.verStatus {
+  color: #940000;
+  font-family: 'Tilt Neon', sans-serif;
+  font-size: 15px;
+}
+
+.verifyContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 50px;
+  margin-top: 10px;
+  font-family: 'Raleway', sans-serif;
+  font-size: 1.3em;
+  color: rgba(224, 224, 224, 0.3);
+  background-color: #192432;
+  border: none;
+  border-radius: 0 7px 7px 7px;
+}
+
+@media (max-width: 1200px) {
+  .verifyContainer {
+    font-size: 1.1em;
+  }
+}
+
+@media (max-width: 992px) {
+  .verifyContainer {
+    font-size: 0.86em;
+  }
+}
+
+@media (max-width: 768px) {
+  .verifyContainer {
+    font-size: 0.8em;
+  }
+}
+
 .btnLogin {
   width: 100%;
   height: 50px;
   margin-top: 20px;
   font-family: 'Raleway', sans-serif;
-  font-size: 19px;
+  font-size: 1.3em;
   color: #940000;
   background-color: #e0e0e0;
   border: none;
