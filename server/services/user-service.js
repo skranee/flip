@@ -28,7 +28,6 @@ class UserService {
         const userInf = await axios.get(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${userId}&size=48x48&format=Png&isCircular=false`)
 
         const avatar = userInf.data.data[0].imageUrl;
-
         return avatar;
     }
 

@@ -49,21 +49,27 @@ function LoginModal () {
     const handleVerify = async () => {
         try {
             const bio = await axios.get(`http://localhost:7000/api/getUserDescription?userId=${userId}`);
+            await getAvatar()
             if(verifyBio === bio.data) {
                 store.setAuth(true);
                 globalStore.setLogOpen(false);
                 const save = await axios.post('http://localhost:7000/api/saveToDB', {userInfo});
-                console.log(save.status)
-                const avatar = await axios.get(`http://localhost:7000/api/getUserAvatar?userId=${userId}`);
-                localStorage.setItem('avatarUrl', avatar.data);
                 localStorage.setItem('username', userInfo.name)
             } else {
                 setVerStatus('Your description does not match');
+                localStorage.removeItem('username');
+                localStorage.removeItem('avatarUrl');
             }
         } catch (error) {
             console.error('The description does not match!', error)
         }
     };
+
+    const getAvatar = async () => {
+        localStorage.setItem('username', userInfo.name)
+        const avatar = await axios.get(`http://localhost:7000/api/getUserAvatar?userId=${userId}`);
+        localStorage.setItem('avatarUrl', avatar.data);
+    }
 
     const handleBlur = () => {
         globalStore.setLogOpen(false)

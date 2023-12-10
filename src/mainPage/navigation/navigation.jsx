@@ -1,6 +1,7 @@
 import React, {useContext} from 'react'
 import logoNav from './logo.png'
 import {Context} from "../../index";
+import {observer} from "mobx-react";
 
 function NavigationPanel () {
     const {globalStore} = useContext(Context)
@@ -27,4 +28,4 @@ function NavigationPanel () {
     )
 }
 
-export default NavigationPanel;
+export default observer(NavigationPanel);
