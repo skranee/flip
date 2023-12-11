@@ -171,6 +171,33 @@ code {
   }
 }
 
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loaderBackground {
+  position: absolute;
+  background-color: #111827;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loader {
+  border: 8px solid #f3f3f3;
+  border-top: 8px solid #FF2D2D;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 2s linear infinite;
+}
+
 .navigation {
   position: fixed;
   display: flex;

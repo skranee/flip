@@ -11,7 +11,6 @@ function LoginModal () {
     const [username, setUsername] = useState('');
     const [userId, setUserId] = useState('');
     const [userInfo, setUserInfo] = useState(null);
-    const [userBio, setUserBio] = useState('');
     const [verify, setVerify] = useState(false);
     const [verifyBio, setVerifyBio] = useState('mm2flip cool mate cat party walk far away')
     const [verStatus, setVerStatus] = useState('')
@@ -29,17 +28,16 @@ function LoginModal () {
 
     const getUserInfo = async () => {
         try {
-            const response = await axios.post(`http://localhost:7000/api/getUser`, {username});
-            const {user} = response.data;
+            const userData = await store.getUser(username);
+            const user = userData.user;
 
-            if (!user) {
+            if (!user || !user.id) {
                 console.error('Error: User not found');
                 return;
             }
 
             setUserId(user.id);
             setUserInfo(user);
-            setUserBio(user);
             setVerify(true);
         } catch (error) {
             console.error('Error fetching user information', error);
@@ -48,12 +46,12 @@ function LoginModal () {
 
     const handleVerify = async () => {
         try {
-            const bio = await axios.get(`http://localhost:7000/api/getUserDescription?userId=${userId}`);
+            const bio = await store.getBio(userId);
             await getAvatar()
-            if(verifyBio === bio.data) {
+            if(verifyBio === bio) {
                 store.setAuth(true);
                 globalStore.setLogOpen(false);
-                const save = await axios.post('http://localhost:7000/api/saveToDB', {userInfo});
+                const save = await store.saveToDb(userInfo);
                 localStorage.setItem('username', userInfo.name)
             } else {
                 setVerStatus('Your description does not match');
@@ -66,9 +64,8 @@ function LoginModal () {
     };
 
     const getAvatar = async () => {
-        localStorage.setItem('username', userInfo.name)
-        const avatar = await axios.get(`http://localhost:7000/api/getUserAvatar?userId=${userId}`);
-        localStorage.setItem('avatarUrl', avatar.data);
+        const avatar = await store.getAvatar(userId);
+        localStorage.setItem('avatarUrl', avatar);
     }
 
     const handleBlur = () => {

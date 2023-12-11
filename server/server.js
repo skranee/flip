@@ -6,16 +6,22 @@ import axios from "axios";
 import mongoose from 'mongoose'
 import cookieParser from 'cookie-parser'
 import router from './router/index.js'
+import errorMiddleware from "./middlewares/error-middleware.js";
 
 config();
 const PORT = process.env.PORT || 3001;
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+    credentials: true,
+    origin: process.env.CLIENT_URL
+}));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use('/api', router)
+
+app.use(errorMiddleware)
 
 const start = async () => {
     try {

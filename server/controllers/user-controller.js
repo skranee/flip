@@ -17,8 +17,7 @@ class UserController {
             const user = userInfo.data.data[0];
             return res.json({user})
         } catch (e) {
-            console.error('Error in getUserInfo endpoint:', e.response?.data || e.message);
-            res.status(500).json({ error: 'Internal Server Error - getUserInfo' });
+            next(e);
         }
     }
 
@@ -31,8 +30,7 @@ class UserController {
 
             res.json(description);
         } catch (e) {
-            console.error('Error in getUserDescription endpoint:', e.response?.data || e.message);
-            res.status(500).json({ error: 'Internal Server Error - getUserDescription' });
+            next(e);
         }
     }
 
@@ -44,36 +42,42 @@ class UserController {
             const avatar = await userService.getAvatar(userId);
 
             return res.json(avatar)
-        } catch (error) {
-            console.error('Error in getUserAvatar endpoint:', error.response?.data || error.message);
-            res.status(500).json({ error: 'Internal Server Error - getUserAvatar' });
+        } catch (e) {
+            next(e);
         }
     }
 
     async saveToDB(req, res, next) {
         try {
-            const {userInfo} = req.body;
-            const save = await userService.saveToDB(userInfo);
+            const {user} = req.body;
+            console.log(user)
+            const save = await userService.saveToDB(user);
             res.cookie('refreshToken', save.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true, secure: true})
             return res.json(save);
         } catch (e) {
-            console.log(e.response?.data?.message);
+            next(e);
         }
     }
 
     async logout(req, res, next) {
         try {
-
+            const {refreshToken} = req.cookies;
+            const token = await userService.logout(refreshToken);
+            res.clearCookie('refreshToken');
+            return res.json(token);
         } catch (e) {
-
+            next(e);
         }
     }
 
     async refresh(req, res, next) {
         try {
-
+            const {refreshToken} = req.cookies;
+            const save = await userService.refresh(refreshToken);
+            res.cookie('refreshToken', save.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true, secure: true})
+            return res.json(save);
         } catch (e) {
-
+            next(e);
         }
     }
 }

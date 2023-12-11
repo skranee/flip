@@ -1,4 +1,4 @@
-import React, {useContext} from 'react'
+import React, {useContext, useEffect} from 'react'
 import MainPage from "./mainPage/mainPage";
 import LeftPanel from "./mainPage/leftPanel/leftPanel";
 import FaqBeneath from "./faqBeneath";
@@ -9,7 +9,21 @@ import {observer} from "mobx-react";
 import NavigationPanel from "./mainPage/navigation/navigation";
 
 function App() {
-    const {globalStore} = useContext(Context)
+    const {globalStore, store} = useContext(Context);
+
+    useEffect(() => {
+        if(localStorage.getItem('token')) {
+            store.checkAuth();
+        }
+    }, []);
+
+    if(store.isLoading) {
+        return (
+            <div className='loaderBackground'>
+                <div className='loader'></div>
+            </div>
+        )
+    }
 
     return (
     <>
