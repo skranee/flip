@@ -33,7 +33,6 @@ class UserService {
     }
 
     async saveToDB(userInfo) {
-        console.log(userInfo)
         const username = userInfo.name;
         const candidate = await userModel.findOne({username});
         if(candidate) {
@@ -44,7 +43,15 @@ class UserService {
             await tokenService.saveToken(userDto.id, tokens.refreshToken);
             return {...tokens, user: userDto};
         } else {
-            const user = await userModel.create({username: userInfo.name});
+            const avatar = await this.getAvatar(userInfo.id);
+            const today = new Date();
+
+            const month = today.toLocaleString('en-US', { month: 'long' });
+            const day = today.getDate();
+            const year = today.getFullYear();
+
+            const formattedDate = `${month} ${day}, ${year}`;
+            const user = await userModel.create({username: userInfo.name, regDate: formattedDate, robloxId: userInfo.id, avatar: avatar});
             const userDto = new UserDto(user);
 
             const tokens = tokenService.generateTokens({...userDto});
@@ -73,6 +80,48 @@ class UserService {
 
         await tokenService.saveToken(userDto.id, tokens.refreshToken);
         return {...tokens, user: userDto};
+    }
+
+    async addItem(item, userId) {
+        const update = await userModel.findOneAndUpdate({robloxId: userId}, {$push: {itemsList: item}});
+        return update;
+    }
+
+    async addExp(id, exp) {
+        const user = await userModel.findById(id);
+        const currExp = user.experience;
+        let newExp = currExp + exp;
+        const level = Math.floor(newExp / process.env.MAX_EXP);
+        newExp -= level * process.env.MAX_EXP;
+        if((user.lvl % 5) + level >= 5) {
+            const claim = await userModel.findByIdAndUpdate(id, {gotReward: false});
+        }
+        const update = await userModel.findByIdAndUpdate(id, {experience: newExp, $inc: {lvl: level}});
+        return update;
+    }
+
+    async claim(id) {
+        const claim = await userModel.findByIdAndUpdate(id, {gotReward: true});
+        return claim;
+    }
+
+    async tip(from, to, amount) {
+        const sender = await userModel.findOne({username: from});
+        const receiver = await userModel.findOne({username: to});
+        if(sender.balance < amount) {
+            throw ApiError.BadRequest('Not enough balance!');
+        } else if(!receiver) {
+            throw ApiError.BadRequest('The receiver does not exist!');
+        }
+        const decrease = await userModel.findOneAndUpdate({username: from}, {$inc: {balance: -amount}});
+        const increase = await userModel.findOneAndUpdate({username: to}, {$inc: {balance: amount}});
+        return increase;
+    }
+
+    async getLeaders() {
+        const users = await userModel.find();
+        const leaders = users.sort((a, b) => b.totalWagered - a.totalWagered).slice(0, 20);
+        return leaders;
     }
 }
 

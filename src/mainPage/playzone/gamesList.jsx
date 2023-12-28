@@ -89,6 +89,86 @@ const games = [
         player2: players[7],
         status: 'Ongoing'
     }),
+    new Game({
+        player1: players[6],
+        player2: players[7],
+        status: 'Joinable'
+    }),
+    new Game({
+        player1: players[0],
+        player2: players[1],
+        status: 'Ongoing'
+    }),
+    new Game({
+        player1: players[2],
+        player2: players[3],
+        status: 'Joinable'
+    }),
+    new Game({
+        player1: players[4],
+        player2: players[5],
+        status: 'Ongoing'
+    }),
+    new Game({
+        player1: players[6],
+        player2: players[7],
+        status: 'Joinable'
+    }),
+    new Game({
+        player1: players[0],
+        player2: players[1],
+        status: 'Ongoing'
+    }),
+    new Game({
+        player1: players[2],
+        player2: players[3],
+        status: 'Joinable'
+    }),
+    new Game({
+        player1: players[4],
+        player2: players[5],
+        status: 'Ongoing'
+    }),
+    new Game({
+        player1: players[6],
+        player2: players[7],
+        status: 'Joinable'
+    }),
+    new Game({
+        player1: players[0],
+        player2: players[1],
+        status: 'Ongoing'
+    }),
+    new Game({
+        player1: players[2],
+        player2: players[3],
+        status: 'Joinable'
+    }),
+    new Game({
+        player1: players[4],
+        player2: players[5],
+        status: 'Ongoing'
+    }),
+    new Game({
+        player1: players[6],
+        player2: players[7],
+        status: 'Joinable'
+    }),
+    new Game({
+        player1: players[0],
+        player2: players[1],
+        status: 'Ongoing'
+    }),
+    new Game({
+        player1: players[2],
+        player2: players[3],
+        status: 'Joinable'
+    }),
+    new Game({
+        player1: players[4],
+        player2: players[5],
+        status: 'Ongoing'
+    }),
 ]
 
 function GamesList () {

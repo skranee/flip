@@ -2,6 +2,9 @@ import React, {useContext} from "react";
 import ItemsList from "./itemsList";
 import {observer} from "mobx-react";
 import {Context} from "../index";
+import CoinFlip from "./coinFlip";
+import coinHeads from '../imgs/coinHeads.png'
+import coinTails from '../imgs/coinTails.png'
 
 function GameModal({game}) {
     const {globalStore} = useContext(Context)
@@ -18,7 +21,9 @@ function GameModal({game}) {
             <div className='modalWindowGame' onClick={(event) => event.stopPropagation()}>
                 <div className='lobbyPlayerContainer'>
                     <div className='lobbyUpperInfo'>
-                        <img className='lobbyAvatar' src={game.player1.avatar} alt=''/>
+                        <div className='avatarContainerLobby'>
+                            <img className='lobbyAvatar' src={game.player1.avatar} alt=''/>
+                        </div>
                         <div className='usernameWorth'>
                             <a className='lobbyUsername'>{game.player1.name}</a>
                             <a className='lobbyWorthText'>Worth: </a>
@@ -31,9 +36,12 @@ function GameModal({game}) {
                     </div>
                     <ItemsList items={game.player1.items} />
                 </div>
+                <CoinFlip />
                 <div className='lobbyPlayerContainer'>
                     <div className='lobbyUpperInfo'>
-                        <img className='lobbyAvatar2' src={game.player2.avatar} alt=''/>
+                        <div className='avatarContainerLobby'>
+                            <img className='lobbyAvatar2' src={game.player2.avatar} alt=''/>
+                        </div>
                         <div className='usernameWorth'>
                             <a className='lobbyUsername'>{game.player2.name}</a>
                             <a className='lobbyWorthText'>Worth: </a>

@@ -4,9 +4,12 @@ import LeftPanel from "./mainPage/leftPanel/leftPanel";
 import FaqBeneath from "./faqBeneath";
 import Chat from "./chat/chat";
 import {Context} from "./index";
-import LoginModal from "./mainPage/loginModal/loginModal";
-import {observer} from "mobx-react";
 import NavigationPanel from "./mainPage/navigation/navigation";
+import {Route, Routes} from "react-router-dom";
+import Profile from "./profile/profile";
+import Market from "./market/market";
+import Rewards from "./rewards/rewards";
+import WeeklyRace from "./leadersBoard/leadersBoard";
 
 function App() {
     const {globalStore, store} = useContext(Context);
@@ -17,24 +20,23 @@ function App() {
         }
     }, []);
 
-    if(store.isLoading) {
-        return (
-            <div className='loaderBackground'>
-                <div className='loader'></div>
-            </div>
-        )
-    }
-
     return (
+        //<Redirect /> !!!
+        //handle 404 (don't show elements like chat, faq etc when the page is .../rekfdosf) => 404 page
     <>
         <NavigationPanel />
-        <MainPage />
-        {globalStore.logOpen ? <LoginModal /> : <div />}
+        <Routes>
+            <Route path='/' element={<MainPage />} />
+            <Route path='/profile' element={<Profile />} />
+            <Route path='/market' element={<Market />} />
+            <Route path='/rewards' element={<Rewards />} />
+            <Route path='/leaders' element={<WeeklyRace />} />
+        </Routes>
         <LeftPanel />
-        <FaqBeneath />
         <Chat />
+        <FaqBeneath />
     </>
   );
 }
 
-export default observer(App);
+export default App;

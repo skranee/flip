@@ -27,20 +27,22 @@ function LoginModal () {
     }, [checked, username]);
 
     const getUserInfo = async () => {
-        try {
-            const userData = await store.getUser(username);
-            const user = userData.user;
+        if(!isDisabled) {
+            try {
+                const userData = await store.getUser(username);
+                const user = userData.user;
 
-            if (!user || !user.id) {
-                console.error('Error: User not found');
-                return;
+                if (!user || !user.id) {
+                    console.error('Error: User not found');
+                    return;
+                }
+
+                setUserId(user.id);
+                setUserInfo(user);
+                setVerify(true);
+            } catch (error) {
+                console.error('Error fetching user information', error);
             }
-
-            setUserId(user.id);
-            setUserInfo(user);
-            setVerify(true);
-        } catch (error) {
-            console.error('Error fetching user information', error);
         }
     };
 
@@ -52,7 +54,6 @@ function LoginModal () {
                 store.setAuth(true);
                 globalStore.setLogOpen(false);
                 const save = await store.saveToDb(userInfo);
-                localStorage.setItem('username', userInfo.name)
             } else {
                 setVerStatus('Your description does not match');
                 localStorage.removeItem('username');
@@ -65,7 +66,9 @@ function LoginModal () {
 
     const getAvatar = async () => {
         const avatar = await store.getAvatar(userId);
+        store.setAvatar(avatar);
         localStorage.setItem('avatarUrl', avatar);
+        localStorage.setItem('username', userInfo.name);
     }
 
     const handleBlur = () => {

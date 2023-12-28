@@ -1,40 +1,64 @@
-import React, {useEffect, useRef, useState} from 'react'
+import React, {useContext, useEffect, useRef, useState} from 'react'
 import { MdOutlineChat } from "react-icons/md/index.esm";
 import usFlag from '../imgs/us_flag.png'
 import { VscSend } from "react-icons/vsc/index.esm";
-import {players} from "../mainPage/playzone/gamesInfo";
 import MessageList from "./messageList";
 import {BiArrowToRight} from "react-icons/bi";
+import {Context} from "../index";
+import {observer} from "mobx-react";
 
 function Chat() {
+    const {store, globalStore} = useContext(Context)
     const [chatOpened, setChatOpened] = useState(false);
     const [mes, setMes] = useState('')
     const [messages, setMessages] = useState([])
+    const modalRef = useRef();
     const [btnDisabled, setBtnDisabled] = useState(true)
     const [connected, setConnected] = useState(false)
+    const [clickInside, setClickInside] = useState(false)
+    const stream = globalStore.streamLive;
 
-    const user = players[0]
-
-    const socket = useRef()
+    const user = store.user;
+    const socket = useRef();
 
     useEffect(() => {
-        socket.current = new WebSocket('ws://localhost:4000')
+        if(user.username) {
+            socket.current = new WebSocket('ws://localhost:4000');
+            socket.current.onopen = () => {
+                socket.current.send(JSON.stringify({
+                    username: user.username
+                }))
+            }
+            socket.current.onmessage = (event) => {
+                let message = JSON.parse(event.data)
+                switch (message.method) {
+                    case 'message':
+                        setArray(message);
+                        break;
+                    case 'stream':
+                        if(message.status === 'live') {
+                            globalStore.setStreamLive(true)
+                        } else {
+                            globalStore.setStreamLive(false)
+                        }
+                        break;
+                }
+            }
+        }
+    }, [user.username]);
 
-        socket.current.onopen = () => {
-            setConnected(true);
-            console.log('Socket connected')
-        }
-        socket.current.onmessage = (event) => {
-            const message = JSON.parse(event.data)
-            setMessages(prev => [...prev, message])
-        }
-        socket.current.onclose = () => {
-            console.log('Socket closed') //!!!!!!!!!
-        }
-        socket.current.onerror = () => {
-            console.log('Error socket') //!!!!!!!!!!!
-        }
-    }, [])
+    useEffect(() => {
+        console.log('rendered')
+    }, []);
+
+    const setArray = (message) => {
+        setMessages(prev => [...prev, message]);
+        return null;
+    }
+
+    const log = () => {
+        console.log('yoyoyo')
+    }
 
     useEffect(() => {
         if(mes.trim().length) {
@@ -44,6 +68,10 @@ function Chat() {
             setBtnDisabled(true)
         }
     }, [mes]);
+
+    const openStream = (path) => {
+        window.open(path)
+    }
 
     const handleChat = () => {
         setChatOpened(!chatOpened)
@@ -61,6 +89,20 @@ function Chat() {
 
     const handleSend = async () => {
         if(mes.length && mes.trim().length) {
+            if(mes[0] === '/') {
+                console.log(mes.substring(1, 4))
+                if(mes.substring(1, 4) === 'tip') {
+                    const params = mes.split(' ');
+                    if(params[1] && params[2]) {
+                        const sender = store.user.username;
+                        const receiver = params[1];
+                        const amount = parseInt(params[2]);
+                        const send = await store.tip(sender, receiver, amount);
+                    }
+                    setMes('');
+                    return null;
+                }
+            }
             const message = {
                 message: mes,
                 id: Date.now(),
@@ -70,15 +112,56 @@ function Chat() {
                     hour12: true
                 }).format(new Date()),
                 user: user,
-                event: 'message'
+                avatar: localStorage.getItem('avatarUrl'),
+                method: 'message'
             }
-                socket.current.send(JSON.stringify(message))
+            setMes('');
+            socket.current.send(JSON.stringify(message))
             if(messages.length > 49) {
                 messages.splice(0, 1);
             }
             setMes('')
         }
     }
+
+    const handleStream = async () => {
+        if(user.role === 'admin') {
+            let notification = {};
+            if(globalStore.streamLive) {
+                notification = {
+                    id: Date.now(),
+                    method: 'stream',
+                    status: 'offline'
+                }
+            } else {
+                notification = {
+                    id: Date.now(),
+                    method: 'stream',
+                    status: 'live'
+                }
+            }
+            socket.current.send(JSON.stringify(notification));
+        }
+    }
+
+    const handleMouseDown = (event) => {
+        if (modalRef.current && modalRef.current.contains(event.target)) {
+            setClickInside(true)
+        }
+        else {
+            setClickInside(false);
+        }
+    };
+
+    const handleMouseUp = () => {
+        if(clickInside) {
+            globalStore.setProfileOpen(true);
+        }
+        else {
+            globalStore.setProfileOpen(false)
+            setClickInside(false)
+        }
+    };
 
     return (
         <div>
@@ -101,6 +184,23 @@ function Chat() {
                         <BiArrowToRight style={{fontSize: '1.3em', cursor: "pointer"}} onClick={handleChat}/>
                     </div>
                     <MessageList messages={messages} />
+                    {store.user.role === 'admin' &&
+                        <button onClick={handleStream} className='btnStream'>
+                            {stream ? 'Turn off' : 'Stream'}
+                        </button>
+                    }
+                    {stream
+                        ? <div className='streamNotification'>
+                            Stream Live!
+                            <button className='streamBtn' onClick={() => openStream('https://www.twitch.tv/mm2flip')}>
+                                Twitch
+                            </button>
+                            <button className='streamBtn' onClick={() => openStream('https://kick.com/mm2flip')}>
+                                Kick
+                            </button>
+                        </div>
+                        : <div />
+                    }
                     <div className='sendContainer'>
                         <input
                             className='inputSend'
@@ -116,8 +216,29 @@ function Chat() {
                     </div>
                 </div>
             </div> : <div />}
+            {globalStore.profileOpen &&
+                <div className='backgroundModal' onMouseDown={handleMouseDown} onMouseUp={handleMouseUp}>
+                    <div className='modalPlayer' style={{maxWidth: 250}} ref={modalRef}>
+                        <div className='userInfoModal'>
+                            <div className='profileImageContainer'>
+                                <img className='avatarProfile' src={globalStore.profileAv} alt='' />
+                                <div className='profileLvl'>{globalStore.profileUser.lvl}</div>
+                            </div>
+                            <a>{globalStore.profileUser.username}</a>
+                        </div>
+                        <div className='profileInfoPlayer'>
+                            <a style={{color: 'rgba(232, 232, 232, 0.8)'}}>Total games played:</a>
+                            <a style={{fontSize: '1.7em'}}>{globalStore.profileUser.gamesPlayed}</a>
+                            <a style={{color: 'rgba(232, 232, 232, 0.8)'}}>Total wagered:</a>
+                            <a style={{fontSize: '1.7em'}}>{globalStore.profileUser.totalWagered}</a>
+                            <a style={{color: 'rgba(232, 232, 232, 0.8)'}}>Registered:</a>
+                            <a style={{fontSize: '1.4em'}}>{globalStore.profileUser.regDate}</a>
+                        </div>
+                    </div>
+                </div>
+            }
         </div>
     )
 }
 
-export default Chat;
+export default observer(Chat);

@@ -15,37 +15,170 @@ export const items = [ //should add some fields to items such as rarity, float, 
     {
         image: ewScythe,
         name: 'ewScythe',
-        cost: 123
+        cost: 123,
+        class: 'Blade'
     },
     {
         image: hallowScythe,
         name: 'Hallow Scythe',
-        cost: 4234
+        cost: 4234,
+        class: 'Gun'
     },
     {
         image: harvester,
         name: 'harvester',
-        cost: 312
+        cost: 312,
+        class: 'Blade'
     },
     {
         image: iceBreaker,
         name: 'Ice Breaker',
-        cost: 523
+        cost: 523,
+        class: 'Gun'
     },
     {
         image: icePiercer,
         name: 'Ice Piercer',
-        cost: 1313
+        cost: 1313,
+        class: 'Blade'
     },
     {
         image: swirlyAxe,
         name: 'Swirly Axe',
-        cost: 444
+        cost: 444,
+        class: 'Gun'
     },
     {
         image: travellersAxe,
         name: 'Travellers Axe',
-        cost: 3213
+        cost: 3213,
+        class: 'Blade'
+    },
+    {
+        image: ewScythe,
+        name: 'ewScythe',
+        cost: 123,
+        class: 'Blade'
+    },
+    {
+        image: hallowScythe,
+        name: 'Hallow Scythe',
+        cost: 4234,
+        class: 'Gun'
+    },
+    {
+        image: harvester,
+        name: 'harvester',
+        cost: 312,
+        class: 'Blade'
+    },
+    {
+        image: iceBreaker,
+        name: 'Ice Breaker',
+        cost: 523,
+        class: 'Gun'
+    },
+    {
+        image: icePiercer,
+        name: 'Ice Piercer',
+        cost: 1313,
+        class: 'Blade'
+    },
+    {
+        image: swirlyAxe,
+        name: 'Swirly Axe',
+        cost: 444,
+        class: 'Gun'
+    },
+    {
+        image: travellersAxe,
+        name: 'Travellers Axe',
+        cost: 3213,
+        class: 'Blade'
+    },
+    {
+        image: ewScythe,
+        name: 'ewScythe',
+        cost: 123,
+        class: 'Blade'
+    },
+    {
+        image: hallowScythe,
+        name: 'Hallow Scythe',
+        cost: 4234,
+        class: 'Gun'
+    },
+    {
+        image: harvester,
+        name: 'harvester',
+        cost: 312,
+        class: 'Blade'
+    },
+    {
+        image: iceBreaker,
+        name: 'Ice Breaker',
+        cost: 523,
+        class: 'Gun'
+    },
+    {
+        image: icePiercer,
+        name: 'Ice Piercer',
+        cost: 1313,
+        class: 'Blade'
+    },
+    {
+        image: swirlyAxe,
+        name: 'Swirly Axe',
+        cost: 444,
+        class: 'Gun'
+    },
+    {
+        image: travellersAxe,
+        name: 'Travellers Axe',
+        cost: 3213,
+        class: 'Blade'
+    },
+    {
+        image: ewScythe,
+        name: 'ewScythe',
+        cost: 123,
+        class: 'Blade'
+    },
+    {
+        image: hallowScythe,
+        name: 'Hallow Scythe',
+        cost: 4234,
+        class: 'Gun'
+    },
+    {
+        image: harvester,
+        name: 'harvester',
+        cost: 312,
+        class: 'Blade'
+    },
+    {
+        image: iceBreaker,
+        name: 'Ice Breaker',
+        cost: 523,
+        class: 'Gun'
+    },
+    {
+        image: icePiercer,
+        name: 'Ice Piercer',
+        cost: 1313,
+        class: 'Blade'
+    },
+    {
+        image: swirlyAxe,
+        name: 'Swirly Axe',
+        cost: 444,
+        class: 'Gun'
+    },
+    {
+        image: travellersAxe,
+        name: 'Travellers Axe',
+        cost: 3213,
+        class: 'Blade'
     },
 ]
 

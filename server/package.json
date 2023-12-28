@@ -6,7 +6,8 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon server.js",
-    "websocket": "nodemon websocket.cjs"
+    "start-ngrok": "ngrok http 7000",
+    "websocket": "nodemon websocket.js"
   },
   "keywords": [],
   "author": "",
@@ -21,6 +22,6 @@
     "mongodb": "^6.3.0",
     "mongoose": "^8.0.3",
     "nodemon": "^3.0.1",
-    "ws": "^8.14.2"
+    "ws": "^8.15.1"
   }
 }

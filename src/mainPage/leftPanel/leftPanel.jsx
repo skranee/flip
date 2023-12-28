@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import { CgGames } from "react-icons/cg";
 import { BiSolidDownArrow } from "react-icons/bi/index.esm";
 import { BiSolidUpArrow } from "react-icons/bi/index.esm";
@@ -10,10 +10,16 @@ import { AiFillWechat } from "react-icons/ai/index.esm";
 import claimImg from './claimImg.png'
 import { BiArrowToLeft } from "react-icons/bi/index.esm";
 import { BiArrowToRight } from "react-icons/bi/index.esm";
+import {useNavigate} from "react-router-dom";
+import {Context} from "../../index";
+import {observer} from "mobx-react";
 
 function LeftPanel () {
-    const [dropdownOpen, setDropdownOpen] = useState(false)
-    const [panelOpen, setPanelOpen] = useState(true)
+    const {store} = useContext(Context);
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [panelOpen, setPanelOpen] = useState(true);
+    const navigate = useNavigate();
+    const [bonus, setBonus] = useState(store.user.gotReward)
 
     const handleDropdown = () => {
         setDropdownOpen(!dropdownOpen)
@@ -25,6 +31,15 @@ function LeftPanel () {
 
     const openPanel = () => {
         setPanelOpen(true)
+    }
+
+    const handleNavigate = (path) => {
+        navigate(path)
+    }
+
+    const claim = async () => {
+        const claim = await store.claim(store.user.id);
+        setBonus(true);
     }
 
     return (
@@ -52,30 +67,32 @@ function LeftPanel () {
                                 {dropdownOpen && <Dropdown />}
                             </div>
                             <p className='titleField'>REWARDS</p>
-                            <div className='menuProp'>
+                            <div className='menuProp' onClick={() => handleNavigate('/rewards')}>
                                 <IoMdTrophy/>
                                 <a> Level Rewards </a>
                             </div>
-                            <div className='menuProp'>
+                            <div className='menuProp' onClick={() => handleNavigate('/leaders')}>
                                 <GiRibbonMedal />
-                                <a> Weekly Race </a>
+                                <a> Leaderboard </a>
                             </div>
                             <p className='titleField'>MARKETPLACE</p>
-                            <div className='menuProp'>
+                            <div className='menuProp' onClick={() => handleNavigate('/market')}>
                                 <AiFillShop />
-                                <a> Shop </a>
+                                <a > Market </a>
                             </div>
                             <div className='menuProp'>
                                 <AiFillWechat />
                                 <a> Support </a>
                             </div>
-                            <div className='claimBonus'>
-                                <img className='imgPanel' src={claimImg} alt='' />
-                                <a className='bonusImg'>NEW<br/>BONUS!</a>
-                                <button className='claimBtn'>
-                                    Claim
-                                </button>
-                            </div>
+                            {bonus &&
+                                <div className='claimBonus'>
+                                    <img className='imgPanel' src={claimImg} alt='' />
+                                    <a className='bonusImg'>NEW<br/>BONUS!</a>
+                                    <button className='claimBtn' onClick={() => claim()}>
+                                        Claim
+                                    </button>
+                                </div>
+                            }
                         </div>
                     </div>
                 </> :
@@ -87,4 +104,4 @@ function LeftPanel () {
     )
 }
 
-export default LeftPanel;
+export default observer(LeftPanel);

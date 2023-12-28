@@ -8,6 +8,10 @@ export default class GlobalStore {
     titleAll = 'All';
     viewOpen = false;
     gameInfo = null;
+    streamLive = false;
+    profileUser = {};
+    profileAv = '';
+    profileOpen = false;
 
     constructor() {
         makeAutoObservable(this)
@@ -39,5 +43,21 @@ export default class GlobalStore {
 
     setGameInfo(obj) {
         this.gameInfo = obj;
+    }
+
+    setStreamLive(bool) {
+        this.streamLive = bool;
+    }
+
+    setProfileUser(user) {
+        this.profileUser = user;
+    }
+
+    setProfileAv(av) {
+        this.profileAv = av;
+    }
+
+    setProfileOpen(bool) {
+        this.profileOpen = bool;
     }
 }

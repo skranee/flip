@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import logo from "./mainPage/navigation/logo.png";
 import inst from './imgs/inst.png'
 import kick from './imgs/kick.png'

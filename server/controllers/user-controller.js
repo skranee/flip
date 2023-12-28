@@ -1,6 +1,5 @@
 import axios from "axios";
 import userService from "../services/user-service.js";
-import tokenService from "../services/token-service.js";
 
 class UserController {
     async getUser(req, res, next) {
@@ -50,7 +49,6 @@ class UserController {
     async saveToDB(req, res, next) {
         try {
             const {user} = req.body;
-            console.log(user)
             const save = await userService.saveToDB(user);
             res.cookie('refreshToken', save.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true, secure: true})
             return res.json(save);
@@ -77,6 +75,55 @@ class UserController {
             res.cookie('refreshToken', save.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true, secure: true})
             return res.json(save);
         } catch (e) {
+            next(e);
+        }
+    }
+
+    async addItem(req, res, next) {
+        try {
+            const {userId, item} = req.body;
+            const update = await userService.addItem(item, userId);
+            return res.json(update);
+        } catch(e) {
+            next(e);
+        }
+    }
+
+    async addExp(req, res, next) {
+        try {
+            const {id, exp} = req.body;
+            const update = await userService.addExp(id, exp);
+            return res.json(update);
+        } catch(e) {
+            next(e);
+        }
+    }
+
+    async claim(req, res, next) {
+        try {
+            const {id} = req.body;
+            const claim = await userService.claim(id);
+            return res.json(claim);
+        } catch(e) {
+            next(e);
+        }
+    }
+
+    async tip(req, res, next) {
+        try {
+            const {from, to, amount} = req.body;
+            const send = await userService.tip(from, to, amount);
+            return res.json(send);
+        } catch(e) {
+            next(e);
+        }
+    }
+
+    async getLeaders(req, res, next) {
+        try {
+            const leaders = await userService.getLeaders();
+            return res.json(leaders);
+        } catch(e) {
             next(e);
         }
     }
