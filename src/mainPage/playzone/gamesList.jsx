@@ -3,179 +3,65 @@ import {players} from "./gamesInfo";
 import {items} from "./gamesInfo";
 import {Context} from "../../index";
 import {observer} from "mobx-react";
+import question from '../../imgs/question.png'
 
 export class Game {
     player1;
     player2;
+    items1;
+    items2;
     items;
     bet;
+    gameId;
     status;
 
     constructor(obj) {
         this.player1 = obj.player1;
         this.player2 = obj.player2;
+        this.items1 = obj.items1;
+        this.items2 = obj.items2;
         this.items = this.combineItems();
         this.bet = this.combineBets();
+        this.gameId = obj.gameId;
         this.status = obj.status;
     }
 
     combineItems() {
-        return this.player1.items.concat(this.player2.items);
+        return this.items1.concat(this.items2);
     }
 
     combineBets() {
-        return this.player1.bet + this.player2.bet;
+        return this.items.reduce((a, b) => a + b.cost, 0);
     }
 }
 
-const games = [
-    new Game({
-        player1: players[0],
-        player2: players[1],
-        status: 'Ongoing'
-    }),
-    new Game({
-        player1: players[2],
-        player2: players[3],
-        status: 'Ongoing'
-    }),
-    new Game({
-        player1: players[4],
-        player2: players[5],
-        status: 'Joinable'
-    }),
-    new Game({
-        player1: players[6],
-        player2: players[7],
-        status: 'Joinable'
-    }),
-    new Game({
-        player1: players[0],
-        player2: players[1],
-        status: 'Ongoing'
-    }),
-    new Game({
-        player1: players[2],
-        player2: players[3],
-        status: 'Joinable'
-    }),
-    new Game({
-        player1: players[4],
-        player2: players[5],
-        status: 'Ongoing'
-    }),
-    new Game({
-        player1: players[6],
-        player2: players[7],
-        status: 'Ongoing'
-    }),
-    new Game({
-        player1: players[0],
-        player2: players[1],
-        status: 'Ongoing'
-    }),
-    new Game({
-        player1: players[2],
-        player2: players[3],
-        status: 'Joinable'
-    }),
-    new Game({
-        player1: players[4],
-        player2: players[5],
-        status: 'Ongoing'
-    }),
-    new Game({
-        player1: players[6],
-        player2: players[7],
-        status: 'Ongoing'
-    }),
-    new Game({
-        player1: players[6],
-        player2: players[7],
-        status: 'Joinable'
-    }),
-    new Game({
-        player1: players[0],
-        player2: players[1],
-        status: 'Ongoing'
-    }),
-    new Game({
-        player1: players[2],
-        player2: players[3],
-        status: 'Joinable'
-    }),
-    new Game({
-        player1: players[4],
-        player2: players[5],
-        status: 'Ongoing'
-    }),
-    new Game({
-        player1: players[6],
-        player2: players[7],
-        status: 'Joinable'
-    }),
-    new Game({
-        player1: players[0],
-        player2: players[1],
-        status: 'Ongoing'
-    }),
-    new Game({
-        player1: players[2],
-        player2: players[3],
-        status: 'Joinable'
-    }),
-    new Game({
-        player1: players[4],
-        player2: players[5],
-        status: 'Ongoing'
-    }),
-    new Game({
-        player1: players[6],
-        player2: players[7],
-        status: 'Joinable'
-    }),
-    new Game({
-        player1: players[0],
-        player2: players[1],
-        status: 'Ongoing'
-    }),
-    new Game({
-        player1: players[2],
-        player2: players[3],
-        status: 'Joinable'
-    }),
-    new Game({
-        player1: players[4],
-        player2: players[5],
-        status: 'Ongoing'
-    }),
-    new Game({
-        player1: players[6],
-        player2: players[7],
-        status: 'Joinable'
-    }),
-    new Game({
-        player1: players[0],
-        player2: players[1],
-        status: 'Ongoing'
-    }),
-    new Game({
-        player1: players[2],
-        player2: players[3],
-        status: 'Joinable'
-    }),
-    new Game({
-        player1: players[4],
-        player2: players[5],
-        status: 'Ongoing'
-    }),
-]
-
 function GamesList () {
-    const {globalStore} = useContext(Context)
+    const {store, globalStore} = useContext(Context)
+    const [games, setGames] = useState([])
     const [gamesCopy, setGamesCopy] = useState([...games]);
     const [searchItem, setSearchItem] = useState('')
     const [searchArr, setSearchArr] = useState([])
+
+    useEffect(() => {
+        const getGames = async () => {
+            const game = await store.getGames();
+            if(game && game.data) {
+                setGames([])
+                game.data.map(item => {
+                    const gameObj = new Game({
+                        player1: item.player1,
+                        player2: item.player2,
+                        items1: item.items1,
+                        items2: item.items2,
+                        status: item.status,
+                        gameId: item.gameId
+                    })
+                    setGames(prev => [...prev, gameObj]);
+                })
+            }
+        }
+        getGames();
+    }, [])
 
     useEffect(() => {
         if(globalStore.titleHL === 'High To Low') {
@@ -300,41 +186,41 @@ function GamesList () {
             </div>
             <ul className='gamesListSpace'>
                 {gamesCopy.length ? gamesCopy.map((item, index) => (
-                        <li key={index} className='gameContainer'>
-                            <div className='imgsVs'>
-                                <img className='playerGame' src={item.player1.avatar} alt='' />
-                                <a className='vs'> vs </a>
-                                <img className='playerGame' src={item.player2.avatar} alt='' style={{border: 'solid 2px #FF2D2D'}}/>
-                            </div>
-                            <div className='items'>
-                                <img className='itemCircle' src={item.items[0].image} alt=''/>
-                                {item.items.length > 1 ?
-                                    <img className='itemCircle' src={item.items[1].image} alt=''/>
-                                    : <div />}
-                                {item.items.length > 2 ?
-                                    <img className='itemCircle' src={item.items[2].image} alt=''/>
-                                    : <div />}
-                                {item.items.length > 3 ?
-                                    <img className='itemCircle' src={item.items[3].image} alt=''/>
-                                    : <div />}
-                                {item.items.length > 4 ? <a className='divItems'> + {item.items.length - 4}</a> : <div />}
-                            </div>
-                            <a className='itemsAmount'>{item.items.length} items</a>
-                            <div className='betParams'>
-                                <a className='betAmount'>{item.bet}R$</a>
-                                <a className='joinableBet'>
-                                    {Math.round(item.bet * 0.95)}R$-{Math.round(item.bet * 1.05)}R$
-                                </a>
-                            </div>
-                            <div className='btnsGame'>
-                                <button className='joinGame' onClick={(item) => handleJoin(item)}>
-                                    JOIN
-                                </button>
-                                <button className='viewGame' onClick={() => handleView(item)}>
-                                    VIEW
-                                </button>
-                            </div>
-                        </li>
+                    <li key={index} className='gameContainer'>
+                        <div className='imgsVs'>
+                            <img className='playerGame' src={item.player1 ? item.player1.avatar : question} alt='' />
+                            <a className='vs'> vs </a>
+                            <img className='playerGame' src={item.player2 ? item.player2.avatar : question} alt='' style={{border: 'solid 2px #FF2D2D'}}/>
+                        </div>
+                        <div className='items'>
+                            <img className='itemCircle' src={item.items1[0].image} alt=''/>
+                            {item.items1.length > 1 ?
+                                <img className='itemCircle' src={item.items1[1].image} alt=''/>
+                                : <div />}
+                            {item.items1.length > 2 ?
+                                <img className='itemCircle' src={item.items1[2].image} alt=''/>
+                                : <div />}
+                            {item.items1.length > 3 ?
+                                <img className='itemCircle' src={item.items1[3].image} alt=''/>
+                                : <div />}
+                            {item.items1.length > 4 ? <a className='divItems'> + {item.items1.length - 4}</a> : <div />}
+                        </div>
+                        <a className='itemsAmount'>{item.items1.length} items</a>
+                        <div className='betParams'>
+                            <a className='betAmount'>{item.bet}R$</a>
+                            <a className='joinableBet'>
+                                {Math.round(item.bet * 0.95)}R$-{Math.round(item.bet * 1.05)}R$
+                            </a>
+                        </div>
+                        <div className='btnsGame'>
+                            <button className='joinGame' onClick={(item) => handleJoin(item)}>
+                                JOIN
+                            </button>
+                            <button className='viewGame' onClick={() => handleView(item)}>
+                                VIEW
+                            </button>
+                        </div>
+                    </li>
                     )) : <a className='noGames'>No games yet...</a>}
             </ul>
         </>

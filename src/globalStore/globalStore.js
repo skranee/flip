@@ -12,6 +12,8 @@ export default class GlobalStore {
     profileUser = {};
     profileAv = '';
     profileOpen = false;
+    createOpen = false;
+    historyOpen = false;
 
     constructor() {
         makeAutoObservable(this)
@@ -59,5 +61,13 @@ export default class GlobalStore {
 
     setProfileOpen(bool) {
         this.profileOpen = bool;
+    }
+
+    setCreateOpen(bool) {
+        this.createOpen = bool;
+    }
+
+    setHistoryOpen(bool) {
+        this.historyOpen = bool;
     }
 }

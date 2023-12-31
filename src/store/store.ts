@@ -9,6 +9,8 @@ import {IItem} from "../models/IItem";
 import UserService from "../services/UserService";
 import AffiliateService from "../services/AffiliateService";
 import AdminService from "../services/AdminService";
+import GameService from "../services/GameService";
+import IGame from "../models/IGame";
 
 export default class Store {
     user = {} as IUser;
@@ -186,6 +188,50 @@ export default class Store {
         try {
             const leaders = await UserService.getLeaders();
             return leaders;
+        } catch(e: any) {
+            console.log(e.response?.data?.message);
+        }
+    }
+
+    async createGame(player1: IUser, items: IItem[]) {
+        try {
+            const game = await GameService.createGame(player1,items);
+            return game;
+        } catch(e: any) {
+            console.log(e.response?.data?.message);
+        }
+    }
+
+    async getGames() {
+        try {
+            const games = await GameService.getGames();
+            return games;
+        } catch(e: any) {
+            console.log(e.response?.data?.message);
+        }
+    }
+
+    async getHistory(userId: string) {
+        try {
+            const history = await UserService.getHistory(userId);
+            return history;
+        } catch(e: any) {
+            console.log(e.response?.data?.message);
+        }
+    }
+
+    async addHistory(userId: string, game: IGame) {
+        try {
+            const add = await UserService.addHistory(userId, game);
+        } catch(e: any) {
+            console.log(e.response?.data?.message);
+        }
+    }
+
+    async endGame(gameId: string) {
+        try {
+            const end = await GameService.endGame(gameId);
+            return end;
         } catch(e: any) {
             console.log(e.response?.data?.message);
         }

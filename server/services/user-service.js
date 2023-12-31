@@ -3,6 +3,7 @@ import axios from "axios";
 import UserDto from "../dtos/user-dto.js";
 import tokenService from "./token-service.js";
 import ApiError from "../exceptions/api-error.js";
+import historyModel from "../models/history-model.js";
 
 class UserService {
     async getUser(username) {
@@ -26,7 +27,7 @@ class UserService {
     }
 
     async getAvatar(userId) {
-        const userInf = await axios.get(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${userId}&size=48x48&format=Png&isCircular=false`)
+        const userInf = await axios.get(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${userId}&size=720x720&format=Png&isCircular=false`)
 
         const avatar = userInf.data.data[0].imageUrl;
         return avatar;
@@ -122,6 +123,49 @@ class UserService {
         const users = await userModel.find();
         const leaders = users.sort((a, b) => b.totalWagered - a.totalWagered).slice(0, 20);
         return leaders;
+    }
+
+    async getHistory(userId) {
+        const history = await historyModel.find({user: userId}).populate('player1').populate('player2');
+        return history;
+    }
+
+    async addHistory(userId, game) {
+        let items;
+        let addItems = [];
+        if(game.player1.id === userId) {
+            items = game.items1;
+        } else {
+            items = game.items2;
+        }
+        if(game.result === 'win') {
+            if(game.player1.id === userId) {
+                addItems = game.items2;
+            } else {
+                addItems = game.items1;
+            }
+        }
+        const update = await userModel.findOneAndUpdate(
+            {id: userId}, {$inc: {gamesPlayed: 1, totalWagered: items.reduce((a, b) => a + b.cost, 0)}, $push: {items: addItems}});
+        const today = new Date();
+        const options = {
+            month: 'long',
+            day: 'numeric',
+            year: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: true
+        };
+
+        const formattedDate = today.toLocaleDateString('en-US', options);
+
+        const result = game.result ? game.result : 'win';
+        const player1 = game.player1;
+        const player2 = game.player2;
+        const totalWorth = game.items1.reduce((a, b) => a + b.cost, 0) + game.items2.reduce((a, b) => a + b.cost, 0);
+        const add = await historyModel.create({
+            user: userId, date: formattedDate, result: result, player1: player1._id, player2: player2._id, totalWorth: totalWorth});
+        return add;
     }
 }
 

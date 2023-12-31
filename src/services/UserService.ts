@@ -3,6 +3,8 @@ import {AxiosResponse} from "axios";
 import {IItem} from "../models/IItem";
 import {RewardResponse} from "../models/response/RewardResponse";
 import {IUser} from "../models/IUser";
+import IHistory from "../models/IHistory";
+import IGame from "../models/IGame";
 
 
 export default class UserService {
@@ -28,5 +30,13 @@ export default class UserService {
 
     static async getLeaders(): Promise<AxiosResponse<IUser[]>> {
         return $api.get('/leaders');
+    }
+
+    static async getHistory(userId: string): Promise<AxiosResponse<IHistory[]>> {
+        return $api.get(`/history?userId=${userId}`)
+    }
+
+    static async addHistory(userId: string, game: IGame): Promise <AxiosResponse> {
+        return $api.post('/history', {userId, game})
     }
 }

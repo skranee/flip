@@ -127,6 +127,26 @@ class UserController {
             next(e);
         }
     }
+
+    async getHistory(req, res, next) {
+        try {
+            const userId = req.query.userId;
+            const history = await userService.getHistory(userId);
+            return res.json(history);
+        } catch(e) {
+            next(e);
+        }
+    }
+
+    async addHistory(req, res, next) {
+        try {
+            const {userId, game} = req.body;
+            const add = await userService.addHistory(userId, game);
+            return res.json(add);
+        } catch(e) {
+            next(e);
+        }
+    }
 }
 
 export default new UserController();
