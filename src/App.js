@@ -10,6 +10,8 @@ import Profile from "./profile/profile";
 import Market from "./market/market";
 import Rewards from "./rewards/rewards";
 import WeeklyRace from "./leadersBoard/leadersBoard";
+import Support from "./support/support";
+import Answer from "./support/answer";
 
 function App() {
     const {globalStore, store} = useContext(Context);
@@ -17,6 +19,17 @@ function App() {
     useEffect(() => {
         if(localStorage.getItem('token')) {
             store.checkAuth();
+        }
+    }, []);
+
+    useEffect(() => {
+        if(store.isAuth) {
+            const av = async () => {
+                const avatar = await store.getAvatar(store.user.robloxId);
+                store.setAvatar(avatar);
+                localStorage.setItem('avatarUrl', avatar);
+            }
+            av();
         }
     }, []);
 
@@ -31,6 +44,8 @@ function App() {
             <Route path='/market' element={<Market />} />
             <Route path='/rewards' element={<Rewards />} />
             <Route path='/leaders' element={<WeeklyRace />} />
+            <Route path='/support' element={<Support />} />
+            <Route path='/answer' element={<Answer />} />
         </Routes>
         <LeftPanel />
         <Chat />

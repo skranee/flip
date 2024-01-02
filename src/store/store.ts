@@ -11,6 +11,7 @@ import AffiliateService from "../services/AffiliateService";
 import AdminService from "../services/AdminService";
 import GameService from "../services/GameService";
 import IGame from "../models/IGame";
+import SupportService from "../services/SupportService";
 
 export default class Store {
     user = {} as IUser;
@@ -232,6 +233,46 @@ export default class Store {
         try {
             const end = await GameService.endGame(gameId);
             return end;
+        } catch(e: any) {
+            console.log(e.response?.data?.message);
+        }
+    }
+
+    async sendQuestion(message: string, userId: string) {
+        try {
+            const send = await SupportService.sendQuestion(message, userId);
+            return send;
+        } catch(e: any) {
+            console.log(e.response?.data?.message);
+        }
+    }
+
+    async getQuestions() {
+        try {
+            if(this.user.role === 'admin' && this.isAuth) {
+                const questions = await SupportService.getQuestions();
+                return questions;
+            } else {
+                throw Error('Not enough rights to get questions');
+            }
+        } catch(e: any) {
+            console.log(e.response?.data?.message);
+        }
+    }
+
+    async answer(id: string, mes: string) {
+        try {
+            const answer = await SupportService.answer(id, mes);
+            return answer;
+        } catch(e: any) {
+            console.log(e.response?.data?.message);
+        }
+    }
+
+    async getAnswers(userId: string) {
+        try {
+            const answers = await SupportService.getAnswers(userId);
+            return answers;
         } catch(e: any) {
             console.log(e.response?.data?.message);
         }

@@ -14,6 +14,7 @@ export default class GlobalStore {
     profileOpen = false;
     createOpen = false;
     historyOpen = false;
+    openAnswers = false;
 
     constructor() {
         makeAutoObservable(this)
@@ -69,5 +70,9 @@ export default class GlobalStore {
 
     setHistoryOpen(bool) {
         this.historyOpen = bool;
+    }
+
+    setOpenAnswers(bool) {
+        this.openAnswers = bool;
     }
 }

@@ -4,6 +4,7 @@ import authMiddleware from "../middlewares/auth-middleware.js";
 import AffiliateController from "../controllers/affiliateController.js";
 import RewardController from "../controllers/rewardController.js";
 import gameController from "../controllers/gameController.js";
+import supportController from "../controllers/supportController.js";
 
 const router = new Router();
 
@@ -25,7 +26,11 @@ router.get('/leaders', userController.getLeaders);
 router.post('/game', gameController.createGame);
 router.get('/game', gameController.getGames);
 router.post('/endGame', gameController.deleteGame);
-router.get('/history', userController.getHistory)
-router.post('/history', userController.addHistory)
+router.get('/history', userController.getHistory);
+router.post('/history', userController.addHistory);
+router.post('/support', supportController.sendQuestion);
+router.get('/support', supportController.getQuestions);
+router.put('/support', supportController.answer);
+router.get('/answers', supportController.getAnswers)
 
 export default router;

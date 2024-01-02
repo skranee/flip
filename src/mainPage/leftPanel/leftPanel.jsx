@@ -80,7 +80,7 @@ function LeftPanel () {
                                 <AiFillShop />
                                 <a > Market </a>
                             </div>
-                            <div className='menuProp'>
+                            <div className='menuProp' onClick={() => handleNavigate('/support')}>
                                 <AiFillWechat />
                                 <a> Support </a>
                             </div>

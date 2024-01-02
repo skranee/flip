@@ -23,8 +23,16 @@ function Chat() {
 
     useEffect(() => {
         if(user.username) {
+            let pingInterval;
             socket.current = new WebSocket('ws://localhost:4000');
+
+            function heartbeat() {
+                socket.current.send(JSON.stringify({ type: 'pong' }));
+            }
+
             socket.current.onopen = () => {
+                socket.current.addEventListener('ping', heartbeat);
+
                 socket.current.send(JSON.stringify({
                     username: user.username
                 }))
@@ -44,14 +52,25 @@ function Chat() {
                         break;
                 }
             }
+            socket.current.onclose = () => {
+                clearInterval(pingInterval);
+            }
+            socket.current.onerror = (error) => {
+                console.log('WS error: ', error);
+            }
+
+            return () => {
+                socket.current.close();
+            }
         }
-    }, [user.username]);
+    }, [user.username, ]);
 
     useEffect(() => {
         console.log('rendered')
     }, []);
 
     const setArray = (message) => {
+        console.log('here')
         setMessages(prev => [...prev, message]);
         return null;
     }
