@@ -146,7 +146,7 @@ class UserService {
             }
         }
         const update = await userModel.findOneAndUpdate(
-            {id: userId}, {$inc: {gamesPlayed: 1, totalWagered: items.reduce((a, b) => a + b.cost, 0)}, $push: {items: addItems}});
+            {id: userId}, {$inc: {gamesPlayed: 1, totalWagered: items.reduce((a, b) => a + b.price, 0)}, $push: {items: addItems}});
         const today = new Date();
         const options = {
             month: 'long',
@@ -162,7 +162,7 @@ class UserService {
         const result = game.result ? game.result : 'win';
         const player1 = game.player1;
         const player2 = game.player2;
-        const totalWorth = game.items1.reduce((a, b) => a + b.cost, 0) + game.items2.reduce((a, b) => a + b.cost, 0);
+        const totalWorth = game.items1.reduce((a, b) => a + b.price, 0) + game.items2.reduce((a, b) => a + b.price, 0);
         const add = await historyModel.create({
             user: userId, date: formattedDate, result: result, player1: player1._id, player2: player2._id, totalWorth: totalWorth});
         return add;

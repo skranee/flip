@@ -1,6 +1,9 @@
 export interface IItem {
     image: string,
     name: string,
-    cost: number,
-    class: string
+    price: number,
+    classification: string,
+    owner: string,
+    id: string,
+    rarity: string
 }

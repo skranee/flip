@@ -6,6 +6,7 @@ import MessageList from "./messageList";
 import {BiArrowToRight} from "react-icons/bi";
 import {Context} from "../index";
 import {observer} from "mobx-react";
+import online from '../imgs/online.png'
 
 function Chat() {
     const {store, globalStore} = useContext(Context)
@@ -16,6 +17,7 @@ function Chat() {
     const [btnDisabled, setBtnDisabled] = useState(true)
     const [connected, setConnected] = useState(false)
     const [clickInside, setClickInside] = useState(false)
+    const [usersOnline, setUsersOnline] = useState(0);
     const stream = globalStore.streamLive;
 
     const user = store.user;
@@ -34,7 +36,8 @@ function Chat() {
                 socket.current.addEventListener('ping', heartbeat);
 
                 socket.current.send(JSON.stringify({
-                    username: user.username
+                    username: user.username,
+                    method: 'connection'
                 }))
             }
             socket.current.onmessage = (event) => {
@@ -44,12 +47,17 @@ function Chat() {
                         setArray(message);
                         break;
                     case 'stream':
-                        if(message.status === 'live') {
+                        if(message.streamStatus === 'live') {
                             globalStore.setStreamLive(true)
                         } else {
                             globalStore.setStreamLive(false)
                         }
                         break;
+                    case 'connection':
+                        setUsersOnline(message.amount);
+                        break;
+                    case 'close':
+                        setUsersOnline(message.amount);
                 }
             }
             socket.current.onclose = () => {
@@ -150,13 +158,13 @@ function Chat() {
                 notification = {
                     id: Date.now(),
                     method: 'stream',
-                    status: 'offline'
+                    streamStatus: 'offline'
                 }
             } else {
                 notification = {
                     id: Date.now(),
                     method: 'stream',
-                    status: 'live'
+                    streamStatus: 'live'
                 }
             }
             socket.current.send(JSON.stringify(notification));
@@ -196,9 +204,13 @@ function Chat() {
                             <MdOutlineChat className='chatIconUpper'/>
                             <a className='chatTitle'>Chat</a>
                         </div>
-                        <div className='langChoice'>
-                            <a>EN</a>
-                            <img src={usFlag} alt='' className='langFlag'/>
+                        {/*<div className='langChoice'>*/}
+                        {/*    <a>EN</a>*/}
+                        {/*    <img src={usFlag} alt='' className='langFlag'/>*/}
+                        {/*</div>*/}
+                        <div className='usersOnline'>
+                            <img src={online} className='onlineCircle' alt=''/>
+                            <a>Online: {usersOnline}</a>
                         </div>
                         <BiArrowToRight style={{fontSize: '1.3em', cursor: "pointer"}} onClick={handleChat}/>
                     </div>

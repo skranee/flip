@@ -4,6 +4,8 @@ import {items} from "./gamesInfo";
 import {Context} from "../../index";
 import {observer} from "mobx-react";
 import question from '../../imgs/question.png'
+import {currProp} from "../../market/market";
+import gem from '../../imgs/currImg.png'
 
 export class Game {
     player1;
@@ -14,6 +16,8 @@ export class Game {
     bet;
     gameId;
     status;
+    side1;
+    side2;
 
     constructor(obj) {
         this.player1 = obj.player1;
@@ -24,6 +28,8 @@ export class Game {
         this.bet = this.combineBets();
         this.gameId = obj.gameId;
         this.status = obj.status;
+        this.side1 = obj.side1;
+        this.side2 = obj.side2;
     }
 
     combineItems() {
@@ -31,7 +37,7 @@ export class Game {
     }
 
     combineBets() {
-        return this.items.reduce((a, b) => a + b.cost, 0);
+        return Math.round(this.items.reduce((a, b) => a + b.price, 0) / currProp);
     }
 }
 
@@ -54,7 +60,9 @@ function GamesList () {
                         items1: item.items1,
                         items2: item.items2,
                         status: item.status,
-                        gameId: item.gameId
+                        gameId: item.gameId,
+                        side1: item.side1,
+                        side2: item.side2
                     })
                     setGames(prev => [...prev, gameObj]);
                 })
@@ -168,7 +176,8 @@ function GamesList () {
     }
 
     const handleJoin = (game) => {
-        //...
+        globalStore.setGameInfo(game);
+        globalStore.setJoinOpen(true);
     }
 
     return (
@@ -207,13 +216,13 @@ function GamesList () {
                         </div>
                         <a className='itemsAmount'>{item.items1.length} items</a>
                         <div className='betParams'>
-                            <a className='betAmount'>{item.bet}R$</a>
+                            <a className='betAmount'>{item.bet} <img src={gem} className='gemWorth' style={{width: 12, height: 12}} alt='' /> </a>
                             <a className='joinableBet'>
-                                {Math.round(item.bet * 0.95)}R$-{Math.round(item.bet * 1.05)}R$
+                                {Math.round(item.bet * 0.95)}-{Math.round(item.bet * 1.05)}  <img src={gem} style={{width: 12, height: 12}} className='gemWorth' alt='' />
                             </a>
                         </div>
                         <div className='btnsGame'>
-                            <button className='joinGame' onClick={(item) => handleJoin(item)}>
+                            <button className='joinGame' onClick={() => handleJoin(item)}>
                                 JOIN
                             </button>
                             <button className='viewGame' onClick={() => handleView(item)}>

@@ -12,6 +12,7 @@ import AdminService from "../services/AdminService";
 import GameService from "../services/GameService";
 import IGame from "../models/IGame";
 import SupportService from "../services/SupportService";
+import MarketService from "../services/MarketService";
 
 export default class Store {
     user = {} as IUser;
@@ -194,10 +195,19 @@ export default class Store {
         }
     }
 
-    async createGame(player1: IUser, items: IItem[]) {
+    async createGame(player1: IUser, items: IItem[], side: string) {
         try {
-            const game = await GameService.createGame(player1,items);
+            const game = await GameService.createGame(player1,items, side);
             return game;
+        } catch(e: any) {
+            console.log(e.response?.data?.message);
+        }
+    }
+
+    async joinGame(player2: IUser, items: IItem[], side: string, gameId: string) {
+        try {
+            const join = await GameService.joinGame(player2, items, side, gameId);
+            return join;
         } catch(e: any) {
             console.log(e.response?.data?.message);
         }
@@ -273,6 +283,42 @@ export default class Store {
         try {
             const answers = await SupportService.getAnswers(userId);
             return answers;
+        } catch(e: any) {
+            console.log(e.response?.data?.message);
+        }
+    }
+
+    async addItemMarket(userId: string, item: IItem) {
+        try {
+            const add = await MarketService.addItemMarket(userId, item);
+            return add;
+        } catch(e: any) {
+            console.log(e.response?.data?.message);
+        }
+    }
+
+    async getItemsMarket() {
+        try {
+            const items = await MarketService.getItemsMarket();
+            return items.data;
+        } catch(e: any) {
+            console.log(e.response?.data?.message);
+        }
+    }
+
+    async removeItemMarket(itemId: string) {
+        try {
+            const remove = await MarketService.removeItemMarket(itemId);
+            return remove;
+        } catch(e: any) {
+            console.log(e.response?.data?.message);
+        }
+    }
+
+    async buyItemMarket(ownerId: string, buyerId: string, itemId: string) {
+        try {
+            const buy = await MarketService.buyItemMarket(ownerId, buyerId, itemId);
+            return buy;
         } catch(e: any) {
             console.log(e.response?.data?.message);
         }

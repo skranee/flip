@@ -13,13 +13,15 @@ function Playzone () {
     const navigate = useNavigate()
 
     useEffect(() => {
-        const his = async () => {
-            const response = await store.getHistory(store.user.id);
-            if(response && response.data) {
-                setHistory(response.data);
+        if(store.user && store.user.id && store.isAuth) {
+            const his = async () => {
+                const response = await store.getHistory(store.user.id);
+                if(response && response.data) {
+                    setHistory(response.data);
+                }
             }
+            his();
         }
-        his();
     }, []);
 
     const handleCreate = () => {

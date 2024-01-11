@@ -230,7 +230,6 @@ code {
   padding: 0 5px;
   height: 70%;
   margin-right: 15px;
-  cursor: pointer;
 }
 
 .balanceNavContainer {
@@ -238,6 +237,7 @@ code {
   justify-content: center;
   gap: 5px;
   align-items: center;
+  cursor: pointer;
 }
 
 .balanceNav {
@@ -251,8 +251,8 @@ code {
   width: 45px;
   height: 45px;
   background-color: #292a33;
-  border: solid 2px darkgray;
   border-radius: 50%;
+  cursor: pointer;
 }
 
 .profileNavText {
@@ -260,11 +260,13 @@ code {
   font-weight: 500;
   font-size: 1.2em;
   color: #FFFFFF;
+  cursor: pointer;
 }
 
 .exitIconNav {
   color: #FFFFFF;
   font-size: 1.3em;
+  cursor: pointer;
 }
 
 .loginBtn {
@@ -1130,15 +1132,23 @@ code {
 .betAmount {
   font-family: 'Sora', sans-serif;
   color: #FFFFFFB2;
-  font-size: 1em;
+  font-size: 1.1em;
   font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3px;
 }
 
 .joinableBet {
   font-family: 'Sora', sans-serif;
   font-weight: 400;
-  font-size: 0.85em;
+  font-size: 0.95em;
   color: #FFFFFF40;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3px;
 }
 
 .btnsGame {
@@ -1432,7 +1442,7 @@ code {
 
 .chatIcon {
   position: fixed;
-  right: 14%;
+  right: 3%;
   top: 93%;
   border-radius: 50%;
   background-color: #8F8F8F;
@@ -1503,6 +1513,23 @@ code {
   font-size: 1.1em;
   font-family: 'Poppins', sans-serif;
   font-weight: 700;
+}
+
+.usersOnline {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 1em;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+
+.onlineCircle {
+  width: 8px;
+  height: 8px;
 }
 
 .langChoice {
@@ -1905,9 +1932,9 @@ code {
   border-radius: 50%;
   border: solid 3px #FFFFFF;
   background-color: #292a33;
-  -webkit-box-shadow: 0 0 25px 5px rgba(237, 237, 237, 0.35);
-  -moz-box-shadow: 0 0 25px 5px rgba(237, 237, 237, 0.35);
-  box-shadow: 0 0 25px 5px rgba(5, 5, 5, 0.85);
+  /*-webkit-box-shadow: 0 0 25px 5px rgba(237, 237, 237, 0.35);*/
+  /*-moz-box-shadow: 0 0 25px 5px rgba(237, 237, 237, 0.35);*/
+  /*box-shadow: 0 0 25px 5px rgba(5, 5, 5, 0.85);*/
 }
 
 .lobbyAvatar2 {
@@ -1916,9 +1943,9 @@ code {
   border-radius: 50%;
   border: solid 3px rgba(255, 0, 0, 0.4);
   background-color: #292a33;
-  -webkit-box-shadow: 0 0 25px 5px rgba(255, 0, 0, 0.4);
-  -moz-box-shadow: 0 0 25px 5px rgba(255, 0, 0, 0.4);
-  box-shadow: 0 0 25px 5px rgba(255, 0, 0, 0.4);
+  /*-webkit-box-shadow: 0 0 25px 5px rgba(255, 0, 0, 0.4);*/
+  /*-moz-box-shadow: 0 0 25px 5px rgba(255, 0, 0, 0.4);*/
+  /*box-shadow: 0 0 25px 5px rgba(255, 0, 0, 0.4);*/
 }
 
 @media (max-width: 1200px) {
@@ -1966,6 +1993,10 @@ code {
   font-size: 1em;
   font-family: 'Tilt Neon', sans-serif;
   color: #d2d4d9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3px;
 }
 
 @media (max-width: 1200px) {
@@ -2023,6 +2054,13 @@ code {
   font-family: 'Poppins', sans-serif;
   color: #d2d4d9;
   font-size: 1.1em;
+}
+
+.lobbyBet {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3px;
 }
 
 @media (max-width: 768px) {
@@ -2097,7 +2135,11 @@ code {
 .lobbyItemCost {
   color: #d2d4d9;
   font-family: 'Tilt Neon', sans-serif;
-  font-size: 1.1em;
+  font-size: 1.2em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3px;
 }
 
 @media (max-width: 1200px) {
@@ -2415,6 +2457,11 @@ code {
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
+  cursor: pointer;
+}
+
+.marketItemContainer:active {
+  transform: translateY(0.5px);
 }
 
 .marketItemImg {
@@ -2457,6 +2504,12 @@ code {
   font-weight: 500;
   font-size: 1em;
   color: #FFFFFF;
+}
+
+.errorBet {
+  font-family: 'Questrial', sans-serif;
+  font-size: 1.2em;
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .marketItemsValue {
@@ -3441,7 +3494,7 @@ code {
   align-items: center;
   width: 100%;
   flex-basis: 60%;
-  border-bottom: solid 1px rgba(255, 255, 255, 0.7);
+  border-bottom: solid 1px rgba(255, 255, 255, 0.2);
 }
 
 .answerText {
@@ -3482,11 +3535,208 @@ code {
   font-size: 1em;
   color: rgba(255, 255, 255, 0.9);
   background-color: rgba(0, 0, 0, 0.15);
-  border: solid 1px rgba(255, 255, 255, 0.7);
+  border: solid 1px rgba(255, 255, 255, 0.1);
   border-radius: 8px;
 }
 
+.modalBuy {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+  min-width: 250px;
+  min-height: 350px;
+  max-width: 600px;
+  max-height: 70vh;
+  border-radius: 8px;
+  background-color: #212C3B;
+}
 
+.headerBuy {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 1.5em;
+  color: rgba(255, 255, 255, 0.9);
+  flex-basis: 10%;
+  text-shadow: 0 2px 10px rgba(255, 255, 255, 0.4);
+}
+
+.imageBuy {
+  width: 150px;
+  height: 200px;
+  flex-basis: 50%;
+}
+
+.classBuy {
+  font-family: 'Questrial', sans-serif;
+  font-weight: 500;
+  font-size: 1.3em;
+  color: rgba(255, 255, 255, 0.5);
+  flex-basis: 10%;
+}
+
+.rarityBuy {
+  font-family: 'Questrial', sans-serif;
+  font-weight: 500;
+  font-size: 1.3em;
+  color: rgba(255, 255, 255, 0.4);
+  flex-basis: 10%;
+}
+
+.priceBuy {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  display: flex;
+  flex-direction: row;
+  width: 70%;
+  gap: 3px;
+  justify-content: flex-start;
+  align-items: center;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 1.3em;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.gemBuy {
+  width: 20px;
+  height: 20px;
+}
+
+.modalWindowDeposit {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px;
+  min-width: 550px;
+  min-height: 350px;
+  max-width: 600px;
+  max-height: 70vh;
+  border-radius: 8px;
+  background-color: #212C3B;
+}
+
+.worthDeposit {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 1.2em;
+  color: rgba(255, 255, 255, 0.9);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 3px;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.gemWorth {
+  width: 15px;
+  height: 15px;
+}
+
+.totalItemsDeposit {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 1.2em;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.depositUpper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 5px;
+  width: 95%;
+}
+
+.depositInventory {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  width: 97%;
+  align-items: flex-start;
+  justify-content: center;
+  flex-wrap: wrap;
+  max-height: 300px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.depositInventory::-webkit-scrollbar {
+  width: 5px;
+}
+
+.depositInventory::-webkit-scrollbar-thumb {
+  background-color: #3b4963;
+  border-radius: 6px;
+}
+
+.depositInventory::-webkit-scrollbar-track {
+  background-color: #111827;
+  border-radius: 6px;
+}
+
+.depositInventory::-webkit-scrollbar-thumb:hover {
+  background-color: #334057;
+}
+
+.noItemsText {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 1.2em;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.depositBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  border-radius: 5px;
+  font-family: 'Questrial', sans-serif;
+  font-size: 1.1em;
+  color: rgba(255, 255, 255, 0.92);
+  background-color: rgba(173, 12, 0, 0.9);
+  height: 25px;
+}
+
+.depositBtn:hover {
+  cursor: pointer;
+  background-color: rgba(173, 12, 0, 0.8)
+}
+
+.depositBtn:active {
+  transform: translate(0.3px);
+  background-color: rgba(173, 12, 0, 1);
+}
+
+.depositButtons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 95%;
+}
+
+.yourSellsText {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 1.05em;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.yourSellsText:hover {
+  cursor: pointer;
+  text-decoration: solid 1px underline rgba(255, 255, 255, 0.9);
+}
 
 
 

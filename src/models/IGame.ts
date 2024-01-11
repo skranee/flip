@@ -7,5 +7,7 @@ export default interface IGame {
     gameId: string,
     items1: IItem[],
     items2: IItem[],
+    side1: string,
+    side2: string,
     status: string
 }

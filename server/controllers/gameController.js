@@ -3,9 +3,19 @@ import gameService from "../services/gameService.js";
 class GameController {
     async createGame(req, res, next) {
         try {
-            const {player1, items} = req.body;
-            const game = gameService.createGame(player1, items);
+            const {player1, items, side} = req.body;
+            const game = gameService.createGame(player1, items, side);
             return res.json(game);
+        } catch(e) {
+            next(e);
+        }
+    }
+
+    async joinGame(req, res, next) {
+        try {
+            const {player2, items, side, gameId} = req.body;
+            const join = await gameService.joinGame(player2, items, side, gameId);
+            return res.json(join);
         } catch(e) {
             next(e);
         }

@@ -10,7 +10,7 @@ import tails from '../../imgs/tails.png'
 function GameCreate() {
     const {store, globalStore} = useContext(Context);
     const [playerItems, setPlayerItems] = useState([]);
-    const [chosenSide, setChosenSide] = useState('')
+    const [chosenSide, setChosenSide] = useState('black')
     const handleBlur = () => {
         globalStore.setCreateOpen(false);
     }
@@ -21,7 +21,7 @@ function GameCreate() {
     }
 
     const createGame = async () => {
-        const game = await store.createGame(store.user, playerItems);
+        const game = await store.createGame(store.user, playerItems, chosenSide);
         globalStore.setCreateOpen(false);
     }
 
@@ -31,7 +31,7 @@ function GameCreate() {
                 <div className='addItems'>
                     <div className='createWorth'>
                         <img className='marketCoinImg' src={coin} alt='' style={{height: 15, width: 15}}/>
-                        <a>{Math.round(playerItems.reduce((a, b) => a + b.cost, 0) / currProp)}</a>
+                        <a>{Math.round(playerItems.reduce((a, b) => a + b.price, 0) / currProp)}</a>
                     </div>
                     <div className='itemsAddContainer'>
                         {playerItems.map((item, index) => (
@@ -41,7 +41,7 @@ function GameCreate() {
                                 <a className='marketItemName'>{item.name}</a>
                                 <div className='marketItemCostContainer'>
                                     <img className='marketCoinImg' src={coin} alt='' />
-                                    <a className='marketItemCost'>{Math.round(item.cost / currProp)}</a>
+                                    <a className='marketItemCost'>{Math.round(item.price / currProp)}</a>
                                 </div>
                             </li>
                         ))}

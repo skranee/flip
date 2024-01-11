@@ -7,6 +7,8 @@ const GameSchema = new Schema({
     items1: {type: Array, required: true},
     items2: {type: Array},
     result: {type: String},
+    side1: {type: String, default: 'black'},
+    side2: {type: String},
     status: {type: String, default: 'Joinable'}
 })
 

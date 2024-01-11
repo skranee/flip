@@ -6,7 +6,7 @@ import DropdownSortAll from "./dropdownSortAll";
 import DropdownSortHL from "./dropdownSortHL";
 import {observer} from "mobx-react";
 function PlayPanel () { //observable?
-    const {globalStore} = useContext(Context)
+    const {store, globalStore} = useContext(Context)
     const [openSortHL, setOpenSortHL] = useState(false)
     const [openSortAll, setOpenSortAll] = useState(false)
 
@@ -21,6 +21,18 @@ function PlayPanel () { //observable?
             setOpenSortAll(false)
         }
     }, [openSortAll]);
+
+    useEffect(() => {
+        const getGames = async () => {
+            const games = await store.getGames();
+            if(games && games.data) {
+                globalStore.setGamesAll(games.data.length);
+                const join = games.data.filter(game => game.status === 'Joinable')
+                globalStore.setGamesJoin(join.length);
+            }
+        }
+        getGames();
+    }, []);
 
     const paramsHL = ['Sort', 'High To Low', 'Low To High']
     const paramsAll = ['All', 'Ongoing', 'Joinable']

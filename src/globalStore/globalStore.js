@@ -2,8 +2,8 @@ import {makeAutoObservable} from "mobx";
 
 export default class GlobalStore {
     logOpen = false;
-    gamesJoin = 3;
-    gamesAll = 8;
+    gamesJoin = 0;
+    gamesAll = 0;
     titleHL = 'Sort';
     titleAll = 'All';
     viewOpen = false;
@@ -15,6 +15,12 @@ export default class GlobalStore {
     createOpen = false;
     historyOpen = false;
     openAnswers = false;
+    buyOpen = false;
+    depositOpen = false;
+    sellOpen = false;
+    sellItemOpen = false;
+    itemsOnSale = false;
+    joinOpen = false;
 
     constructor() {
         makeAutoObservable(this)
@@ -74,5 +80,29 @@ export default class GlobalStore {
 
     setOpenAnswers(bool) {
         this.openAnswers = bool;
+    }
+
+    setBuyOpen(bool) {
+        this.buyOpen = bool;
+    }
+
+    setDepositOpen(bool) {
+        this.depositOpen = bool;
+    }
+
+    setSellOpen(bool) {
+        this.sellOpen = bool;
+    }
+
+    setSellItemOpen(bool) {
+        this.sellItemOpen = bool;
+    }
+
+    setItemsOnSale(bool) {
+        this.itemsOnSale = bool;
+    }
+
+    setJoinOpen(bool) {
+        this.joinOpen = bool;
     }
 }

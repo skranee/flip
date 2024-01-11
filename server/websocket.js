@@ -8,12 +8,19 @@ function heartbeat() {
     this.isAlive = true;
 }
 
+let streamStatus = 'offline';
+
 wss.on('connection', function connection(ws) {
     console.log('new commit 1')
 
     ws.isAlive = true;
 
     ws.on('pong', heartbeat);
+
+    ws.send(JSON.stringify({
+        method: 'stream',
+        streamStatus: streamStatus
+    }))
 
     ws.on('message', function (message) {
         message = JSON.parse(message);
@@ -23,11 +30,33 @@ wss.on('connection', function connection(ws) {
                 broadcastMessage(message);
                 break;
             case 'stream':
+                streamStatus = message.streamStatus;
                 broadcastMessage(message);
+                break;
+            case 'connection':
+                broadcastAmount('connection');
+                break;
+            case 'close':
+                console.log('closed')
+                broadcastAmount('close');
                 break;
         }
     })
+
+    ws.on('close', function () {
+        wss.clients.delete(ws);
+        broadcastAmount('close');
+    })
 })
+
+function broadcastAmount(method) {
+    wss.clients.forEach(client => {
+        client.send(JSON.stringify({
+            amount: wss.clients.size + 50,
+            method: method
+        }));
+    })
+}
 
 function broadcastMessage(message) {
     wss.clients.forEach(client => {

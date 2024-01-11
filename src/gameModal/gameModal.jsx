@@ -6,11 +6,13 @@ import CoinFlip from "./coinFlip";
 import coinHeads from '../imgs/coinHeads.png'
 import coinTails from '../imgs/coinTails.png'
 import question from '../imgs/question.png'
+import {currProp} from "../market/market";
+import gem from "../imgs/currImg.png";
 
 function GameModal({game}) {
     const {store, globalStore} = useContext(Context)
-    const player1Bet = game.items1.reduce((a, b) => a + b.cost, 0);
-    const player2Bet = game.items2.reduce((a, b) => a + b.cost, 0);
+    const player1Bet = Math.round(game.items1.reduce((a, b) => a + b.price, 0) / currProp);
+    const player2Bet = Math.round(game.items2.reduce((a, b) => a + b.price, 0) / currProp);
 
     const handleBlur = () => {
         globalStore.setViewOpen(false)
@@ -32,16 +34,24 @@ function GameModal({game}) {
                 <div className='lobbyPlayerContainer'>
                     <div className='lobbyUpperInfo'>
                         <div className='avatarContainerLobby'>
-                            <img className='lobbyAvatar' src={game.player1.avatar} alt=''/>
+                            <img
+                                className='lobbyAvatar'
+                                style={{
+                                    boxShadow: game.side1 === 'red' ? '0 0 25px 5px rgba(255, 0, 0, 0.4)' :
+                                        '0 0 25px 5px rgba(5, 5, 5, 0.85)'
+                                }}
+                                src={game.player1.avatar}
+                                alt=''
+                            />
                         </div>
                         <div className='usernameWorth'>
-                            <a className='lobbyUsername'>{game.player1.name}</a>
+                            <a className='lobbyUsername'>{game.player1.username}</a>
                             <a className='lobbyWorthText'>Worth: </a>
-                            <a className='lobbyWorth'>{player1Bet}R$</a>
+                            <a className='lobbyWorth'>{player1Bet} <img src={gem} className='gemWorth' alt='' /> </a>
                         </div>
                     </div>
                     <div className='lobbyPlayerBet'>
-                        <a className='lobbyBet'>{player1Bet}R$</a>
+                        <a className='lobbyBet'>{player1Bet} <img src={gem} className='gemWorth' alt='' /> </a>
                         <a className='lobbyChance'>{calcChance(player1Bet, player2Bet)}%</a>
                     </div>
                     <ItemsList items={game.items1} />
@@ -53,16 +63,24 @@ function GameModal({game}) {
                 <div className='lobbyPlayerContainer'>
                     <div className='lobbyUpperInfo'>
                         <div className='avatarContainerLobby'>
-                            <img className='lobbyAvatar2' src={game.player2 ? game.player2.avatar : question} alt=''/>
+                            <img
+                                className='lobbyAvatar2'
+                                style={{
+                                    boxShadow: game.side1 === 'black' ? '0 0 25px 5px rgba(255, 0, 0, 0.4)' :
+                                        '0 0 25px 5px rgba(5, 5, 5, 0.85)'
+                                }}
+                                src={game.player2 ? game.player2.avatar : question}
+                                alt=''
+                            />
                         </div>
                         <div className='usernameWorth'>
-                            <a className='lobbyUsername'>{game.player2 ? game.player2.name : '???'}</a>
+                            <a className='lobbyUsername'>{game.player2 ? game.player2.username : '???'}</a>
                             <a className='lobbyWorthText'>Worth: </a>
-                            <a className='lobbyWorth'>{game.player2 ? player2Bet : '?'}R$</a>
+                            <a className='lobbyWorth'>{game.player2 ? player2Bet : '?'} <img src={gem} className='gemWorth' alt='' /> </a>
                         </div>
                     </div>
                     <div className='lobbyPlayerBet'>
-                        <a className='lobbyBet'>{game.player2 ? player2Bet: '?'}R$</a>
+                        <a className='lobbyBet'>{game.player2 ? player2Bet: '?'} <img src={gem} className='gemWorth' alt='' /> </a>
                         <a className='lobbyChance'>{calcChance(player2Bet, player1Bet)}%</a>
                     </div>
                     {game.items2 &&

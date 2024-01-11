@@ -15,170 +15,170 @@ export const items = [ //should add some fields to items such as rarity, float, 
     {
         image: ewScythe,
         name: 'ewScythe',
-        cost: 123,
-        class: 'Blade'
+        price: 123,
+        classification: 'Blade'
     },
     {
         image: hallowScythe,
         name: 'Hallow Scythe',
-        cost: 4234,
-        class: 'Gun'
+        price: 4234,
+        classification: 'Gun'
     },
     {
         image: harvester,
         name: 'harvester',
-        cost: 312,
-        class: 'Blade'
+        price: 312,
+        classification: 'Blade'
     },
     {
         image: iceBreaker,
         name: 'Ice Breaker',
-        cost: 523,
-        class: 'Gun'
+        price: 523,
+        classification: 'Gun'
     },
     {
         image: icePiercer,
         name: 'Ice Piercer',
-        cost: 1313,
-        class: 'Blade'
+        price: 1313,
+        classification: 'Blade'
     },
     {
         image: swirlyAxe,
         name: 'Swirly Axe',
-        cost: 444,
-        class: 'Gun'
+        price: 444,
+        classification: 'Gun'
     },
     {
         image: travellersAxe,
         name: 'Travellers Axe',
-        cost: 3213,
-        class: 'Blade'
+        price: 3213,
+        classification: 'Blade'
     },
     {
         image: ewScythe,
         name: 'ewScythe',
-        cost: 123,
-        class: 'Blade'
+        price: 123,
+        classification: 'Blade'
     },
     {
         image: hallowScythe,
         name: 'Hallow Scythe',
-        cost: 4234,
-        class: 'Gun'
+        price: 4234,
+        classification: 'Gun'
     },
     {
         image: harvester,
         name: 'harvester',
-        cost: 312,
-        class: 'Blade'
+        price: 312,
+        classification: 'Blade'
     },
     {
         image: iceBreaker,
         name: 'Ice Breaker',
-        cost: 523,
-        class: 'Gun'
+        price: 523,
+        classification: 'Gun'
     },
     {
         image: icePiercer,
         name: 'Ice Piercer',
-        cost: 1313,
-        class: 'Blade'
+        price: 1313,
+        classification: 'Blade'
     },
     {
         image: swirlyAxe,
         name: 'Swirly Axe',
-        cost: 444,
-        class: 'Gun'
+        price: 444,
+        classification: 'Gun'
     },
     {
         image: travellersAxe,
         name: 'Travellers Axe',
-        cost: 3213,
-        class: 'Blade'
+        price: 3213,
+        classification: 'Blade'
     },
     {
         image: ewScythe,
         name: 'ewScythe',
-        cost: 123,
-        class: 'Blade'
+        price: 123,
+        classification: 'Blade'
     },
     {
         image: hallowScythe,
         name: 'Hallow Scythe',
-        cost: 4234,
-        class: 'Gun'
+        price: 4234,
+        classification: 'Gun'
     },
     {
         image: harvester,
         name: 'harvester',
-        cost: 312,
-        class: 'Blade'
+        price: 312,
+        classification: 'Blade'
     },
     {
         image: iceBreaker,
         name: 'Ice Breaker',
-        cost: 523,
-        class: 'Gun'
+        price: 523,
+        classification: 'Gun'
     },
     {
         image: icePiercer,
         name: 'Ice Piercer',
-        cost: 1313,
-        class: 'Blade'
+        price: 1313,
+        classification: 'Blade'
     },
     {
         image: swirlyAxe,
         name: 'Swirly Axe',
-        cost: 444,
-        class: 'Gun'
+        price: 444,
+        classification: 'Gun'
     },
     {
         image: travellersAxe,
         name: 'Travellers Axe',
-        cost: 3213,
-        class: 'Blade'
+        price: 3213,
+        classification: 'Blade'
     },
     {
         image: ewScythe,
         name: 'ewScythe',
-        cost: 123,
-        class: 'Blade'
+        price: 123,
+        classification: 'Blade'
     },
     {
         image: hallowScythe,
         name: 'Hallow Scythe',
-        cost: 4234,
-        class: 'Gun'
+        price: 4234,
+        classification: 'Gun'
     },
     {
         image: harvester,
         name: 'harvester',
-        cost: 312,
-        class: 'Blade'
+        price: 312,
+        classification: 'Blade'
     },
     {
         image: iceBreaker,
         name: 'Ice Breaker',
-        cost: 523,
-        class: 'Gun'
+        price: 523,
+        classification: 'Gun'
     },
     {
         image: icePiercer,
         name: 'Ice Piercer',
-        cost: 1313,
-        class: 'Blade'
+        price: 1313,
+        classification: 'Blade'
     },
     {
         image: swirlyAxe,
         name: 'Swirly Axe',
-        cost: 444,
-        class: 'Gun'
+        price: 444,
+        classification: 'Gun'
     },
     {
         image: travellersAxe,
         name: 'Travellers Axe',
-        cost: 3213,
-        class: 'Blade'
+        price: 3213,
+        classification: 'Blade'
     },
 ]
 
@@ -198,7 +198,7 @@ class Player {
     }
 
     calcBet() {
-        return this.items.reduce((a, b) => a + b.cost, 0)
+        return this.items.reduce((a, b) => a + b.price, 0)
     }
 }
 

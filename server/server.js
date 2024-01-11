@@ -2,7 +2,6 @@ import {config} from "dotenv";
 import express from 'express'
 import bodyParser from "body-parser";
 import cors from 'cors'
-import axios from "axios";
 import mongoose from 'mongoose'
 import cookieParser from 'cookie-parser'
 import router from './router/index.js'

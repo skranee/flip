@@ -5,6 +5,7 @@ import AffiliateController from "../controllers/affiliateController.js";
 import RewardController from "../controllers/rewardController.js";
 import gameController from "../controllers/gameController.js";
 import supportController from "../controllers/supportController.js";
+import marketController from "../controllers/marketController.js";
 
 const router = new Router();
 
@@ -24,6 +25,7 @@ router.put('/claim', userController.claim);
 router.patch('/tip', userController.tip);
 router.get('/leaders', userController.getLeaders);
 router.post('/game', gameController.createGame);
+router.patch('/game', gameController.joinGame);
 router.get('/game', gameController.getGames);
 router.post('/endGame', gameController.deleteGame);
 router.get('/history', userController.getHistory);
@@ -31,6 +33,10 @@ router.post('/history', userController.addHistory);
 router.post('/support', supportController.sendQuestion);
 router.get('/support', supportController.getQuestions);
 router.put('/support', supportController.answer);
-router.get('/answers', supportController.getAnswers)
+router.get('/answers', supportController.getAnswers);
+router.post('/market', marketController.addItemMarket);
+router.get('/market', marketController.getItemsMarket);
+router.put('/market', marketController.buyItemMarket);
+router.post('/marketRemove', marketController.removeItemMarket);
 
 export default router;
