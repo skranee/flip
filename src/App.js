@@ -9,9 +9,10 @@ import {Route, Routes} from "react-router-dom";
 import Profile from "./profile/profile";
 import Market from "./market/market";
 import Rewards from "./rewards/rewards";
-import WeeklyRace from "./leadersBoard/leadersBoard";
 import Support from "./support/support";
 import Answer from "./support/answer";
+import AdminPanel from "./adminPanel/adminPanel";
+import LeadersBoard from "./leadersBoard/leadersBoard";
 
 function App() {
     const {globalStore, store} = useContext(Context);
@@ -38,14 +39,16 @@ function App() {
         //handle 404 (don't show elements like chat, faq etc when the page is .../rekfdosf) => 404 page
     <>
         <NavigationPanel />
+        <div className='background' />
         <Routes>
             <Route path='/' element={<MainPage />} />
             <Route path='/profile' element={<Profile />} />
             <Route path='/market' element={<Market />} />
             <Route path='/rewards' element={<Rewards />} />
-            <Route path='/leaders' element={<WeeklyRace />} />
+            <Route path='/leaders' element={<LeadersBoard />} />
             <Route path='/support' element={<Support />} />
             <Route path='/answer' element={<Answer />} />
+            <Route path='/admin' element={<AdminPanel />} />
         </Routes>
         <LeftPanel />
         <Chat />

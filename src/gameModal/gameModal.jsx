@@ -8,24 +8,43 @@ import coinTails from '../imgs/coinTails.png'
 import question from '../imgs/question.png'
 import {currProp} from "../market/market";
 import gem from "../imgs/currImg.png";
+import {items} from "../mainPage/playzone/gamesInfo";
+import { HiDotsHorizontal } from "react-icons/hi";
 
 function GameModal({game}) {
     const {store, globalStore} = useContext(Context)
-    const player1Bet = Math.round(game.items1.reduce((a, b) => a + b.price, 0) / currProp);
-    const player2Bet = Math.round(game.items2.reduce((a, b) => a + b.price, 0) / currProp);
+    const player1Bet = game.items1.length > 0 ? Math.round(game.items1.reduce((a, b) => a + b.price, 0) / currProp) : Math.round(game.gems1)
+    const player2Bet = game.items2.length > 0 ? Math.round(game.items2.reduce((a, b) => a + b.price, 0) / currProp) : Math.round(game.gems2)
 
     const handleBlur = () => {
         globalStore.setViewOpen(false)
     }
 
     function calcChance(player, opponent) {
-        return (player / (player + opponent)).toFixed(2) * 100;
+        if(!player) {
+            player = 0;
+        }
+        if(!opponent) {
+            opponent = 0;
+        }
+        return ((player / (player + opponent)).toFixed(4) * 100).toFixed(2);
     }
 
     const endGame = async () => { //!!!!!!!
-        const deleteGame = await store.endGame(game.gameId);
-        const add = await store.addHistory(store.user.id, game);
-        globalStore.setViewOpen(false);
+        // const deleteGame = await store.endGame(game.gameId);
+        // const add = await store.addHistory(store.user.id, game);
+        // globalStore.setViewOpen(false);
+        // const response = await store.findWinner(game.gameId);
+        // console.log(response.data)
+        // const add = await store.addItemBot(store.user.robloxId, items[10])
+        // const id = await store.getAccountId();
+        // const address = await store.createPaymentAddress(id.data, 'BTC');
+        // console.log(address.data)
+        // const item = await store.createItem('testgun', 1);
+        // const response = await store.getTransactions();
+        // console.log(response);
+        const payments = await store.getPayments(store.user.id);
+        console.log(payments);
     }
 
     return (
@@ -37,8 +56,10 @@ function GameModal({game}) {
                             <img
                                 className='lobbyAvatar'
                                 style={{
-                                    boxShadow: game.side1 === 'red' ? '0 0 25px 5px rgba(255, 0, 0, 0.4)' :
-                                        '0 0 25px 5px rgba(5, 5, 5, 0.85)'
+                                    boxShadow: game.side1 === 'red' ? '0 0 20px 5px rgba(200, 200, 200, 1)' :
+                                        '0 0 25px 5px rgba(255, 0, 0, 1)',
+                                    border: game.side1 === 'red' ? 'solid 3px rgba(200, 200, 200, 1)' :
+                                        'solid 3px rgba(255, 0, 0, 1)'
                                 }}
                                 src={game.player1.avatar}
                                 alt=''
@@ -56,22 +77,32 @@ function GameModal({game}) {
                     </div>
                     <ItemsList items={game.items1} />
                 </div>
-                <button onClick={endGame}>
-                    end
-                </button>
+                {/*<button onClick={endGame}>*/}
+                {/*    end*/}
+                {/*</button>*/}
                 <CoinFlip />
                 <div className='lobbyPlayerContainer'>
                     <div className='lobbyUpperInfo'>
                         <div className='avatarContainerLobby'>
-                            <img
-                                className='lobbyAvatar2'
-                                style={{
-                                    boxShadow: game.side1 === 'black' ? '0 0 25px 5px rgba(255, 0, 0, 0.4)' :
-                                        '0 0 25px 5px rgba(5, 5, 5, 0.85)'
-                                }}
-                                src={game.player2 ? game.player2.avatar : question}
-                                alt=''
-                            />
+                            {game.player2 ?
+                                <img className='lobbyAvatar2'
+                                     style={{
+                                         boxShadow: game.side1 === 'black' ? '0 0 20px 5px rgba(200, 200, 200, 1)' :
+                                             '0 0 25px 5px rgba(239, 0, 0, 1)'
+                                     }}
+                                     src={game.player2.avatar}
+                                     alt=''/>
+                                :
+                                <div className='lobbyAvatar2'
+                                     style={{
+                                         boxShadow: game.side1 === 'black' ? '0 0 20px 5px rgba(200, 200, 200, 1)' :
+                                             '0 0 20px 5px rgba(239, 0, 0, 1)',
+                                         border: game.side1 === 'black' ? 'solid 3px rgba(200, 200, 200, 1)' :
+                                             'solid 3px rgba(239, 0, 0, 1)'
+                                     }}>
+                                    <HiDotsHorizontal style={{fontSize: '1.8em'}} />
+                                </div>
+                            }
                         </div>
                         <div className='usernameWorth'>
                             <a className='lobbyUsername'>{game.player2 ? game.player2.username : '???'}</a>

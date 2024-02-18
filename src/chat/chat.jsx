@@ -1,6 +1,5 @@
 import React, {useContext, useEffect, useRef, useState} from 'react'
 import { MdOutlineChat } from "react-icons/md/index.esm";
-import usFlag from '../imgs/us_flag.png'
 import { VscSend } from "react-icons/vsc/index.esm";
 import MessageList from "./messageList";
 import {BiArrowToRight} from "react-icons/bi";
@@ -9,10 +8,9 @@ import {observer} from "mobx-react";
 import online from '../imgs/online.png'
 
 function Chat() {
+    const [messages, setMessages] = useState([]);
     const {store, globalStore} = useContext(Context)
-    const [chatOpened, setChatOpened] = useState(false);
     const [mes, setMes] = useState('')
-    const [messages, setMessages] = useState([])
     const modalRef = useRef();
     const [btnDisabled, setBtnDisabled] = useState(true)
     const [connected, setConnected] = useState(false)
@@ -44,7 +42,7 @@ function Chat() {
                 let message = JSON.parse(event.data)
                 switch (message.method) {
                     case 'message':
-                        setArray(message);
+                        setMessages((prevState) => [...prevState, message]);
                         break;
                     case 'stream':
                         if(message.streamStatus === 'live') {
@@ -54,6 +52,8 @@ function Chat() {
                         }
                         break;
                     case 'connection':
+                        const msgs = message.messages;
+                        setMessages(msgs);
                         setUsersOnline(message.amount);
                         break;
                     case 'close':
@@ -77,16 +77,6 @@ function Chat() {
         console.log('rendered')
     }, []);
 
-    const setArray = (message) => {
-        console.log('here')
-        setMessages(prev => [...prev, message]);
-        return null;
-    }
-
-    const log = () => {
-        console.log('yoyoyo')
-    }
-
     useEffect(() => {
         if(mes.trim().length) {
             setBtnDisabled(false)
@@ -101,7 +91,7 @@ function Chat() {
     }
 
     const handleChat = () => {
-        setChatOpened(!chatOpened)
+        globalStore.setChatOpened(!globalStore.chatOpened)
     }
 
     const handleChange = (text) => {
@@ -143,7 +133,8 @@ function Chat() {
                 method: 'message'
             }
             setMes('');
-            socket.current.send(JSON.stringify(message))
+            socket.current.send(JSON.stringify(message));
+            await store.sendMessage(message.user.id, message.message, message.time, (message.id).toString(), message.avatar);
             if(messages.length > 49) {
                 messages.splice(0, 1);
             }
@@ -192,61 +183,63 @@ function Chat() {
 
     return (
         <div>
-            {!chatOpened &&
+            {!globalStore.chatOpened &&
                 <div className='chatIcon' onClick={handleChat}>
-                    <MdOutlineChat style={{marginTop: 7}}/>
+                    <MdOutlineChat />
                 </div>
             }
-            {chatOpened ? <div className='chatSpace'>
-                <div className='chatInner'>
-                    <div className='chatUpperPanel'>
-                        <div className='chatText'>
-                            <MdOutlineChat className='chatIconUpper'/>
-                            <a className='chatTitle'>Chat</a>
+            <div className='chatSpace' style={{width: globalStore.chatOpened ? '' : 0}}>
+                {globalStore.chatOpened &&
+                    <div className='chatInner'>
+                        <div className='chatUpperPanel'>
+                            {/*<div className='langChoice'>*/}
+                            {/*    <a>EN</a>*/}
+                            {/*    <img src={usFlag} alt='' className='langFlag'/>*/}
+                            {/*</div>*/}
+                            <div className='usersOnline'>
+                                <img src={online} className='onlineCircle' alt=''/>
+                                <a> {usersOnline}</a>
+                            </div>
+                            <div className='chatText'>
+                                {/*<MdOutlineChat className='chatIconUpper'/>*/}
+                                <a className='chatTitle'>Chat</a>
+                            </div>
+                            <BiArrowToRight style={{fontSize: '1.3em', cursor: "pointer"}} onClick={handleChat}/>
                         </div>
-                        {/*<div className='langChoice'>*/}
-                        {/*    <a>EN</a>*/}
-                        {/*    <img src={usFlag} alt='' className='langFlag'/>*/}
-                        {/*</div>*/}
-                        <div className='usersOnline'>
-                            <img src={online} className='onlineCircle' alt=''/>
-                            <a>Online: {usersOnline}</a>
-                        </div>
-                        <BiArrowToRight style={{fontSize: '1.3em', cursor: "pointer"}} onClick={handleChat}/>
-                    </div>
-                    <MessageList messages={messages} />
-                    {store.user.role === 'admin' &&
-                        <button onClick={handleStream} className='btnStream'>
-                            {stream ? 'Turn off' : 'Stream'}
-                        </button>
-                    }
-                    {stream
-                        ? <div className='streamNotification'>
-                            Stream Live!
-                            <button className='streamBtn' onClick={() => openStream('https://www.twitch.tv/mm2flip')}>
-                                Twitch
+                        <MessageList messages={messages} />
+                        {store.user.role === 'admin' &&
+                            <button onClick={handleStream} className='btnStream'>
+                                {stream ? 'Turn off' : 'Stream'}
                             </button>
-                            <button className='streamBtn' onClick={() => openStream('https://kick.com/mm2flip')}>
-                                Kick
+                        }
+                        {stream
+                            ? <div className='streamNotification'>
+                                Stream Live!
+                                <button className='streamBtn' onClick={() => openStream('https://www.twitch.tv/mm2flip')}>
+                                    Twitch
+                                </button>
+                                <button className='streamBtn' onClick={() => openStream('https://kick.com/mm2flip')}>
+                                    Kick
+                                </button>
+                            </div>
+                            : <div />
+                        }
+                        <div className='sendContainer'>
+                            <input
+                                className='inputSend'
+                                type='text'
+                                value={mes}
+                                placeholder='Type here...'
+                                onChange={(event) => handleChange(event.target.value)}
+                                onKeyDown={(event) => handleKeyDown(event)}
+                            />
+                            <button disabled={btnDisabled} className='btnSend' onClick={() => handleSend()}>
+                                <VscSend />
                             </button>
                         </div>
-                        : <div />
-                    }
-                    <div className='sendContainer'>
-                        <input
-                            className='inputSend'
-                            type='text'
-                            value={mes}
-                            placeholder='Type here...'
-                            onChange={(event) => handleChange(event.target.value)}
-                            onKeyDown={(event) => handleKeyDown(event)}
-                        />
-                        <button disabled={btnDisabled} className='btnSend' onClick={() => handleSend()}>
-                            <VscSend />
-                        </button>
                     </div>
-                </div>
-            </div> : <div />}
+                }
+            </div>
             {globalStore.profileOpen &&
                 <div className='backgroundModal' onMouseDown={handleMouseDown} onMouseUp={handleMouseUp}>
                     <div className='modalPlayer' style={{maxWidth: 250}} ref={modalRef}>

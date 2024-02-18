@@ -1,5 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Context} from "../index";
+import gem from '../imgs/currImg.png'
 
 function LeadersList() {
     const {store} = useContext(Context);
@@ -23,15 +24,15 @@ function LeadersList() {
                     </div>
                     <div className='leaderTotal'>
                         <a className='totalUpper'>Total wagered</a>
-                        <a style={{color: 'rgba(255, 255, 255, 0.92)'}}>{item.totalWagered} R$</a>
+                        <a style={{color: 'rgba(255, 255, 255, 0.92)', textShadow: '0 2px 8px rgba(255, 255, 255, 0.7)'}}>{Math.round(item.totalWagered)} <img src={gem} className='gemWorth' alt='' /></a>
                     </div>
                     <div className='leaderTotal'>
                         <a className='totalUpper'>Games played</a>
-                        <a style={{color: 'rgba(255, 255, 255, 0.92)'}}>{item.gamesPlayed}</a>
+                        <a style={{color: 'rgba(255, 255, 255, 0.92)', textShadow: '0 2px 8px rgba(255, 255, 255, 0.7)'}}>{item.gamesPlayed}</a>
                     </div>
                     <div className='leaderTotal'>
                         <a className='totalUpper'>Level</a>
-                        <a style={{color: 'rgba(255, 255, 255, 0.92)'}}>{item.lvl}</a>
+                        <a style={{color: 'rgba(255, 255, 255, 0.92)', textShadow: '0 2px 8px rgba(255, 255, 255, 0.7)'}}>{item.lvl}</a>
                     </div>
                 </li>
             ))}

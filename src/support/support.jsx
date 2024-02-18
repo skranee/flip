@@ -23,6 +23,21 @@ function Support() {
         }
     }, [store.user.role]);
 
+    const containerWidth = () => {
+        if(!globalStore.chatOpened && globalStore.panelOpen) {
+            return '84.5%'
+        }
+        else if(!globalStore.chatOpened && !globalStore.panelOpen) {
+            return '97.5%'
+        }
+        else if(globalStore.chatOpened && !globalStore.panelOpen) {
+            return '81%'
+        }
+        else {
+            return '68%'
+        }
+    }
+
     const handleChange = (event) => {
         if(event.target.value.trim().length) {
             setDisabled(false);
@@ -64,8 +79,11 @@ function Support() {
         <div>
             <div className='background' />
             <div className='supportPage'>
-                <div className='supportContainer'>
-                    {store.user.role === 'user' &&
+                <div className='supportContainer' style={{
+                    width: containerWidth(),
+                    marginLeft: globalStore.panelOpen ? '14.5%' : '1%'
+                }}>
+                    {store.user.role === 'user' || store.user.role === 'developer' &&
                         <>
                             <a className='supportHeader'>NEED HELP WITH MM2FLIP.COM?</a>
                             <textarea

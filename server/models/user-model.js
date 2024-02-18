@@ -9,12 +9,11 @@ const UserSchema = new Schema({
     totalWithdrawn: {type: Number, default: 0},
     totalWagered: {type: Number, default: 0},
     gamesPlayed: {type: Number, default: 0},
-    itemsList: {type: Array, default: []},
     balance: {type: Number, default: 0},
     role: {type: String, default: 'user'},
     lvl: {type: Number, default: 1},
     experience: {type: Number, default: 0},
-    gotReward: {type: Boolean, default: true},
+    gotReward: {type: Boolean, default: true}
 })
 
 export default model('User', UserSchema);

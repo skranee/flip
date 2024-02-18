@@ -1,10 +1,10 @@
 import {config} from "dotenv";
 import express from 'express'
 import bodyParser from "body-parser";
-import cors from 'cors'
-import mongoose from 'mongoose'
-import cookieParser from 'cookie-parser'
-import router from './router/index.js'
+import cors from 'cors';
+import mongoose from 'mongoose';
+import cookieParser from 'cookie-parser';
+import router from './router/index.js';
 import errorMiddleware from "./middlewares/error-middleware.js";
 
 config();
@@ -16,6 +16,7 @@ app.use(cors({
     credentials: true,
     origin: process.env.CLIENT_URL
 }));
+// app.options('*', cors());
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use('/api', router)

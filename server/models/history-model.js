@@ -1,7 +1,6 @@
 import {Schema, model} from 'mongoose';
 
 const HistorySchema = new Schema({
-    user: {type: Schema.Types.ObjectId, required: true, ref: 'User'},
     date: {type: String, required: true},
     result: {type: String, required: true},
     player1: {type: Schema.Types.ObjectId, required: true, ref: 'User'},

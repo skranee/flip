@@ -7,7 +7,7 @@ import {items} from "../mainPage/playzone/gamesInfo";
 export const maxExp = 2000;
 
 function Rewards() {
-    const {store} = useContext(Context)
+    const {globalStore, store} = useContext(Context)
     const [reward, setReward] = useState({name: '', lvl: 0, description: 'Bonus', image: ''})
 
     useEffect(() => {
@@ -23,7 +23,22 @@ function Rewards() {
         }
         getReward();
         store.setLoading(false)
-    });
+    }, [store.user.lvl]);
+
+    const containerWidth = () => {
+        if(!globalStore.chatOpened && globalStore.panelOpen) {
+            return '84.5%'
+        }
+        else if(!globalStore.chatOpened && !globalStore.panelOpen) {
+            return '97.5%'
+        }
+        else if(globalStore.chatOpened && !globalStore.panelOpen) {
+            return '81%'
+        }
+        else {
+            return '68%'
+        }
+    }
 
     const progressStatus = (store.user.experience / maxExp) * 100;
 
@@ -35,7 +50,10 @@ function Rewards() {
         <div>
             <div className='background' />
             <div className='rewardsPage'>
-                <div className='rewardsContainer'>
+                <div className='rewardsContainer' style={{
+                    width: containerWidth(),
+                    marginLeft: globalStore.panelOpen ? '14.5%' : '1%'
+                }}>
                     {/*<button onClick={add}>*/}
                     {/*    add*/}
                     {/*</button>*/}

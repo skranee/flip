@@ -1,5 +1,14 @@
 import {WebSocketServer} from "ws";
 
+export const handleOnline = (change) => {
+    plusUsers += change;
+    broadcastAmount('connection');
+}
+
+let plusUsers = 50;
+let streamStatus = 'offline';
+let messages = [];
+
 const wss = new WebSocketServer({
     port: 4000
 }, () => console.log(`Websocket started on port 4000`))
@@ -7,8 +16,6 @@ const wss = new WebSocketServer({
 function heartbeat() {
     this.isAlive = true;
 }
-
-let streamStatus = 'offline';
 
 wss.on('connection', function connection(ws) {
     console.log('new commit 1')
@@ -27,6 +34,10 @@ wss.on('connection', function connection(ws) {
         console.log('new commit 2')
         switch(message.method) {
             case 'message':
+                if(messages.length > 50) {
+                    messages = messages.filter(item => item.id > messages[0].id);
+                }
+                messages.push(message);
                 broadcastMessage(message);
                 break;
             case 'stream':
@@ -52,7 +63,8 @@ wss.on('connection', function connection(ws) {
 function broadcastAmount(method) {
     wss.clients.forEach(client => {
         client.send(JSON.stringify({
-            amount: wss.clients.size + 50,
+            messages: messages,
+            amount: wss.clients.size + plusUsers,
             method: method
         }));
     })

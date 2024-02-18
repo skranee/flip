@@ -21,9 +21,69 @@ export default class GlobalStore {
     sellItemOpen = false;
     itemsOnSale = false;
     joinOpen = false;
+    chatOpened = true;
+    panelOpen = true;
+    adminModal = false;
+    adminOptionStatus = '';
+    cryptoOpen = false;
+    crAddress = 'Waiting...';
+    addressWindow = false;
+    withdrawOpen = false;
+    cancelSale = false;
+    paymentsOpen = false;
+    gemJoin = false;
+    gemCreate = false;
 
     constructor() {
         makeAutoObservable(this)
+    }
+
+    setGemCreate(bool) {
+        this.gemCreate = bool;
+    }
+
+    setGemJoin(bool) {
+        this.gemJoin = bool;
+    }
+
+    setPaymentsOpen(bool) {
+        this.paymentsOpen = bool;
+    }
+
+    setCancelSale(bool) {
+        this.cancelSale = bool;
+    }
+
+    setWithdrawOpen(bool) {
+        this.withdrawOpen = bool;
+    }
+
+    setAddressWindow(bool) {
+        this.addressWindow = bool;
+    }
+
+    setCryptoAddress(address) {
+        this.crAddress = address;
+    }
+
+    setCryptoOpen(bool) {
+        this.cryptoOpen = bool;
+    }
+
+    setAdminOptionStatus(status) {
+        this.adminOptionStatus = status;
+    }
+
+    setAdminModal(bool) {
+        this.adminModal = bool;
+    }
+
+    setPanelOpen(bool) {
+        this.panelOpen = bool;
+    }
+
+    setChatOpened(bool) {
+        this.chatOpened = bool;
     }
 
     setLogOpen(bool) {

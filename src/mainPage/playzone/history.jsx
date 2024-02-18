@@ -1,9 +1,29 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {observer} from "mobx-react";
 import question from "../../imgs/question.png";
 import curr from '../../imgs/currImg.png'
+import {Context} from "../../index";
 
 function History({history}) {
+    const {store} = useContext(Context);
+    const a = 1;
+
+    const handleResult = (ex, res) => {
+        if(res === 'First player won') {
+            if(store.user.id === ex.player1._id) {
+                return 'WIN'
+            } else {
+                return 'LOSS'
+            }
+        } else {
+            if(store.user.id === ex.player2._id) {
+                return 'WIN'
+            } else {
+                return 'LOSS'
+            }
+        }
+    }
+
     return (
         <ul className='gamesListSpace'>
             {history.map((item, index) => (
@@ -18,9 +38,9 @@ function History({history}) {
                     </a>
                     <a
                         className='historyInfo'
-                        style={{color: item.result === 'win' ? 'rgba(0, 133, 13, 0.9)' : 'rgba(133, 0, 0, 0.9)', flexBasis: '6%'}}
+                        style={{color: handleResult(item, item.result) === 'WIN' ? 'rgba(0, 133, 13, 0.9)' : 'rgba(133, 0, 0, 0.9)', flexBasis: '6%'}}
                     >
-                        {item.result}
+                        {handleResult(item, item.result)}
                     </a>
                     <div className='totalWorthHistory'>
                         <img className='gemHistory' src={curr} alt='' />

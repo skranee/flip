@@ -5,5 +5,6 @@ export interface IItem {
     classification: string,
     owner: string,
     id: string,
-    rarity: string
+    rarity: string,
+    itemId: string
 }

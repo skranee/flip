@@ -2,6 +2,7 @@ import React, {useContext} from 'react';
 import {Context} from "../index";
 import gem from '../imgs/currImg.png'
 import {currProp} from "./market";
+import {items} from "../mainPage/playzone/gamesInfo";
 
 function BuyModal({item}) {
     const {store, globalStore} = useContext(Context);
@@ -20,13 +21,25 @@ function BuyModal({item}) {
     }
 
     const buy = async () => {
-        if(store.user.balance >= item.price) {
-            const buy = await store.buyItemMarket(item.owner, store.user.id, item._id);
+        if(store.user.balance >= item.price / 2.5) {
+            const buy = await store.buyItemMarket(item.owner, store.user.id, item.itemId);
         } else {
-            throw Error('Not enough balance');
+            return Error('Not enough balance');
         }
         globalStore.setBuyOpen(false);
         window.location.reload();
+    }
+
+    const add = async () => {
+        await store.addItemBot(store.user.robloxId, {
+            name: items[0].name,
+            rarity: items[0].rarity,
+            classification: items[0].classification,
+            image: items[0].image,
+            price: items[0].price
+        });
+        // const success = await store.checkOwnership(store.user.robloxId, item);
+        // console.log(success.data)
     }
 
     return (

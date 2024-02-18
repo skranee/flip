@@ -24,6 +24,21 @@ function Playzone () {
         }
     }, []);
 
+    const containerWidth = () => {
+        if(!globalStore.chatOpened && globalStore.panelOpen) {
+            return '84.5%'
+        }
+        else if(!globalStore.chatOpened && !globalStore.panelOpen) {
+            return '97.5%'
+        }
+        else if(globalStore.chatOpened && !globalStore.panelOpen) {
+            return '81%'
+        }
+        else {
+            return '68%'
+        }
+    }
+
     const handleCreate = () => {
         globalStore.setCreateOpen(true);
     }
@@ -42,16 +57,19 @@ function Playzone () {
 
     return (
         <>
-            <div className='playZone'>
+            <div className='playZone' style={{
+                width: containerWidth(),
+                marginLeft: globalStore.panelOpen ? '14.5%' : '1%'
+            }}>
                 <PlayPanel />
                 <div className='btnsPanel'>
                     <button className='btnPlaceBet' onClick={openGames}>
                         GAMES
                     </button>
-                    <button className='btnPlaceBet' style={{background: '#8F8F8F'}} onClick={handleCreate}>
+                    <button className='btnPlaceBet btnPlaceBetGray' style={{background: '#8F8F8F'}} onClick={handleCreate}>
                         BET ITEMS
                     </button>
-                    <button className='btnPlaceBet' style={{background: '#192432'}} onClick={handleHistory}>
+                    <button className='btnPlaceBet btnPlaceBetDarkBlue' style={{background: '#192432'}} onClick={handleHistory}>
                         HISTORY
                     </button>
                 </div>

@@ -32,6 +32,10 @@ function PlayPanel () { //observable?
             }
         }
         getGames();
+
+        const intervalId = setInterval(getGames, 3000);
+
+        return () => clearInterval(intervalId);
     }, []);
 
     const paramsHL = ['Sort', 'High To Low', 'Low To High']

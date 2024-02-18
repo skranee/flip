@@ -344,9 +344,11 @@ code {
   border-radius: 10px;
   padding: 20px;
   box-sizing: border-box;
-  transition: all 0.3s ease-out;
   overflow-y: auto;
   max-height: 100vh;
+  animation: opacityFade 0.3s;
+  transform: translateY(-20px);
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
 
 .modalWindow::-webkit-scrollbar {
@@ -530,17 +532,17 @@ code {
 .leftPanel {
   position: fixed;
   background-color: #192432;
-  width: 13.4%;
   top: 0;
+  width: calc(14% - 5px);
   height: 100%;
   padding-top: 70px;
-  padding-left: 5px;
   padding-bottom: 10vh;
   border-radius: 10px;
   left: 0;
   animation: slideRight 0.1s;
   z-index: 1;
   overflow-y: auto;
+  transition: width 0.2s ease-out;
 }
 
 .leftPanel::-webkit-scrollbar {
@@ -731,6 +733,12 @@ code {
   font-size: 1em;
   width: 92.7%;
   cursor: pointer;
+  text-shadow: -1px 1px 3px rgba(255, 255, 255, 0.8);
+  transition: font-size 0.1s ease-in;
+}
+
+.menuProp:hover {
+  font-size: 1.1em;
 }
 
 .claimBonus {
@@ -816,7 +824,9 @@ code {
   row-gap: 2vh;
   width: 65vw;
   margin-top: 14vh;
+  padding: 3px;
   margin-left: 17.5%;
+  transition: width 0.2s ease-in, margin-left 0.2s ease-in;
 }
 
 @media (max-width: 768px) {
@@ -884,6 +894,11 @@ code {
   border-radius: 10px;
   background-color: #00000099;
   cursor: pointer;
+  transition: width 0.1s ease-in;
+}
+
+.sortParams:hover {
+  width: 27%;
 }
 
 @media (max-width: 1200px) {
@@ -1015,10 +1030,21 @@ code {
   border: none;
   border-radius: 10px;
   background: linear-gradient(0deg, #FF2D2D, #FF2D2D);
+  transition: width 0.1s ease-in, height 0.1s ease-in;
 }
 
 .btnPlaceBet:hover {
+  box-shadow: 0 0 10px rgba(255, 45, 45, 1);
+  width: 27%;
   cursor: pointer;
+}
+
+.btnPlaceBetGray:hover {
+  box-shadow: 0 0 10px rgba(143, 143, 143, 1);
+}
+
+.btnPlaceBetDarkBlue:hover {
+  box-shadow: 0 0 10px rgba(25, 36, 50, 1);
 }
 
 .btnPlaceBet:active {
@@ -1085,7 +1111,6 @@ code {
   Padding: 8px 32px 8px 32px;
   display: flex;
   justify-content: space-between;
-  gap: 5px;
   align-items: center;
 }
 
@@ -1107,17 +1132,33 @@ code {
   background-color: #292a33; /*???*/
 }
 
+.dotsPlayer2 {
+  width: 3.3em;
+  height: 3.3em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.9);
+  border: solid 2px #FF2D2D;
+  border-radius: 50%;
+}
+
 .vs {
   color: #FFFFFF;
   font-family: 'Righteous', sans-serif;
   font-size: 1.3em;
+  text-shadow: 1px 1px 5px rgba(255, 255, 255, 1);
 }
 
 .itemsAmount {
+  display: flex;
+  flex-basis: 10%;
   font-family: 'Poppins', sans-serif;
   font-size: 1em;
   row-gap: 20%;
   color: #FFFFFF40;
+  text-shadow: 1px 1px 5px rgba(255, 255, 255, 0.4);
+  justify-content: flex-start;
 }
 
 .betParams {
@@ -1125,6 +1166,7 @@ code {
   flex-direction: column;
   height: 100%;
   gap: 30%;
+  flex-basis: 15%;
   justify-content: center;
   align-items: center;
 }
@@ -1137,6 +1179,7 @@ code {
   display: flex;
   justify-content: center;
   align-items: center;
+  text-shadow: 1px 1px 5px rgba(255, 255, 255, 0.7);
   gap: 3px;
 }
 
@@ -1145,6 +1188,7 @@ code {
   font-weight: 400;
   font-size: 0.95em;
   color: #FFFFFF40;
+  text-shadow: 1px 1px 5px rgba(255, 255, 255, 0.4);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1158,10 +1202,12 @@ code {
   align-items: center;
   height: 100%;
   gap: 5%;
+  flex-basis: 10%;
 }
 
 .joinGame {
   background-color: #FF2D2D;
+  box-shadow: 0 0 8px rgba(255, 45, 45, 1);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1169,12 +1215,14 @@ code {
   border: none;
   font-family: 'Questrial', sans-serif;
   font-size: 0.8em;
-  padding: 0 70%;
+  width: 100%;
   border-radius: 5px;
   color: #FFFFFF;
+  transition: width 0.1s ease-in, height 0.1s ease-in;
 }
 
 .joinGame:hover {
+  width: 105%;
   cursor: pointer;
 }
 
@@ -1184,6 +1232,7 @@ code {
 
 .viewGame {
   background-color: #283242;
+  box-shadow: 0 0 8px rgba(40, 50, 66, 1);
   flex-basis: 100%;
   display: flex;
   justify-content: center;
@@ -1191,12 +1240,14 @@ code {
   border: none;
   font-family: 'Questrial', sans-serif;
   font-size: 0.8em;
-  padding: 0 70%;
+  width: 100%;
   border-radius: 5px;
   color: #FFFFFF80;
+  transition: width 0.1s ease-in, height 0.1s ease-in;
 }
 
 .viewGame:hover {
+  width: 105%;
   cursor: pointer;
 }
 
@@ -1218,12 +1269,23 @@ code {
   display: flex;
   align-items: center;
   height: 100%;
+  flex-basis: 30%;
+}
+
+.CWGtext {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.2em;
+  font-weight: 500;
+  margin-left: -0.5rem;
+  width: 100%;
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: -2px 1px 8px rgba(255, 255, 255, 0.5);
 }
 
 .itemCircle {
   height: 3.3em;
   width: 3.3em;
-  margin-right: -10%;
+  margin-left: -1rem;
   border: solid 2px #111827;
   border-radius: 50%;
   background-color: #292B35;
@@ -1247,8 +1309,10 @@ code {
 .divItems {
   font-family: 'Questrial', sans-serif;
   font-size: 1.3em;
-  margin-left: 12%;
+  margin-left: 1.5rem;
   color: #FFFFFF4D;
+  text-shadow: 1px 1px 5px rgba(255, 255, 255, 0.4);
+  flex-basis: 25%;
 }
 
 @media (max-width: 768px) {
@@ -1292,9 +1356,10 @@ code {
   }
   .itemsAmount {
     font-size: 1.1em;
+    flex-basis: 15%;
   }
   .betParams {
-    /**/
+    flex-basis: 20%;
   }
   .betAmount {
     font-size: 1em;
@@ -1442,6 +1507,9 @@ code {
 
 .chatIcon {
   position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   right: 3%;
   top: 93%;
   border-radius: 50%;
@@ -1450,7 +1518,12 @@ code {
   width: 40px;
   color: #FFFFFF;
   font-size: 27px;
-  text-align: center;
+  transition: background-color 0.15s ease-in, width 0.15s ease-in, height 0.15s ease-in;
+}
+
+.chatIcon:hover {
+  width: 45px;
+  height: 45px;
   cursor: pointer;
 }
 
@@ -1471,10 +1544,11 @@ code {
 .chatSpace {
   position: fixed;
   right: 0;
+  width: calc(17% - 6px);
   top: 70px;
   height: 100%;
-  width: 16%;
   background-color: #192432;
+  transition: width 0.2s ease-out;
 }
 
 .chatInner {
@@ -1493,6 +1567,7 @@ code {
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
+  gap: 25%;
   width: 100%;
   height: 50px;
   color: #FFFFFF;
@@ -1510,9 +1585,10 @@ code {
 }
 
 .chatTitle {
-  font-size: 1.1em;
+  font-size: 1.2em;
   font-family: 'Poppins', sans-serif;
   font-weight: 700;
+  text-shadow: 0 1px 5px rgba(255, 255, 255, 0.7);
 }
 
 .usersOnline {
@@ -1521,13 +1597,16 @@ code {
   align-items: center;
   gap: 3px;
   font-family: 'Poppins', sans-serif;
-  font-weight: 500;
+  font-weight: 700;
   font-size: 1em;
+  text-shadow: 1px 1px 5px rgba(255, 255, 255, 0.5);
   color: rgba(255, 255, 255, 0.9);
 }
 
 
 .onlineCircle {
+  box-shadow: 0 0 5px rgba(0, 204, 3, 1);
+  border-radius: 50%;
   width: 8px;
   height: 8px;
 }
@@ -1841,6 +1920,10 @@ code {
   font-size: 0.7vw;
 }
 
+.iconRoleChat {
+  font-size: 1em;
+}
+
 @media (max-width: 768px) {
   .chatSpace {
     width: 100%;
@@ -1878,11 +1961,13 @@ code {
   border-radius: 10px;
   padding: 15px 2%;
   box-sizing: border-box;
-  transition: all 0.3s ease-out;
   overflow-y: auto;
   overflow-x: hidden;
   row-gap: 10px;
   max-height: 500px;
+  animation: opacityFade 0.3s;
+  transform: translateY(-20px);
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
 
 @media (max-width: 768px) {
@@ -1891,6 +1976,32 @@ code {
     width: 95%;
   }
 }
+
+/*.gameCancelBtn {*/
+/*  position: absolute;*/
+/*  right: 5px;*/
+/*  top: 5px;*/
+/*  border: none;*/
+/*  display: flex;*/
+/*  justify-content: center;*/
+/*  align-items: center;*/
+/*  padding: 0 10px;*/
+/*  font-family: 'Poppins', sans-serif;*/
+/*  font-weight: 500;*/
+/*  font-size: 1.1em;*/
+/*  color: rgba(255, 255, 255, 0.92);*/
+/*  border-radius: 8px;*/
+/*  min-height: 25px;*/
+/*  background-color: rgba(143, 7, 0, 0.95);*/
+/*}*/
+
+/*.gameCancelBtn:hover {*/
+/*  cursor: pointer;*/
+/*}*/
+
+/*.gameCancelBtn {*/
+/*  transform: translate(0.5px);*/
+/*}*/
 
 .lobbyPlayerContainer {
   display: flex;
@@ -1943,6 +2054,10 @@ code {
   border-radius: 50%;
   border: solid 3px rgba(255, 0, 0, 0.4);
   background-color: #292a33;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.9);
   /*-webkit-box-shadow: 0 0 25px 5px rgba(255, 0, 0, 0.4);*/
   /*-moz-box-shadow: 0 0 25px 5px rgba(255, 0, 0, 0.4);*/
   /*box-shadow: 0 0 25px 5px rgba(255, 0, 0, 0.4);*/
@@ -2286,11 +2401,12 @@ code {
   border-radius: 10px;
   justify-content: center;
   gap: 0;
-  width: 65vw;
+  width: 68%;
   height: 80vh;
   margin-top: 14vh;
-  margin-left: 17.5%;
+  margin-left: 14.5%;
   padding: 3px;
+  transition: width 0.2s ease-in, margin-left 0.2s ease-in;
 }
 
 @media (max-width: 768px) {
@@ -2343,6 +2459,7 @@ code {
   font-family: 'Poppins', sans-serif;
   font-weight: 500;
   font-size: 1.25em;
+  text-shadow: 0 2px 9px rgba(255, 255, 255, 1);
   color: #FFFFFF;
 }
 
@@ -2369,7 +2486,7 @@ code {
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  row-gap: 10px;
+  row-gap: 5%;
   width: 100%;
   height: 100%;
   flex-wrap: nowrap;
@@ -2383,10 +2500,11 @@ code {
 }
 
 .outerInfoNum {
-  font-family: 'Questrial', sans-serif;
-  font-size: 1.9em;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 1.55em;
+  text-shadow: 0 2px 9px rgba(255, 255, 255, 0.4);
   color: #FFFFFF;
-  margin-bottom: 40px;
 }
 
 .marketPage {
@@ -2395,7 +2513,7 @@ code {
   width: 100%;
   height: 100%;
   z-index: 0;
-  overflow-y: auto;
+  overflow-y: hidden;
 }
 
 .marketContainer {
@@ -2409,9 +2527,11 @@ code {
   row-gap: 10px;
   width: 65vw;
   height: 85vh;
-  max-height: 85vh;
+  max-height: 80vh;
   margin-top: 14vh;
+  padding: 3px;
   margin-left: 17.5%;
+  transition: width 0.2s ease-in, margin-left 0.2s ease-in;
 }
 
 .marketListSpace {
@@ -2427,6 +2547,7 @@ code {
   flex-basis: 100%;
   overflow-y: auto;
   margin: 0;
+  padding: 5px;
 }
 
 .marketListSpace::-webkit-scrollbar {
@@ -2450,18 +2571,26 @@ code {
 .marketItemContainer {
   background-color: #192432;
   border-radius: 8px;
-  height: 200px;
-  flex-basis: calc(20% - 10px);
+  height: 250px;
+  width: calc(23% - 10px);
+  max-width: 15rem;
   display: flex;
   row-gap: 1px;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
   cursor: pointer;
+  outline: solid 0 rgba(255, 255, 255, 1);
+  transition: height 0.15s ease-in, width 0.15s ease-in;
+}
+
+.marketItemContainer:hover {
+  width: calc(23.5% - 10px);
+  height: 255px;
 }
 
 .marketItemContainer:active {
-  transform: translateY(0.5px);
+  transform: translate(0.5px);
 }
 
 .marketItemImg {
@@ -2510,6 +2639,7 @@ code {
   font-family: 'Questrial', sans-serif;
   font-size: 1.2em;
   color: rgba(255, 255, 255, 0.9);
+  align-self: center;
 }
 
 .marketItemsValue {
@@ -2549,6 +2679,7 @@ code {
   height: 23px;
   padding: 5px;
   border-radius: 5px;
+  transition: width 0.1s ease-in;
 }
 
 .searchMarket {
@@ -2578,10 +2709,11 @@ code {
   height: 25px;
   width: 40px;
   box-shadow: 0 2px 16px 0 #FF2D2D;
-
+  transition: height 0.1s ease-in;
 }
 
 .btnBuy:hover {
+  height: 28px;
   cursor: pointer;
 }
 
@@ -2608,17 +2740,55 @@ code {
   color: #4B5563;
 }
 
+.affiliatedBalanceInfo {
+  display: flex;
+  width: 100%;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: nowrap;
+}
+
+.btnGetBalance {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 1em;
+  color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(255, 45, 45, 1);
+  border: none;
+  border-radius: 4px;
+  transition: background-color 0.1s ease-in, padding 0.1s ease-in;
+  height: 25px;
+  padding: 0 15px;
+}
+
+.btnGetBalance:hover {
+  padding: 0 20px;
+  background-color: rgba(255, 30, 30, 1);
+  cursor: pointer;
+}
+
+.btnGetBalance:active {
+  background-color: rgba(255, 60, 60, 1);
+  transform: translate(0.3px);
+}
+
 .affiliatedInfoNum {
-  font-family: 'Questrial', sans-serif;
-  font-size: 1.5em;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 1.3em;
+  text-shadow: 0 2px 10px rgba(255, 255, 255, 0.4);
   color: #FFFFFF;
-  margin-bottom: 40px;
 }
 
 .codeContainer {
   display: flex;
   height: 20px;
   flex-direction: row;
+  flex-wrap: wrap;
   justify-content: flex-start;
   gap: 5px;
   align-items: center;
@@ -2646,9 +2816,11 @@ code {
 .btnSave {
   font-size: 1.5em;
   color: #26304f;
+  transition: font-size 0.1s ease-in;
 }
 
 .btnSave:hover {
+  font-size: 1.6em;
   cursor: pointer;
 }
 
@@ -2666,9 +2838,11 @@ code {
 .btnCancel {
   font-size: 1.6em;
   color: #26304f;
+  transition: font-size 0.1s ease-in;
 }
 
 .btnCancel:hover {
+  font-size: 1.7em;
   cursor: pointer;
 }
 
@@ -2680,15 +2854,53 @@ code {
 .btnPen {
   font-size: 1.45em;
   color: #26304f;
+  transition: font-size 0.1s ease-in;
 }
 
 .btnPen:hover {
+  font-size: 1.55em;
   cursor: pointer;
 }
 
 .btnPen:active {
   font-size: 1.35em;
   transform: translate(0.3px);
+}
+
+.errorCode {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 1em;
+  color: #940000;
+  text-shadow: -1px 1px 5px rgba(148, 0, 0, 1);
+  flex-basis: 100%;
+}
+
+.btnCheckError {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  border-radius: 4px;
+  background-color: rgba(255, 45, 45, 1);
+  color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0 3px rgba(255, 45, 45, 1);
+  transition: height 0.1s ease-in, width 0.1s ease-in, background-color 0.1s ease-in;
+  height: 15px;
+  width: 15px;
+}
+
+.btnCheckError:hover {
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
+  background-color: rgba(255, 30, 30, 1);
+  box-shadow: rgba(255, 30, 30, 1);
+}
+
+.btnCheckError:active {
+  background-color: rgba(255, 60, 60, 1);
+  box-shadow: rgba(255, 60, 60, 1);
 }
 
 .rewardsPage {
@@ -2713,6 +2925,7 @@ code {
   margin-top: 14vh;
   margin-left: 17.5%;
   padding: 3px;
+  transition: width 0.2s ease-in, margin-left 0.2s ease-in;
 }
 
 .rewardDiv {
@@ -2748,6 +2961,7 @@ code {
   align-items: center;
   font-family: 'Poppins', sans-serif;
   font-size: 1.4em;
+  height: 1.4em;
   color: #FFFFFF;
 }
 
@@ -2803,7 +3017,6 @@ code {
   border-radius: 10px;
   padding: 20px;
   box-sizing: border-box;
-  transition: all 0.3s ease-out;
   overflow-y: auto;
   max-height: 100vh;
   display: flex;
@@ -2812,6 +3025,9 @@ code {
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
+  animation: opacityFade 0.3s;
+  transform: translateY(-20px);
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
 
 .profileImageContainer {
@@ -2902,7 +3118,7 @@ code {
   transform: translate(0.3px);
 }
 
-.weeklyRacePage {
+.mainContentPage {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -2911,7 +3127,7 @@ code {
   overflow-y: auto;
 }
 
-.weeklyRaceContainer {
+.mainContentContainer {
   position: relative;
   display: flex;
   align-items: center;
@@ -2919,17 +3135,17 @@ code {
   background-color: #212C3B;
   border-radius: 10px;
   justify-content: center;
-  width: 65vw;
   height: 80vh;
   margin-top: 14vh;
-  margin-left: 17.5%;
   padding: 3px;
   gap: 20px;
+  transition: width 0.2s ease-in, margin-left 0.2s ease-in;
 }
 
 .leadersText {
   font-family: 'Questrial', sans-serif;
   font-size: 2.4em;
+  text-shadow: 2px 2px 9px rgba(255, 255, 255, 0.9);
   color: rgba(255, 255, 255, 0.9);
   display: flex;
   flex-direction: row;
@@ -2982,11 +3198,11 @@ code {
   width: 100%;
   min-height: 85px;
   border-radius: 5px;
-  background-color: rgba(41, 43, 53, 1);
+  background-color: rgba(25, 36, 50, 0.8);
   font-family: 'Questrial', sans-serif;
   font-size: 1.4em;
   color: rgba(255, 255, 255, 0.85);
-  box-shadow: 0 2px 4px rgba(148, 0, 0, 0.4)
+  /*box-shadow: 0 1px 2px rgba(148, 0, 0, 0.4)*/
 }
 
 .leaderImg {
@@ -3007,6 +3223,7 @@ code {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
+  text-shadow: 0 2px 9px rgba(255, 255, 255, 0.65);
   align-items: center;
   gap: 7px;
   flex-basis: 25%;
@@ -3024,6 +3241,7 @@ code {
 .totalUpper {
   font-size: 0.8em;
   color: rgba(255, 255, 255, 0.3);
+  text-shadow: 0 1px 7px rgba(255, 255, 255, 0.5);
 }
 
 .addItems {
@@ -3033,7 +3251,7 @@ code {
   min-height: 350px;
   max-height: 400px;
   border-radius: 8px;
-  background-color: rgba(33, 30, 23, 0.5);
+  background-color: rgba(25, 36, 50, 0.5);
   padding: 5px;
 }
 
@@ -3055,7 +3273,7 @@ code {
 .itemsAddContainer {
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: flex-start;
   gap: 7px;
   row-gap: 7px;
@@ -3089,13 +3307,26 @@ code {
 .addItemContainer {
   background-color: #192432;
   border-radius: 8px;
-  height: 200px;
-  flex-basis: calc(25% - 10px);
+  height: 250px;
+  width: calc(28% - 10px);
   display: flex;
   row-gap: 1px;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
+  transition: width 0.1s ease-in, height 0.1s ease-in;
+}
+
+.addItemContainer:hover {
+  width: calc(29% - 10px);
+  height: 255px;
+}
+
+.btnsJoin {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 }
 
 .btnCreateGame {
@@ -3103,20 +3334,26 @@ code {
   justify-content: center;
   align-items: center;
   align-self: flex-end;
-  height: 35px;
+  height: 27px;
   font-family: 'Questrial', sans-serif;
   font-size: 1.2em;
   color: rgba(255, 255, 255, 0.9);
   border: none;
   border-radius: 4px;
   background-color: rgba(153, 0, 0, 0.9);
+  padding: 5px;
+  transition: background-color 0.1s ease-in, padding 0.1s ease-in;
 }
 
 .btnCreateGame:hover {
+  box-shadow: 0 0 8px rgba(171, 0, 0, 0.9);
+  padding: 0 10px;
+  background-color: rgba(171, 0, 0, 0.9);
   cursor: pointer;
 }
 
 .btnCreateGame:active {
+  background-color: rgba(150, 0, 0, 0.9);
   transform: translate(0.3px);
 }
 
@@ -3144,11 +3381,19 @@ code {
   cursor: pointer;
 }
 
+.beneathCreate {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
 .chooseSide {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   flex-basis: 15%;
   height: 50px;
@@ -3177,6 +3422,7 @@ code {
   justify-content: center;
   gap: 5px;
   align-items: center;
+  flex-basis: 8%;
 }
 
 .gemHistory {
@@ -3203,10 +3449,12 @@ code {
   border-radius: 10px;
   row-gap: 40px;
   width: 65vw;
-  height: 85vh;
-  max-height: 85vh;
+  height: 80vh;
+  max-height: 80vh;
   margin-top: 14vh;
   margin-left: 17.5%;
+  padding: 3px;
+  transition: width 0.2s ease-in, margin-left 0.2s ease-in;
 }
 
 .supportHeader {
@@ -3553,6 +3801,9 @@ code {
   max-height: 70vh;
   border-radius: 8px;
   background-color: #212C3B;
+  animation: opacityFade 0.3s;
+  transform: translateY(-20px);
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
 
 .headerBuy {
@@ -3621,6 +3872,9 @@ code {
   max-height: 70vh;
   border-radius: 8px;
   background-color: #212C3B;
+  animation: opacityFade 0.3s;
+  transform: translateY(-20px);
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
 
 .worthDeposit {
@@ -3668,6 +3922,7 @@ code {
   max-height: 300px;
   overflow-x: hidden;
   overflow-y: auto;
+  padding: 5px;
 }
 
 .depositInventory::-webkit-scrollbar {
@@ -3701,14 +3956,19 @@ code {
   align-items: center;
   border: none;
   border-radius: 5px;
+  width: 25%;
   font-family: 'Questrial', sans-serif;
   font-size: 1.1em;
   color: rgba(255, 255, 255, 0.92);
   background-color: rgba(173, 12, 0, 0.9);
   height: 25px;
+  transition: width 0.1s ease, height 0.1s ease;
 }
 
 .depositBtn:hover {
+  height: 27px;
+  width: 26%;
+  box-shadow: 0 0 10px rgba(173, 12, 0, 0.9);
   cursor: pointer;
   background-color: rgba(173, 12, 0, 0.8)
 }
@@ -3724,6 +3984,7 @@ code {
   justify-content: space-between;
   align-items: center;
   width: 95%;
+  height: 30px;
 }
 
 .yourSellsText {
@@ -3731,12 +3992,495 @@ code {
   font-weight: 500;
   font-size: 1.05em;
   color: rgba(255, 255, 255, 0.95);
+  transition: text-shadow 0.05s ease-in, font-size 0.05s ease-in;
 }
 
 .yourSellsText:hover {
   cursor: pointer;
-  text-decoration: solid 1px underline rgba(255, 255, 255, 0.9);
+  text-shadow: 1px 1px 5px rgba(255, 255, 255, 0.8);
+  font-size: 1.1em;
 }
+
+.adminOptions {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 15px;
+  row-gap: 15px;
+  width: 95%;
+  height: 95%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-radius: 8px;
+  background-color: rgba(25, 36, 50, 0.2);
+  padding: 5px;
+}
+
+.adminOptions::-webkit-scrollbar {
+  width: 5px;
+}
+
+.adminOptions::-webkit-scrollbar-thumb {
+  background-color: #3b4963;
+  border-radius: 6px;
+}
+
+.adminOptions::-webkit-scrollbar-track {
+  background-color: #111827;
+  border-radius: 6px;
+}
+
+.adminOptions::-webkit-scrollbar-thumb:hover {
+  background-color: #334057;
+}
+
+.optionContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 15px;
+  flex-basis: calc(19% - 10px);
+  height: 30%;
+  border-radius: 6px;
+  outline: solid 1px rgba(255, 255, 255, 0.9);
+  background-color: rgba(25, 36, 50, 0.95);
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.92);
+  transition: background-color 0.3s;
+}
+
+.optionContainer:hover {
+  cursor: pointer;
+  outline: solid 2px rgba(255, 255, 255, 0.9);
+  background-color: rgba(25, 36, 50, 0.1);
+}
+
+.optionContainer:active {
+  transform: translate(0.3px);
+}
+
+.iconAdmin {
+  font-size: 2.5em;
+}
+
+.adminText {
+  max-width: 98%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 1.2em;
+}
+
+@keyframes opacityFade {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.modalWindowAdmin {
+  width: 40%;
+  min-width: 300px;
+  max-width: 600px;
+  background-color: #212C3B;
+  border-radius: 10px;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  max-height: 100vh;
+  display :flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  animation: opacityFade 0.3s;
+  transform: translateY(-20px);
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+  overflow-x: hidden;
+}
+
+.inputAdmin {
+  border: solid 2px rgba(255, 255, 255, 0.4);
+  border-radius: 15px;
+  width: 50%;
+  height: 30px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 1.2em;
+  color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(25, 36, 50, 0.9);
+  padding: 5px;
+}
+
+.inputAdmin:focus {
+  outline: none;
+  border: solid 2px rgba(255, 255, 255, 0.8);
+}
+
+.labelAdmin {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 0.9em;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.inputLabelAdmin {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.optionStatus {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 1.7em;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.btnAdminDone {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 30px;
+  width: 40%;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 1.2em;
+  color: rgba(255, 255, 255, 0.92);
+  border: none;
+  border-radius: 4px;
+  background-color: rgba(156, 0, 3, 0.9);
+  transition: width 0.1s ease-in;
+}
+
+.btnAdminDone:hover {
+  width: 42%;
+  box-shadow: 0 0 10px rgba(156, 0, 3, 0.9);
+  cursor: pointer;
+}
+
+.btnAdminDone:active {
+  transform: translate(0.3px);
+}
+
+.btnAdminDone:disabled {
+  width: 40%;
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.modalWindowAddress {
+  width: 40%;
+  min-width: 300px;
+  max-width: 600px;
+  background-color: #212C3B;
+  border-radius: 10px;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  max-height: 100vh;
+  display :flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  animation: opacityFade 0.3s;
+  transform: translateY(-20px);
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.explainTextAddress {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 1.2em;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.currRateText {
+  font-family: 'Tilt Neon', sans-serif;
+  font-size: 0.9em;
+  color: rgba(255, 255, 255, 0.4);
+  align-self: flex-start;
+}
+
+.addressContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  gap: 3px;
+}
+
+.aboveAddress {
+  font-family: 'Questrial', sans-serif;
+  font-size: 1em;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.addressInput {
+  width: 90%;
+  height: 30px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.05em;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(25, 36, 50, 1);
+  border: solid 1px rgba(255, 255, 255, 0.4);
+  border-radius: 5px;
+  outline: none;
+}
+
+.addressInput:focus {
+  outline: none;
+}
+
+.beneathAddress {
+  font-family: 'Questrial', sans-serif;
+  font-weight: 500;
+  font-size: 0.8em;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.roleChoose {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: nowrap;
+  gap: 5px;
+  height: 40%;
+}
+
+.radioRole {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: transparent;
+  border: solid 3px rgba(204, 204, 204, 1);
+  outline: solid 2px rgba(0, 0, 0, 0.9);
+  transition: background-color 0.15s ease-out;
+  cursor: pointer;
+}
+
+.radioRole.checked {
+  background-color: rgba(191, 0, 0, 1);
+  outline: solid 2px rgba(191, 0, 0, 1);
+}
+
+.labelRadio {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 1.2em;
+  color: rgba(255, 255, 255, 0.9);
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.incDecChoice {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 1.2em;
+  color: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+  transition: transform 0.2s ease-in, font-size 0.2s ease-in;
+}
+
+.incDecChoice.chosen {
+  color: rgba(191, 0, 0, 1);
+  font-size: 1.25em;
+}
+
+.incDecChoice:hover {
+  transform: translateY(-1px);
+}
+
+.upperTextPayments {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 2em;
+  text-shadow: 0 3px 9px rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.paymentsSpace {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  gap: 10px;
+  padding: 5px;
+  justify-items: flex-start;
+  align-items: center;
+  width: 100%;
+  flex-basis: 70%;
+  max-height: 70%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.paymentsSpace::-webkit-scrollbar {
+  width: 5px;
+}
+
+.paymentsSpace::-webkit-scrollbar-thumb {
+  background-color: #3b4963;
+  border-radius: 6px;
+}
+
+.paymentsSpace::-webkit-scrollbar-track {
+  background-color: #111827;
+  border-radius: 6px;
+}
+
+.paymentsSpace::-webkit-scrollbar-thumb:hover {
+  background-color: #334057;
+}
+
+.paymentContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 5px;
+  height: 15%;
+  align-items: center;
+  border: solid 1px rgba(255, 255, 255, 0.7);
+  border-radius: 5px;
+  font-family: 'Poppins', sans-serif;
+  box-shadow: 0 1px 5px rgba(255, 255, 255, 0.7);
+  font-weight: 500;
+  font-size: 1.1em;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.paymentInnerInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  flex-basis: 20%;
+  overflow-x: hidden;
+}
+
+.upperPaymentInnerInfo {
+  font-family: 'Questrial', sans-serif;
+  font-size: 0.8em;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.mainPaymentInnerInfo {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 1.1em;
+  color: rgba(255, 255, 255, 0.87);
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.infoJoinGems {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 1.2em;
+  text-shadow: 1px 1px 4px rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.gemsAmount {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 1.2em;
+  color: rgba(255, 255, 255, 0.93);
+  text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.5);
+}
+
+.gemSlider {
+  width: 80%;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  background-color: #FFFFF1;
+  border: solid 3px #CACBCC;
+  border-radius: 15px;
+  height: 15px;
+  box-shadow: 0 0 7px rgba(255, 255, 255, 1);
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  background-color: rgba(219, 0, 0, 0.9);
+  box-shadow: 0 0 5px rgba(219, 0, 0, 0.9);
+  width: 17px;
+  height: 17px;
+  margin-top: -3.5px;
+  border-radius: 50%;
+  -webkit-appearance: none;
+}
+
+.btnPayments {
+  width: 10rem;
+  height: 2rem;
+  border-radius: 3px;
+  border: none;
+  box-shadow: 0 2px 10px rgba(255, 45, 45, 0.8);
+  background-color: rgba(255, 45, 45, 1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 1.2em;
+  color: rgba(255, 255, 255, 0.9);
+  transition: background-color 0.1s ease-in, color 0.1s ease-in, width 0.1s ease-in;
+}
+
+.btnPayments:hover {
+  width: 10.5rem;
+  cursor: pointer;
+  background-color: rgba(255, 15, 15, 1);
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.btnPayments:active {
+  transform: translate(0.3px);
+  background-color: rgba(255, 65, 65, 1);
+}
+
+.fieldContainerProfile {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 8px;
+  flex-wrap: nowrap;
+}
+
+
+
+
 
 
 

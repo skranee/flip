@@ -16,169 +16,197 @@ export const items = [ //should add some fields to items such as rarity, float, 
         image: ewScythe,
         name: 'ewScythe',
         price: 123,
-        classification: 'Blade'
+        classification: 'Blade',
+        rarity: 'mythical'
     },
     {
         image: hallowScythe,
         name: 'Hallow Scythe',
         price: 4234,
-        classification: 'Gun'
+        classification: 'Gun',
+        rarity: 'legendary'
     },
     {
         image: harvester,
         name: 'harvester',
         price: 312,
-        classification: 'Blade'
+        classification: 'Blade',
+        rarity: 'mythical'
     },
     {
         image: iceBreaker,
         name: 'Ice Breaker',
         price: 523,
-        classification: 'Gun'
+        classification: 'Gun',
+        rarity: 'mythical'
     },
     {
         image: icePiercer,
         name: 'Ice Piercer',
         price: 1313,
-        classification: 'Blade'
+        classification: 'Blade',
+        rarity: 'legendary'
     },
     {
         image: swirlyAxe,
         name: 'Swirly Axe',
         price: 444,
-        classification: 'Gun'
+        classification: 'Gun',
+        rarity: 'legendary'
     },
     {
         image: travellersAxe,
         name: 'Travellers Axe',
         price: 3213,
-        classification: 'Blade'
+        classification: 'Blade',
+        rarity: 'legendary'
     },
     {
         image: ewScythe,
         name: 'ewScythe',
         price: 123,
-        classification: 'Blade'
+        classification: 'Blade',
+        rarity: 'legendary'
     },
     {
         image: hallowScythe,
         name: 'Hallow Scythe',
         price: 4234,
-        classification: 'Gun'
+        classification: 'Gun',
+        rarity: 'legendary'
     },
     {
         image: harvester,
         name: 'harvester',
         price: 312,
-        classification: 'Blade'
+        classification: 'Blade',
+        rarity: 'legendary'
     },
     {
         image: iceBreaker,
         name: 'Ice Breaker',
         price: 523,
-        classification: 'Gun'
+        classification: 'Gun',
+        rarity: 'legendary'
     },
     {
         image: icePiercer,
         name: 'Ice Piercer',
         price: 1313,
-        classification: 'Blade'
+        classification: 'Blade',
+        rarity: 'legendary'
     },
     {
         image: swirlyAxe,
         name: 'Swirly Axe',
         price: 444,
-        classification: 'Gun'
+        classification: 'Gun',
+        rarity: 'legendary'
     },
     {
         image: travellersAxe,
         name: 'Travellers Axe',
         price: 3213,
-        classification: 'Blade'
+        classification: 'Blade',
+        rarity: 'legendary'
     },
     {
         image: ewScythe,
         name: 'ewScythe',
         price: 123,
-        classification: 'Blade'
+        classification: 'Blade',
+        rarity: 'mythical'
     },
     {
         image: hallowScythe,
         name: 'Hallow Scythe',
         price: 4234,
-        classification: 'Gun'
+        classification: 'Gun',
+        rarity: 'legendary'
     },
     {
         image: harvester,
         name: 'harvester',
         price: 312,
-        classification: 'Blade'
+        classification: 'Blade',
+        rarity: 'mythical'
     },
     {
         image: iceBreaker,
         name: 'Ice Breaker',
         price: 523,
-        classification: 'Gun'
+        classification: 'Gun',
+        rarity: 'legendary'
     },
     {
         image: icePiercer,
         name: 'Ice Piercer',
         price: 1313,
-        classification: 'Blade'
+        classification: 'Blade',
+        rarity: 'mythical'
     },
     {
         image: swirlyAxe,
         name: 'Swirly Axe',
         price: 444,
-        classification: 'Gun'
+        classification: 'Gun',
+        rarity: 'legendary'
     },
     {
         image: travellersAxe,
         name: 'Travellers Axe',
         price: 3213,
-        classification: 'Blade'
+        classification: 'Blade',
+        rarity: 'mythical'
     },
     {
         image: ewScythe,
         name: 'ewScythe',
         price: 123,
-        classification: 'Blade'
+        classification: 'Blade',
+        rarity: 'legendary'
     },
     {
         image: hallowScythe,
         name: 'Hallow Scythe',
         price: 4234,
-        classification: 'Gun'
+        classification: 'Gun',
+        rarity: 'legendary'
     },
     {
         image: harvester,
         name: 'harvester',
         price: 312,
-        classification: 'Blade'
+        classification: 'Blade',
+        rarity: 'legendary'
     },
     {
         image: iceBreaker,
         name: 'Ice Breaker',
         price: 523,
-        classification: 'Gun'
+        classification: 'Gun',
+        rarity: 'legendary'
     },
     {
         image: icePiercer,
         name: 'Ice Piercer',
         price: 1313,
-        classification: 'Blade'
+        classification: 'Blade',
+        rarity: 'mythical'
     },
     {
         image: swirlyAxe,
         name: 'Swirly Axe',
         price: 444,
-        classification: 'Gun'
+        classification: 'Gun',
+        rarity: 'mythical'
     },
     {
         image: travellersAxe,
         name: 'Travellers Axe',
         price: 3213,
-        classification: 'Blade'
+        classification: 'Blade',
+        rarity: 'legendary'
     },
 ]
 

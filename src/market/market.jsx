@@ -5,6 +5,8 @@ import { SlMagnifier } from "react-icons/sl";
 import {observer} from "mobx-react";
 import BuyModal from "./buyModal";
 import SellModal from "./sellModal";
+import CancelModal from "./cancelModal";
+// import {items} from "../mainPage/playzone/gamesInfo";
 
 
 export const currProp = 2.5;
@@ -17,13 +19,13 @@ function Market() {
     const [filteredItems, setFilteredItems] = useState(items);
     const [itemBuying, setItemBuying] = useState({});
     const [itemSelling, setItemSelling] = useState({});
-    const [itemsSale, setItemsSale] = useState([]);
+    const [itemCancelling, setItemCancelling] = useState({});
 
     useEffect(() => {
         const getItems = async () => {
             const response = await store.getItemsMarket();
             if(response) {
-                setItems(response);
+                setItems(response.data);
             }
         }
         getItems();
@@ -36,22 +38,26 @@ function Market() {
     }, [items]);
 
     useEffect(() => {
-        if (store.user && store.user.itemsList) {
-            const value = store.user.itemsList.reduce((a, b) => a + b.price, 0);
+        if (store.user && store.itemsList && store.itemsList.length) {
+            const value = store.itemsList.reduce((a, b) => a + b.price, 0);
             setItemsValue(Math.round(value / currProp));
         }
-    }, [store.user.itemsList]);
+    }, [items, store.itemsList]);
 
-    useEffect(() => {
-        const getYourItems = async () => {
-            const yourItems = await store.getItemsMarket();
-            const filtered = yourItems.filter(item => item.owner === store.user.id);
-            console.log(yourItems);
+    const containerWidth = () => {
+        if(!globalStore.chatOpened && globalStore.panelOpen) {
+            return '84.5%'
         }
-        if(store.user && store.isAuth) {
-            getYourItems();
+        else if(!globalStore.chatOpened && !globalStore.panelOpen) {
+            return '97.5%'
         }
-    }, []);
+        else if(globalStore.chatOpened && !globalStore.panelOpen) {
+            return '81%'
+        }
+        else {
+            return '68%'
+        }
+    }
 
     const handleChange = (event) => {
         const searchValue = event.target.value;
@@ -80,7 +86,8 @@ function Market() {
         globalStore.setBuyOpen(true);
     }
 
-    const openSell = () => {
+    const openSell = async () => {
+        const items = await store.getUserItems(store.user.id);
         globalStore.setSellOpen(true);
     }
 
@@ -93,19 +100,44 @@ function Market() {
         globalStore.setSellItemOpen(true);
     }
 
+    const setItemCancel = (item) => {
+        setItemCancelling(item);
+        globalStore.setCancelSale(true);
+    }
+
+    const add = async () => {
+        await store.addItemBot(store.user.robloxId, {
+            name: items[0].name,
+            rarity: items[0].rarity,
+            classification: items[0].classification,
+            image: items[0].image,
+            price: items[0].price
+        });
+        // const success = await store.checkOwnership(store.user.robloxId, item);
+        // console.log(success.data)
+    }
+
     return (
         <div>
             <div className='background' />
             <div className='marketPage'>
                 {globalStore.sellOpen &&
                     <div className='backgroundModal' onClick={handleBlur}>
-                        <div className='modalWindowDeposit' onClick={(event) => event.stopPropagation()}>
+                        {globalStore.sellItemOpen &&
+                            <SellModal item={itemSelling} />
+                        }
+                        <div className='modalWindowDeposit' onClick={(event) => event.stopPropagation()} style={{justifyContent: "flex-start"}}>
+                            <div className='marketItemsValue'>
+                                <a>Items Value:</a>
+                                <img className='marketCoinImg' src={coin} alt=''/>
+                                <a>{itemsValue}</a>
+                            </div>
                             <div className='depositInventory' style={{maxHeight: '95%'}}>
-                                {store.user.itemsList.length ?
-                                    store.user.itemsList.map((item, index) => (
+                                {store.itemsList.length ?
+                                    store.itemsList.map((item, index) => (
                                         <li key={index}
                                             className='marketItemContainer'
-                                            style={{flexBasis: 'calc(30% - 15px)'}}
+                                            style={{flexBasis: 'calc(50% - 15px)'}}
                                             onClick={() => setItemSell(item)}
                                         >
                                             <img className='marketItemImg' src={item.image} alt='' />
@@ -132,22 +164,22 @@ function Market() {
                                     </div>
                                 }
                             </div>
-                            {globalStore.sellItemOpen &&
-                                <SellModal item={itemSelling} />
-                            }
                         </div>
                     </div>
                 }
                 {globalStore.itemsOnSale &&
                     <div className='backgroundModal' onClick={() => globalStore.setItemsOnSale(false)}>
+                        {globalStore.cancelSale &&
+                            <CancelModal item={itemCancelling} />
+                        }
                         <div className='modalWindowDeposit' onClick={(event) => event.stopPropagation()}>
                             <div className='depositInventory' style={{maxHeight: '95%'}}>
-                                {store.user && store.isAuth && store.user.itemsList.length ?
-                                    store.user.itemsList.map((item, index) => (
+                                {store.user && store.isAuth && items.filter(item => item.owner === store.user.id).length ?
+                                    items.filter(item => item.owner === store.user.id).map((item, index) => (
                                         <li key={index}
                                             className='marketItemContainer'
-                                            style={{flexBasis: 'calc(30% - 15px)'}}
-                                            onClick={() => setItemSell(item)}
+                                            style={{flexBasis: "calc(45% - 5px)"}}
+                                            onClick={() => setItemCancel(item)}
                                         >
                                             <img className='marketItemImg' src={item.image} alt='' />
                                             <a className='marketItemClass'>{item.classification}</a>
@@ -176,7 +208,10 @@ function Market() {
                         </div>
                     </div>
                 }
-                <div className='marketContainer'>
+                <div className='marketContainer' style={{
+                    width: containerWidth(),
+                    marginLeft: globalStore.panelOpen ? '14.5%' : '1%'
+                }}>
                     {globalStore.buyOpen &&
                         <BuyModal item={itemBuying} />
                     }
@@ -197,9 +232,6 @@ function Market() {
                                 />
                                 <SlMagnifier style={{color: '#FFFFFF', fontSize: '0.85em'}} />
                             </div>
-                            {/*<button className='btnBuy' onClick={() => buy()}>*/}
-                            {/*    Buy*/}
-                            {/*</button>*/}
                             <button className='btnBuy' onClick={openSell}>
                                 Sell
                             </button>

@@ -10,7 +10,6 @@ export interface IUser {
     totalWithdrawn: number;
     totalDeposited: number;
     gamesPlayed: number;
-    itemsList: IItem[];
     balance: number;
     lvl: number;
     role: string;

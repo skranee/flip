@@ -133,16 +133,16 @@ class UserController {
             const userId = req.query.userId;
             const history = await userService.getHistory(userId);
             return res.json(history);
-        } catch(e) {
+        } catch (e) {
             next(e);
         }
     }
 
-    async addHistory(req, res, next) {
+    async getPayments(req, res, next) {
         try {
-            const {userId, game} = req.body;
-            const add = await userService.addHistory(userId, game);
-            return res.json(add);
+            const userId = req.query.userId;
+            const payments = await userService.getPayments(userId);
+            return res.json(payments);
         } catch(e) {
             next(e);
         }

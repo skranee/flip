@@ -5,6 +5,7 @@ import {RewardResponse} from "../models/response/RewardResponse";
 import {IUser} from "../models/IUser";
 import IHistory from "../models/IHistory";
 import IGame from "../models/IGame";
+import IPayment from "../models/IPayment";
 
 
 export default class UserService {
@@ -38,5 +39,9 @@ export default class UserService {
 
     static async addHistory(userId: string, game: IGame): Promise <AxiosResponse> {
         return $api.post('/history', {userId, game})
+    }
+
+    static async getPayments(userId: string): Promise<AxiosResponse<IPayment[]>> {
+        return $api.get(`/payments?userId=${userId}`);
     }
 }

@@ -1,5 +1,8 @@
 import React, { useRef, useEffect, useContext, useState } from 'react';
 import { Context } from "../index";
+import { FaCrown } from "react-icons/fa";
+import { RiMacbookFill } from "react-icons/ri";
+import {observer} from "mobx-react";
 
 function MessageList({ messages }) {
     const { globalStore, store } = useContext(Context);
@@ -15,7 +18,7 @@ function MessageList({ messages }) {
         if (user.lvl >= 50) {
             return '#00a1db';
         } else if (user.lvl >= 10) {
-            return '#b00000';
+            return 'rgb(255, 0, 0)';
         } else {
             return '#FFFFFF';
         }
@@ -40,7 +43,9 @@ function MessageList({ messages }) {
                         </div>
                         <div className='messageBox'>
                             <div className='user_time'>
-                                <a>{item.user.username}</a>
+                                {item.user.role === 'admin' && <FaCrown className='iconRoleChat' style={{color: color(item.user)}} />}
+                                {item.user.role === 'developer' && <RiMacbookFill className='iconRoleChat' style={{color: color(item.user)}}/>}
+                                <a style={{color: color(item.user)}}>{item.user.username}</a>
                                 <a> {item.time} </a>
                             </div>
                             <a className='message'>{item.message}</a>
@@ -53,4 +58,4 @@ function MessageList({ messages }) {
     );
 }
 
-export default MessageList;
+export default observer(MessageList);

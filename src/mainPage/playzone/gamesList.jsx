@@ -6,6 +6,7 @@ import {observer} from "mobx-react";
 import question from '../../imgs/question.png'
 import {currProp} from "../../market/market";
 import gem from '../../imgs/currImg.png'
+import { HiDotsHorizontal } from "react-icons/hi";
 
 export class Game {
     player1;
@@ -13,6 +14,8 @@ export class Game {
     items1;
     items2;
     items;
+    gems1;
+    gems2;
     bet;
     gameId;
     status;
@@ -25,6 +28,8 @@ export class Game {
         this.items1 = obj.items1;
         this.items2 = obj.items2;
         this.items = this.combineItems();
+        this.gems1 = obj.gems1;
+        this.gems2 = obj.gems2;
         this.bet = this.combineBets();
         this.gameId = obj.gameId;
         this.status = obj.status;
@@ -37,7 +42,11 @@ export class Game {
     }
 
     combineBets() {
-        return Math.round(this.items.reduce((a, b) => a + b.price, 0) / currProp);
+        if(this.items1.length > 0) {
+            return Math.round(this.items.reduce((a, b) => a + b.price, 0) / currProp);
+        } else {
+            return Math.round(this.gems1);
+        }
     }
 }
 
@@ -62,13 +71,19 @@ function GamesList () {
                         status: item.status,
                         gameId: item.gameId,
                         side1: item.side1,
-                        side2: item.side2
+                        side2: item.side2,
+                        gems1: item.gems1,
+                        gems2: item.gems2
                     })
                     setGames(prev => [...prev, gameObj]);
                 })
             }
         }
         getGames();
+
+        const intervalId = setInterval(getGames, 3000);
+
+        return () => clearInterval(intervalId);
     }, [])
 
     useEffect(() => {
@@ -180,6 +195,11 @@ function GamesList () {
         globalStore.setJoinOpen(true);
     }
 
+    const cancel = async (game) => {
+        const cancelGame = await store.cancelGame(store.user, game);
+        await store.checkAuth();
+    }
+
     return (
         <>
             <div className='searchContainer'>
@@ -199,32 +219,54 @@ function GamesList () {
                         <div className='imgsVs'>
                             <img className='playerGame' src={item.player1 ? item.player1.avatar : question} alt='' />
                             <a className='vs'> vs </a>
-                            <img className='playerGame' src={item.player2 ? item.player2.avatar : question} alt='' style={{border: 'solid 2px #FF2D2D'}}/>
+                            {item.player2 ?
+                                <img className='playerGame' src={item.player2.avatar} alt='' style={{border: 'solid 2px #FF2D2D'}}/>
+                                :
+                                <div className='dotsPlayer2'>
+                                    <HiDotsHorizontal style={{fontSize: '1.6em'}} />
+                                </div>
+                            }
                         </div>
-                        <div className='items'>
-                            <img className='itemCircle' src={item.items1[0].image} alt=''/>
-                            {item.items1.length > 1 ?
-                                <img className='itemCircle' src={item.items1[1].image} alt=''/>
-                                : <div />}
-                            {item.items1.length > 2 ?
-                                <img className='itemCircle' src={item.items1[2].image} alt=''/>
-                                : <div />}
-                            {item.items1.length > 3 ?
-                                <img className='itemCircle' src={item.items1[3].image} alt=''/>
-                                : <div />}
-                            {item.items1.length > 4 ? <a className='divItems'> + {item.items1.length - 4}</a> : <div />}
-                        </div>
-                        <a className='itemsAmount'>{item.items1.length} items</a>
+                        {item.items1.length > 0 ?
+                            <>
+                                <div className='items'>
+                                    <img className='itemCircle' src={item.items1[0].image} alt=''/>
+                                    {item.items1.length > 1 ?
+                                        <img className='itemCircle' src={item.items1[1].image} alt=''/>
+                                        : <div style={{width: '3.3em', height: '3.3em'}}/>}
+                                    {item.items1.length > 2 ?
+                                        <img className='itemCircle' src={item.items1[2].image} alt=''/>
+                                        : <div style={{width: '3.3em', height: '3.3em'}}/>}
+                                    {item.items1.length > 3 ?
+                                        <img className='itemCircle' src={item.items1[3].image} alt=''/>
+                                        : <div style={{width: '3.3em', height: '3.3em'}}/>}
+                                    {item.items1.length > 4 ? <a className='divItems'> + {item.items1.length - 4}</a> : <a className='divItems'> </a>}
+                                </div>
+                                <a className='itemsAmount'>{item.items1.length} item{item.items1.length > 1 ? 's': ''}</a>
+                            </> :
+                            <>
+                                <div className='items' style={{flexBasis: '45%'}}>
+                                    <a className='CWGtext'>Created With Gems</a>
+                                </div>
+
+                            </>
+                        }
                         <div className='betParams'>
                             <a className='betAmount'>{item.bet} <img src={gem} className='gemWorth' style={{width: 12, height: 12}} alt='' /> </a>
                             <a className='joinableBet'>
-                                {Math.round(item.bet * 0.95)}-{Math.round(item.bet * 1.05)}  <img src={gem} style={{width: 12, height: 12}} className='gemWorth' alt='' />
+                                {Math.round(item.bet * 0.9)}-{Math.round(item.bet * 1.1)}  <img src={gem} style={{width: 12, height: 12}} className='gemWorth' alt='' />
                             </a>
                         </div>
                         <div className='btnsGame'>
-                            <button className='joinGame' onClick={() => handleJoin(item)}>
-                                JOIN
-                            </button>
+                            {item.player1._id === store.user.id ?
+                                <button className='joinGame' onClick={() => cancel(item)}>
+                                    CANCEL
+                                </button>
+                                :
+                                <button className='joinGame' onClick={() => handleJoin(item)}>
+                                    JOIN
+                                </button>
+                            }
                             <button className='viewGame' onClick={() => handleView(item)}>
                                 VIEW
                             </button>
