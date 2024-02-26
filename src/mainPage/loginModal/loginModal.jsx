@@ -2,10 +2,10 @@ import React, {useContext, useEffect, useState} from "react";
 import {Context} from "../../index";
 import axios from "axios";
 import {observer} from "mobx-react";
+import {useNavigate} from "react-router-dom";
 
 function LoginModal () {
     const {globalStore} = useContext(Context)
-    const [showTerms, setShowTerms] = useState(false) //do later
     const [checked, setChecked] = useState(false)
     const [isDisabled, setIsDisabled] = useState(true)
     const [username, setUsername] = useState('');
@@ -14,6 +14,7 @@ function LoginModal () {
     const [verify, setVerify] = useState(false);
     const [verifyBio, setVerifyBio] = useState('mm2flip cool mate cat party walk far away')
     const [verStatus, setVerStatus] = useState('')
+    const navigate = useNavigate();
 
     const {store} = useContext(Context)
 
@@ -26,11 +27,16 @@ function LoginModal () {
         }
     }, [checked, username]);
 
+    const handleNavigate = (page) => {
+        navigate(page);
+        globalStore.setLogOpen(false);
+    }
+
     const getUserInfo = async () => {
         if(!isDisabled) {
             try {
                 const userData = await store.getUser(username);
-                const user = userData.user;
+                const user = userData.data.user;
 
                 if (!user || !user.id) {
                     console.error('Error: User not found');
@@ -85,10 +91,6 @@ function LoginModal () {
         ifDisabled()
     }
 
-    const goToTerms = () => {
-        setShowTerms(true)
-    }
-
     const ifDisabled = () => {
         if(!username || !username.trim()) {
             setIsDisabled(true);
@@ -117,8 +119,8 @@ function LoginModal () {
                 </label>
                 <p className='agreement'> I agree with
                     <a
-                        style={{color: '#EB0000', cursor: 'pointer'}}
-                        onClick={() => goToTerms()}> terms of use
+                        className='tosLabelLogin'
+                        onClick={() => handleNavigate('/tos')}> terms of use
                     </a>
                 </p>
                 {verStatus && <a className='verStatus'>{verStatus}</a>}

@@ -42,7 +42,7 @@ function Market() {
             const value = store.itemsList.reduce((a, b) => a + b.price, 0);
             setItemsValue(Math.round(value / currProp));
         }
-    }, [items, store.itemsList]);
+    }, [items, store.itemsList, store.itemsList.length, store.user, store.isAuth, ]);
 
     const containerWidth = () => {
         if(!globalStore.chatOpened && globalStore.panelOpen) {
@@ -128,9 +128,7 @@ function Market() {
                         }
                         <div className='modalWindowDeposit' onClick={(event) => event.stopPropagation()} style={{justifyContent: "flex-start"}}>
                             <div className='marketItemsValue'>
-                                <a>Items Value:</a>
-                                <img className='marketCoinImg' src={coin} alt=''/>
-                                <a>{itemsValue}</a>
+                                <a>Items Value:</a><img className='marketCoinImg' src={coin} alt=''/><a>{itemsValue}</a>
                             </div>
                             <div className='depositInventory' style={{maxHeight: '95%'}}>
                                 {store.itemsList.length ?

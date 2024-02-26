@@ -6,6 +6,9 @@ import {BiArrowToRight} from "react-icons/bi";
 import {Context} from "../index";
 import {observer} from "mobx-react";
 import online from '../imgs/online.png'
+import gem from '../imgs/currImg.png'
+import axios from "axios";
+import {API_URL} from "../http";
 
 function Chat() {
     const [messages, setMessages] = useState([]);
@@ -22,7 +25,7 @@ function Chat() {
     const socket = useRef();
 
     useEffect(() => {
-        if(user.username) {
+        if(user.username) { //correct so unauthorized users can see the chat messages!!!
             let pingInterval;
             socket.current = new WebSocket('ws://localhost:4000');
 
@@ -58,6 +61,27 @@ function Chat() {
                         break;
                     case 'close':
                         setUsersOnline(message.amount);
+                    case 'joinGame':
+                        console.log(message);
+                        if(store.user.id === message.mainReceiver) {
+                            globalStore.setGameInfo(message.game);
+                            setTimeout(async () => {
+                                const updateUser = async () => {
+                                    try {
+                                        const response = await axios.get(`${API_URL}/refresh`, {withCredentials: true});
+                                        store.setUser(response.data.user);
+                                        store.setAuth(true);
+                                        localStorage.setItem('token', response.data.accessToken);
+                                        localStorage.setItem('username', response.data.user.username);
+                                    } catch(e) {
+                                        localStorage.removeItem('avatarUrl');
+                                        console.log(e.response?.data?.message);
+                                    }
+                                }
+                                await updateUser();
+                            }, 3200)
+                            globalStore.setViewOpen(true);
+                        }
                 }
             }
             socket.current.onclose = () => {
@@ -134,7 +158,7 @@ function Chat() {
             }
             setMes('');
             socket.current.send(JSON.stringify(message));
-            await store.sendMessage(message.user.id, message.message, message.time, (message.id).toString(), message.avatar);
+            // await store.sendMessage(message.user.id, message.message, message.time, (message.id).toString(), message.avatar); // ?????
             if(messages.length > 49) {
                 messages.splice(0, 1);
             }
@@ -251,12 +275,14 @@ function Chat() {
                             <a>{globalStore.profileUser.username}</a>
                         </div>
                         <div className='profileInfoPlayer'>
-                            <a style={{color: 'rgba(232, 232, 232, 0.8)'}}>Total games played:</a>
-                            <a style={{fontSize: '1.7em'}}>{globalStore.profileUser.gamesPlayed}</a>
-                            <a style={{color: 'rgba(232, 232, 232, 0.8)'}}>Total wagered:</a>
-                            <a style={{fontSize: '1.7em'}}>{globalStore.profileUser.totalWagered}</a>
-                            <a style={{color: 'rgba(232, 232, 232, 0.8)'}}>Registered:</a>
-                            <a style={{fontSize: '1.4em'}}>{globalStore.profileUser.regDate}</a>
+                            <a style={{color: 'rgba(232, 232, 232, 0.8)', textShadow: '1px 1px 4px rgba(232, 232, 232, 0.5)'}}>Total games played:</a>
+                            <a style={{fontSize: '1.7em', textShadow: '1px 1px 5px rgba(255, 255, 255, 0.7)'}}>{Math.round(globalStore.profileUser.gamesPlayed)}</a>
+                            <a style={{color: 'rgba(232, 232, 232, 0.8)', textShadow: '1px 1px 4px rgba(232, 232, 232, 0.5)'}}>Total wagered:</a>
+                            <a style={{fontSize: '1.7em', textShadow: '1px 1px 5px rgba(255, 255, 255, 0.7)'}}>
+                                {Math.round(globalStore.profileUser.totalWagered)} <img src={gem} className='gemBuy' alt='' />
+                            </a>
+                            <a style={{color: 'rgba(232, 232, 232, 0.8)',  textShadow: '1px 1px 4px rgba(232, 232, 232, 0.5)'}}>Registered:</a>
+                            <a style={{fontSize: '1.4em', textShadow: '1px 1px 5px rgba(255, 255, 255, 0.7)'}}>{globalStore.profileUser.regDate}</a>
                         </div>
                     </div>
                 </div>

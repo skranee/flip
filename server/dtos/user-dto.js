@@ -14,6 +14,7 @@ export default class UserDto {
     lvl;
     experience;
     gotReward;
+    banned;
 
     constructor(model) {
         this.username = model.username;
@@ -31,5 +32,6 @@ export default class UserDto {
         this.lvl = model.lvl;
         this.experience = model.experience;
         this.gotReward = model.gotReward;
+        this.banned = model.banned;
     }
 }

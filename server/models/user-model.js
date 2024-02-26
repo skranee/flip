@@ -13,7 +13,8 @@ const UserSchema = new Schema({
     role: {type: String, default: 'user'},
     lvl: {type: Number, default: 1},
     experience: {type: Number, default: 0},
-    gotReward: {type: Boolean, default: true}
+    gotReward: {type: Boolean, default: true},
+    banned: {type: Boolean, default: false}
 })
 
 export default model('User', UserSchema);

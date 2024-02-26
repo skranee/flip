@@ -18,23 +18,36 @@ class BotService {
         }
     }
 
-    async addItemBot(robloxId, item) {
+    async addItemBot(robloxId, items) {
         const user = await userModel.findOne({robloxId: robloxId});
         if(!user) {
             throw ApiError.BadRequest('User with this robloxId was not found');
         }
-        const id = uuidv4();
-        const add = await botModel.create(
-            {
-                name: item.name,
-                owner: user._id,
-                rarity: item.rarity,
-                classification: item.classification,
-                image: item.image,
-                price: item.price,
-                itemId: id
-            });
-        return add;
+        let newItems = [];
+        for(const item of items) {
+            for(let i = 0; i < item.quantity; ++i) {
+                const id = uuidv4();
+                const add = await botModel.create(
+                    {
+                        name: item.name,
+                        owner: user._id,
+                        rarity: 'rare', //item.rarity
+                        classification: 'gun', //item.classification
+                        image: '', //item.image
+                        price: item.price,
+                        itemId: id
+                    });
+                newItems.push(add);
+            }
+        }
+        return newItems.map(item => ({
+            name: item.name,
+            rarity: 'rare', //item.rarity
+            classification: 'gun', //item.classification
+            image: '', //item.image
+            price: item.price,
+            itemId: item.id
+        }));
     }
 
     async getWithdrawData() {

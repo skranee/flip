@@ -1,11 +1,12 @@
 import {WebSocketServer} from "ws";
+import gameService from "./services/gameService.js";
 
 export const handleOnline = (change) => {
     plusUsers += change;
     broadcastAmount('connection');
 }
 
-let plusUsers = 50;
+let plusUsers = 0;
 let streamStatus = 'offline';
 let messages = [];
 
@@ -51,6 +52,9 @@ wss.on('connection', function connection(ws) {
                 console.log('closed')
                 broadcastAmount('close');
                 break;
+            case 'joinGame':
+                joinGame(message);
+                break;
         }
     })
 
@@ -59,6 +63,17 @@ wss.on('connection', function connection(ws) {
         broadcastAmount('close');
     })
 })
+
+function joinGame(message) {
+    const game = message.game;
+    wss.clients.forEach(client => {
+        client.send(JSON.stringify({
+            method: 'joinGame',
+            game: game,
+            mainReceiver: game.player1._id
+        }))
+    })
+}
 
 function broadcastAmount(method) {
     wss.clients.forEach(client => {

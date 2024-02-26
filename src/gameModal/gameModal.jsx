@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import ItemsList from "./itemsList";
 import {observer} from "mobx-react";
 import {Context} from "../index";
@@ -10,11 +10,28 @@ import {currProp} from "../market/market";
 import gem from "../imgs/currImg.png";
 import {items} from "../mainPage/playzone/gamesInfo";
 import { HiDotsHorizontal } from "react-icons/hi";
+import cheerio from 'cheerio';
+import axios from "axios";
 
 function GameModal({game}) {
     const {store, globalStore} = useContext(Context)
+    const [pointerEvents, setPointerEvents] = useState('none');
+    const [opacityFairness, setOpacityFairness] = useState(0);
+    const [widthBtn, setWidthBtn] = useState(0);
     const player1Bet = game.items1.length > 0 ? Math.round(game.items1.reduce((a, b) => a + b.price, 0) / currProp) : Math.round(game.gems1)
     const player2Bet = game.items2.length > 0 ? Math.round(game.items2.reduce((a, b) => a + b.price, 0) / currProp) : Math.round(game.gems2)
+
+    useEffect(() => {
+        setTimeout(() => {
+            if(game.result && game.player2 && (game.player1._id === store.user.id || game.player2._id === store.user.id)) {
+                setPointerEvents('');
+                setOpacityFairness(1);
+            } else {
+                setPointerEvents('none');
+                setOpacityFairness(0);
+            }
+        }, 3200)
+    }, [game, ]);
 
     const handleBlur = () => {
         globalStore.setViewOpen(false)
@@ -43,8 +60,17 @@ function GameModal({game}) {
         // const item = await store.createItem('testgun', 1);
         // const response = await store.getTransactions();
         // console.log(response);
-        const payments = await store.getPayments(store.user.id);
-        console.log(payments);
+        // const payments = await store.getPayments(store.user.id);
+        // console.log(payments);
+    }
+
+    const checkResult = () => {
+        window.open(globalStore.checkLink);
+    }
+
+    const parseHtml = async () => {
+        const htmlContent = await axios.get('/https://mm2values.com/?p=common');
+        const $ = cheerio.load(htmlContent);
     }
 
     return (
@@ -77,10 +103,10 @@ function GameModal({game}) {
                     </div>
                     <ItemsList items={game.items1} />
                 </div>
-                {/*<button onClick={endGame}>*/}
-                {/*    end*/}
-                {/*</button>*/}
-                <CoinFlip />
+                <button onClick={endGame}>
+                    end
+                </button>
+                <CoinFlip game={game} />
                 <div className='lobbyPlayerContainer'>
                     <div className='lobbyUpperInfo'>
                         <div className='avatarContainerLobby'>
@@ -88,7 +114,9 @@ function GameModal({game}) {
                                 <img className='lobbyAvatar2'
                                      style={{
                                          boxShadow: game.side1 === 'black' ? '0 0 20px 5px rgba(200, 200, 200, 1)' :
-                                             '0 0 25px 5px rgba(239, 0, 0, 1)'
+                                             '0 0 25px 5px rgba(239, 0, 0, 1)',
+                                         border: game.side1 === 'black' ? 'solid 3px rgba(200, 200, 200, 1)' :
+                                             'solid 3px rgba(239, 0, 0, 1)'
                                      }}
                                      src={game.player2.avatar}
                                      alt=''/>
@@ -117,6 +145,15 @@ function GameModal({game}) {
                     {game.items2 &&
                         <ItemsList items={game.items2} />
                     }
+                </div>
+                <div className='btnCheckResultContainer'>
+                    <button
+                        className='btnCheckResult'
+                        onClick={checkResult}
+                        style={{opacity: `${opacityFairness}`, pointerEvents: pointerEvents}}
+                    >
+                        Provably Fair
+                    </button>
                 </div>
             </div>
         </div>

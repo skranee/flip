@@ -14,6 +14,7 @@ function AdminPanel() {
     const [roleCheck, setRoleCheck] = useState('');
     const [incDec, setIncDec] = useState('increase')
     const [payments, setPayments] = useState([]);
+    const [banState, setBanState] = useState('ban');
 
     const containerWidth = () => {
         if(!globalStore.chatOpened && globalStore.panelOpen) {
@@ -131,11 +132,14 @@ function AdminPanel() {
                     <div className='modalWindowAdmin' onClick={(event) => event.stopPropagation()} onKeyDown={(event) => handleKeyDown(event)}>
                         <a className='optionStatus'>{globalStore.adminOptionStatus}</a>
                         {
-                            (globalStore.adminOptionStatus === 'ROLE CHANGE' ||
+                            (
+                                globalStore.adminOptionStatus === 'ROLE CHANGE' ||
                                 globalStore.adminOptionStatus === 'BALANCE ADD' ||
                                 globalStore.adminOptionStatus === 'BALANCE REDUCE' ||
-                            globalStore.adminOptionStatus === 'LEVEL MANAGEMENT' ||
-                            globalStore.adminOptionStatus === 'PAYMENTS') &&
+                                globalStore.adminOptionStatus === 'BAN / UNBAN' ||
+                                globalStore.adminOptionStatus === 'LEVEL MANAGEMENT' ||
+                                globalStore.adminOptionStatus === 'PAYMENTS'
+                            ) &&
 
                             <div className='inputLabelAdmin'>
                                 <a className='labelAdmin'>USERNAME</a>
@@ -151,6 +155,7 @@ function AdminPanel() {
                         {
                             (   globalStore.adminOptionStatus === 'BALANCE ADD' ||
                                 globalStore.adminOptionStatus === 'BALANCE REDUCE' ||
+                                globalStore.adminOptionStatus === 'BAN / UNBAN' ||
                                 globalStore.adminOptionStatus === 'LEVEL MANAGEMENT' ||
                                 globalStore.adminOptionStatus === 'ONLINE MANAGEMENT') &&
                             <div className='inputLabelAdmin'>
@@ -202,6 +207,11 @@ function AdminPanel() {
                                 >
                                     Decrease
                                 </a>
+                            </div>
+                        }
+                        {
+                            globalStore.adminOptionStatus === 'BAN / UNBAN' &&
+                            <div className='roleChoose'>
                             </div>
                         }
                         <button className='btnAdminDone' disabled={isDisabled} onClick={handleProceed}>

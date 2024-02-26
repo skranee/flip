@@ -34,4 +34,12 @@ export default class AdminService {
     static async getUser(username: string): Promise<AxiosResponse<IUser>> {
         return $api.get(`/adminUser?username=${username}`);
     }
+
+    static async banUser(admin: string, userId: string): Promise<AxiosResponse> {
+        return $api.post('/banUser', {admin, userId});
+    }
+
+    static async unbanUser(admin: string, userId: string): Promise<AxiosResponse> {
+        return $api.post('/unbanUser', {admin, userId});
+    }
 }

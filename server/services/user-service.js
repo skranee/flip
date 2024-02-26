@@ -96,9 +96,9 @@ class UserService {
         const level = Math.floor(newExp / process.env.MAX_EXP);
         newExp -= level * process.env.MAX_EXP;
         if((user.lvl % 5) + level >= 5) {
-            const claim = await userModel.findByIdAndUpdate(id, {gotReward: false});
+            const claim = await userModel.updateOne({_id: id}, {gotReward: false});
         }
-        const update = await userModel.findByIdAndUpdate(id, {experience: newExp, $inc: {lvl: level}});
+        const update = await userModel.updateOne({_id: id}, {experience: newExp, $inc: {lvl: level}});
         return update;
     }
 

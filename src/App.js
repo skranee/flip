@@ -13,9 +13,12 @@ import Support from "./support/support";
 import Answer from "./support/answer";
 import AdminPanel from "./adminPanel/adminPanel";
 import LeadersBoard from "./leadersBoard/leadersBoard";
+import TOS from "./tos/tos";
+import PrivacyPolicy from "./privacyPolicy/privacyPolicy";
 
 function App() {
     const {globalStore, store} = useContext(Context);
+    console.log(store.user.avatar)
 
     useEffect(() => {
         if(localStorage.getItem('token')) {
@@ -49,6 +52,8 @@ function App() {
             <Route path='/support' element={<Support />} />
             <Route path='/answer' element={<Answer />} />
             <Route path='/admin' element={<AdminPanel />} />
+            <Route path='/tos' element={<TOS />} />
+            <Route path='/privacy-policy' element={<PrivacyPolicy />} />
         </Routes>
         <LeftPanel />
         <Chat />

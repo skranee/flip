@@ -135,7 +135,7 @@ function NavigationPanel () {
                         </div>
                         <div className='depositButtons'>
                             <button className='depositBtn' onClick={handleCrypto}>
-                                Deposit crypto
+                                Get Gems
                             </button>
                             <button className='depositBtn' onClick={handleWithdraw}>
                                 Withdraw items

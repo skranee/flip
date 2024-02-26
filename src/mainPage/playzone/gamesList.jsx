@@ -21,6 +21,7 @@ export class Game {
     status;
     side1;
     side2;
+    result;
 
     constructor(obj) {
         this.player1 = obj.player1;
@@ -35,6 +36,7 @@ export class Game {
         this.status = obj.status;
         this.side1 = obj.side1;
         this.side2 = obj.side2;
+        this.result = obj.result;
     }
 
     combineItems() {
@@ -73,7 +75,8 @@ function GamesList () {
                         side1: item.side1,
                         side2: item.side2,
                         gems1: item.gems1,
-                        gems2: item.gems2
+                        gems2: item.gems2,
+                        result: item.result
                     })
                     setGames(prev => [...prev, gameObj]);
                 })
@@ -169,7 +172,7 @@ function GamesList () {
             let bool = false;
             games.map((game) => {
                 for (const item of game.items) {
-                    if (item.name === searchItem) {
+                    if (item.name.toLowerCase() === searchItem.toLowerCase()) {
                         bool = true;
                         break;
                     }
@@ -217,12 +220,31 @@ function GamesList () {
                 {gamesCopy.length ? gamesCopy.map((item, index) => (
                     <li key={index} className='gameContainer'>
                         <div className='imgsVs'>
-                            <img className='playerGame' src={item.player1 ? item.player1.avatar : question} alt='' />
+                            <img
+                                className='playerGame'
+                                src={item.player1 ? item.player1.avatar : question}
+                                alt=''
+                                style={{
+                                    border: item.side1 === 'red' ? 'solid 2px rgba(200, 200, 200, 1)' :
+                                        'solid 2px rgba(255, 0, 0, 1)'
+                                }}
+                            />
                             <a className='vs'> vs </a>
                             {item.player2 ?
-                                <img className='playerGame' src={item.player2.avatar} alt='' style={{border: 'solid 2px #FF2D2D'}}/>
+                                <img
+                                    className='playerGame'
+                                    src={item.player2.avatar}
+                                    alt=''
+                                    style={{
+                                        border: item.side1 === 'black' ? 'solid 2px rgba(200, 200, 200, 1)' :
+                                            'solid 2px rgba(239, 0, 0, 1)'
+                                    }}
+                                />
                                 :
-                                <div className='dotsPlayer2'>
+                                <div className='dotsPlayer2' style={{
+                                    border: item.side1 === 'black' ? 'solid 2px rgba(200, 200, 200, 1)' :
+                                        'solid 2px rgba(239, 0, 0, 1)'
+                                }}>
                                     <HiDotsHorizontal style={{fontSize: '1.6em'}} />
                                 </div>
                             }
@@ -258,14 +280,15 @@ function GamesList () {
                             </a>
                         </div>
                         <div className='btnsGame'>
-                            {item.player1._id === store.user.id ?
-                                <button className='joinGame' onClick={() => cancel(item)}>
-                                    CANCEL
-                                </button>
-                                :
-                                <button className='joinGame' onClick={() => handleJoin(item)}>
-                                    JOIN
-                                </button>
+                            {item.status !== 'Ongoing' &&
+                                (item.player1._id === store.user.id ?
+                                        <button className='joinGame' onClick={() => cancel(item)}>
+                                            CANCEL
+                                        </button>
+                                        :
+                                        <button className='joinGame' onClick={() => handleJoin(item)}>
+                                            JOIN
+                                        </button>)
                             }
                             <button className='viewGame' onClick={() => handleView(item)}>
                                 VIEW

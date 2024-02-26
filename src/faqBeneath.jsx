@@ -8,13 +8,19 @@ import x from './imgs/x.png'
 import discord from './imgs/discord.png'
 import youtube from './imgs/youtube.png'
 import ban from './imgs/ban.png'
+import {useNavigate} from "react-router-dom";
 
 function FaqBeneath () {
-    const underLogo = 'MM2Flip is a brand name of...'
-    const gmailSupport = 'support@mm2flip.com'
+    const underLogo = 'MM2Flip is a brand name of...';
+    const gmailSupport = 'support@mm2flip.com';
+    const navigate = useNavigate();
 
     const handleNavigate = (social) => {
         window.open(social)
+    }
+
+    const handleNavigateModals = (page) => {
+        navigate(page);
     }
 
     return (
@@ -35,9 +41,10 @@ function FaqBeneath () {
             </div>
             <div className='optionsFaq'>
                 <a>Other</a>
-                <a className='underOptions'>Terms Of<br />Service</a>
+                <a className='underOptions' onClick={() => handleNavigateModals('/tos')}>Terms Of<br />Service</a>
                 <a className='underOptions'>Refund Policy</a>
                 <a className='underOptions'>Provably Fair</a>
+                <a className='underOptions' onClick={() => handleNavigateModals('/privacy-policy')}>Privacy Policy</a>
             </div>
             <div  className='optionsFaq'>
                 <a>Socials</a>

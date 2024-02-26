@@ -60,7 +60,7 @@ export default class Store {
     async getUser(username: string) {
         try {
             const response = await AuthService.getUser(username);
-            return response.data;
+            return response;
         } catch(e: any) {
             console.log(e.response?.data?.message);
         }
@@ -638,6 +638,32 @@ export default class Store {
         try {
             const link = await LinkedCodeService.linkLinkedCode(code, userId);
             return link;
+        } catch(e: any) {
+            console.log(e.response?.data?.message);
+        }
+    }
+
+    async banUser(admin: string, userId: string) {
+        try {
+            if(this.user.role !== 'admin') {
+                return new Error('Not enough rights!');
+            } else {
+                const ban = await AdminService.banUser(admin, userId);
+                return ban;
+            }
+        } catch(e: any) {
+            console.log(e.response?.data?.message);
+        }
+    }
+
+    async unbanUser(admin: string, userId: string) {
+        try {
+            if(this.user.role !== 'admin') {
+                return new Error('Not enough rights!');
+            } else {
+                const unban = await AdminService.unbanUser(admin, userId);
+                return unban;
+            }
         } catch(e: any) {
             console.log(e.response?.data?.message);
         }

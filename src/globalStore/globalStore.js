@@ -33,9 +33,14 @@ export default class GlobalStore {
     paymentsOpen = false;
     gemJoin = false;
     gemCreate = false;
+    checkLink = '';
 
     constructor() {
         makeAutoObservable(this)
+    }
+
+    setCheckLink(link) {
+        this.checkLink = link;
     }
 
     setGemCreate(bool) {

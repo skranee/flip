@@ -76,31 +76,26 @@ class GameService {
     async joinWithGems(player2, side, gameId, gemsAmount) {
         const reduceBalance = await userModel.updateOne({_id: player2.id}, {$inc: {balance: -gemsAmount}});
         const game = await gameModel.findOneAndUpdate({gameId: gameId}, {player2: player2.id, gems2: gemsAmount, side2: side, status: 'Ongoing'});
+        let gems1 = 0;
+        if(game && game.gems1) {
+            gems1 = game.gems1;
+        }
         const random = await this.findWinner(gameId);
         const result = random.winner === 'first' ? 'First player won' : 'Second player won'
         const updateWinner = await gameModel.updateOne({gameId: gameId}, {result: result});
-        if(game.items1.length > 0) {
+        if(game.items1 && game.items1.length > 0) {
             const itemsFirst = game.items1;
             for(const item of itemsFirst) {
                 await botModel.updateOne({itemId: item.itemId}, {owner: result === 'First player won' ? game.player1 : player2.id});
             }
         }
         if(result === 'First player won') {
-            const addBalance = await userModel.updateOne({_id: game.player1}, {$inc: {balance: gemsAmount}});
+            const addBalance = await userModel.updateOne({_id: game.player1}, {$inc: {balance: gemsAmount + gems1}});
         } else {
-            const addBalance = await userModel.updateOne({_id: player2.id}, {$inc: {balance: gemsAmount}});
+            const addBalance = await userModel.updateOne({_id: player2.id}, {$inc: {balance: gemsAmount + gems1}});
         }
 
-        const gameToPass = await gameModel.findOne({gameId: gameId});
-
-        if(game.items1) {
-            const price = game.items1.reduce((a, b) => a + b.price / 2,5, 0);
-            await userService.addExp(game.player1, Math.round(price / 40));
-        }
-        if(game.gems1) {
-            await userService.addExp(game.player1, Math.round(game.gems1 / 40));
-        }
-        await userService.addExp(player2.id, Math.round(gemsAmount / 40));
+        const gameToPass = await gameModel.findOne({gameId: gameId}).populate('player1').populate('player2');
 
         if(game.items1) {
             const price = game.items1.reduce((a, b) => a + b.price / 2,5, 0);
@@ -111,7 +106,20 @@ class GameService {
         }
         await userService.addExp(player2.id, Math.round(gemsAmount / 40));
 
-        const deleteGame = await this.deleteGame(gameId);
+        if(game.items1) {
+            const price = game.items1.reduce((a, b) => a + b.price / 2,5, 0);
+            await userService.addExp(game.player1, Math.round(price / 40));
+        }
+        if(game.gems1) {
+            await userService.addExp(game.player1, Math.round(game.gems1 / 40));
+        }
+        await userService.addExp(player2.id, Math.round(gemsAmount / 40));
+
+        const history = await historyService.addHistory(gameToPass);
+
+        setTimeout(async () => {
+            const deleteGame = await this.deleteGame(gameId);
+        }, 60000);
 
         return {
             game: gameToPass,

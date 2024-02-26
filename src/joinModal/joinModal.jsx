@@ -1,10 +1,13 @@
-import React, {useContext, useState, useEffect} from 'react';
+import React, {useContext, useState, useEffect, useRef} from 'react';
 import {Context} from "../index";
 import gem from "../imgs/currImg.png";
 import {currProp} from "../market/market";
 import heads from "../imgs/heads.png";
 import tails from "../imgs/tails.png";
 import {observer} from "mobx-react";
+import axios from "axios";
+import {AuthResponse} from "../models/response/AuthResponse";
+import {API_URL} from "../http";
 
 function JoinModal({game}) {
     const {store, globalStore} = useContext(Context)
@@ -16,6 +19,16 @@ function JoinModal({game}) {
     const [approximate, setApproximate] = useState(0);
     const [errorMes, setErrorMes] = useState('No items to bet...');
     const [gemsBet, setGemsBet] = useState(game.bet ? Math.round(game.bet) : 0);
+
+    const socket = useRef();
+
+    useEffect(() => {
+        if(store.isAuth) {
+            socket.current = new WebSocket('ws://localhost:4000');
+
+
+        }
+    }, []);
 
     useEffect(() => {
         const getUserItems = async () => {
@@ -78,10 +91,31 @@ function JoinModal({game}) {
     const joinWithGems = async () => {
         if(gemsBet >= approximate * 0.9 && gemsBet <= approximate * 1.1) {
             const join = await store.joinWithGems(store.user, chosenSide, game.gameId, gemsBet);
-            await store.checkAuth();
+            setTimeout(async () => {
+                const updateUser = async () => {
+                    try {
+                        const response = await axios.get(`${API_URL}/refresh`, {withCredentials: true});
+                        store.setUser(response.data.user);
+                        store.setAuth(true);
+                        localStorage.setItem('token', response.data.accessToken);
+                        localStorage.setItem('username', response.data.user.username);
+                    } catch(e) {
+                        localStorage.removeItem('avatarUrl');
+                        console.log(e.response?.data?.message);
+                    }
+                }
+                await updateUser();
+            }, 3200)
+            globalStore.setCheckLink(join.data.link);
             globalStore.setGemJoin(false);
             globalStore.setJoinOpen(false);
-            console.log(join);
+            globalStore.setGameInfo(join.data.game);
+            globalStore.setViewOpen(true);
+            const message = {
+                method: 'joinGame',
+                game: join.data.game
+            }
+            socket.current.send(JSON.stringify(message));
         } else {
             setErrorMes(`Gems amount must be between ${Math.round(approximate * 0.9)} and ${Math.round(approximate * 1.1)}`)
         }
@@ -96,9 +130,9 @@ function JoinModal({game}) {
             {globalStore.gemJoin &&
                 <div className='backgroundModal' onClick={handleBlurGem}>
                     <div className='modalWindowAdmin' onClick={(event) => event.stopPropagation()}>
-                        <a className='infoJoinGems'>
+                        <p className='infoJoinGems'>
                             Gems amount must be between <a style={{color: 'rgba(255, 255, 255, 1)', fontWeight: 700}}>{Math.round(approximate * 0.9)}<img src={gem} className='gemWorth' alt='' /></a> and <a style={{color: 'rgba(255, 255, 255, 1)', fontWeight: 700}}>{Math.round(approximate * 1.1)}<img src={gem} className='gemWorth' alt='' /></a>
-                        </a>
+                        </p>
                         <a className='gemsAmount'>{gemsBet} <img className='gemWorth' src={gem} alt='' /></a>
                         <input
                             type='range'

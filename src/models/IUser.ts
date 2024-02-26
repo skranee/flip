@@ -15,4 +15,5 @@ export interface IUser {
     role: string;
     experience: number;
     gotReward: boolean;
+    banned: boolean;
 }

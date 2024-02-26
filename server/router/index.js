@@ -69,6 +69,8 @@ router.post('/createItem', itemController.createItem);
 router.post('/withdraw', withdrawController.addToQueue);
 router.post('/increaseOnline', adminController.increaseOnline);
 router.post('/decreaseOnline', adminController.decreaseOnline);
+router.post('/banUser', adminController.banUser);
+router.post('/unbanUser', adminController.unbanUser);
 router.get('/transactions', depositController.getTransactions);
 router.post('/notification-webhook', depositController.getNotified);
 router.get('/payments', userController.getPayments);

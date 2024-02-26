@@ -70,6 +70,26 @@ class AdminController {
             next(e);
         }
     }
+
+    async banUser(req, res, next) {
+        try {
+            const {admin, userId} = req.body;
+            const ban = await adminService.banUser(admin, userId);
+            return res.json(ban);
+        } catch(e) {
+            next(e);
+        }
+    }
+
+    async unbanUser(req, res, next) {
+        try {
+            const {admin, userId} = req.body;
+            const unban = await adminService.unbanUser(admin, userId);
+            return res.json(unban);
+        } catch(e) {
+            next(e);
+        }
+    }
 }
 
 export default new AdminController();

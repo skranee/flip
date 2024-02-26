@@ -6,6 +6,7 @@ import { TbMedal } from "react-icons/tb";
 import { IoPeople } from "react-icons/io5";
 import { CiStreamOn } from "react-icons/ci";
 import { SiBitcoinsv } from "react-icons/si";
+import { FaBan } from "react-icons/fa";
 import {Context} from "../index";
 
 function OptionsList() {
@@ -45,6 +46,10 @@ function OptionsList() {
             <li className='optionContainer' onClick={() => openModal('PAYMENTS')}>
                 <SiBitcoinsv className='iconAdmin' />
                 <a className='adminText'>PAYMENTS</a>
+            </li>
+            <li className='optionContainer' onClick={() => openModal('BAN / UNBAN')}>
+                <FaBan className='iconAdmin' />
+                <a className='adminText'>BAN / UNBAN</a>
             </li>
         </>
     )
