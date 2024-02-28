@@ -34,9 +34,19 @@ export default class GlobalStore {
     gemJoin = false;
     gemCreate = false;
     checkLink = '';
+    connectModal = false;
+    withdrawStatus = '';
 
     constructor() {
         makeAutoObservable(this)
+    }
+
+    setWithdrawStatus(status) {
+        this.withdrawStatus = status;
+    }
+
+    setConnectModal(bool) {
+        this.connectModal = bool;
     }
 
     setCheckLink(link) {

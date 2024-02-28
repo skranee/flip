@@ -58,6 +58,8 @@ router.post('/completeWithdraw', botController.completeWithdraw);
 router.post('/bot', botController.addItemBot);
 router.get('/getUserItems', botController.getUserItems);
 router.get('/withdraw', botController.getWithdrawData);
+router.post('/parseHtml', botController.parseHtml);
+router.post('/decideWhichBot', botController.decideWhichBot);
 router.get('/accountId', depositController.getAccountId);
 router.post('/paymentAddress', depositController.createPaymentAddress);
 router.post('/findAddress', depositController.findAddress);

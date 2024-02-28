@@ -84,7 +84,7 @@ function GamesList () {
         }
         getGames();
 
-        const intervalId = setInterval(getGames, 3000);
+        const intervalId = setInterval(getGames, 3000); //fix to 1s probably!!!!
 
         return () => clearInterval(intervalId);
     }, [])

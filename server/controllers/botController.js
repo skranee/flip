@@ -1,6 +1,22 @@
 import botService from "../services/botService.js";
 
 class BotController {
+    async decideWhichBot(req, res, next) {
+        const {items} = req.body;
+        const response = await botService.decideWhichBot(items);
+        return res.json(response);
+    }
+
+    async parseHtml(req, res, next) {
+        try {
+            const {itemName} = req.body;
+            const item = await botService.parseHtml(itemName);
+            return res.json(item);
+        } catch(e) {
+            next(e);
+        }
+    }
+
     async completeWithdraw(req, res, next) {
         try {
             const {userId} = req.body;

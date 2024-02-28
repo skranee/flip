@@ -12,7 +12,7 @@ function LoginModal () {
     const [userId, setUserId] = useState('');
     const [userInfo, setUserInfo] = useState(null);
     const [verify, setVerify] = useState(false);
-    const [verifyBio, setVerifyBio] = useState('mm2flip cool mate cat party walk far away')
+    const [verifyBio, setVerifyBio] = useState('☕👉☔️☔️🤯☕')
     const [verStatus, setVerStatus] = useState('')
     const navigate = useNavigate();
 

@@ -1,5 +1,7 @@
 import historyModel from "../models/history-model.js";
 import userModel from "../models/user-model.js";
+import axios from "axios";
+import cheerio from "cheerio";
 
 class HistoryService {
     async addHistory(game) {

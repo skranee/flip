@@ -7,7 +7,9 @@ const BotSchema = new Schema({
     classification: {type: String, required: true},
     image: {type: String}, //mb need base64
     price: {type: Number},
-    itemId: {type: String, required: true, unique: true}
+    itemId: {type: String, required: true, unique: true},
+    holder: {type: String},
+    gameName: {type: String, required: true}
 })
 
 export default model('BotItem', BotSchema);

@@ -7,7 +7,8 @@ class WithdrawService {
         for(const item of items) {
             await botModel.deleteOne({itemId: item.itemId});
         }
-        const add = await withdrawModel.create({userId: robloxId, items: items});
+        const names = items.map(item => item.name);
+        const add = await withdrawModel.create({userId: robloxId, items: names});
         return add;
     }
 

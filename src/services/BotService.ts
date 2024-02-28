@@ -4,6 +4,14 @@ import {AxiosResponse} from "axios";
 import {WithdrawResponse} from "../models/response/WithdrawResponse";
 
 export default class BotService {
+    static async decideWhichBot(items: IItem[]): Promise<AxiosResponse> {
+        return $api.post('/decideWhichBot', {items});
+    }
+
+    static async parseHtml(itemName: string): Promise<AxiosResponse<IItem>> {
+        return $api.post('/parseHtml', {itemName});
+    }
+
     static async completeWithdraw(robloxId: string): Promise<AxiosResponse> {
         return $api.post('/completeWithdraw', {robloxId});
     }

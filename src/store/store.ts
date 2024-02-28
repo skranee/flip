@@ -668,4 +668,22 @@ export default class Store {
             console.log(e.response?.data?.message);
         }
     }
+
+    async parseHtml(itemName: string) {
+        try {
+            const item = await BotService.parseHtml(itemName);
+            return item;
+        } catch(e: any) {
+            console.log(e.response?.data?.message);
+        }
+    }
+
+    async decideWhichBot(items: IItem[]) {
+        try {
+            const decide = await BotService.decideWhichBot(items);
+            return decide;
+        } catch(e: any) {
+            console.log(e.response?.data?.message);
+        }
+    }
 }

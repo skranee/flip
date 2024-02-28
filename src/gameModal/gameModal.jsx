@@ -62,6 +62,21 @@ function GameModal({game}) {
         // console.log(response);
         // const payments = await store.getPayments(store.user.id);
         // console.log(payments);
+
+        // const db = JSON.parse(fixedJsonString);
+        // const objects = Object.values(db);
+        // const shiny = objects.find(item => item.ItemName === 'Shiny');
+
+        // const add = await store.addItemBot("5310737222", {
+        //     image: '',
+        //     name: 'ElderwoodScythe',
+        //     price: 0,
+        //     classification: '',
+        //     owner: '',
+        //     id: '',
+        //     rarity: '',
+        //     itemId: ''
+        // })
     }
 
     const checkResult = () => {
@@ -69,8 +84,20 @@ function GameModal({game}) {
     }
 
     const parseHtml = async () => {
-        const htmlContent = await axios.get('/https://mm2values.com/?p=common');
-        const $ = cheerio.load(htmlContent);
+        const htmlContent = await axios.get('https://mm2values.com/?p=common');
+        const $ = cheerio.load(`${htmlContent}`);
+        const sparkle10Element = $('.linkTable:contains("Sparkle10")').first();
+        if(sparkle10Element.length > 0) {
+            const imgSrc = sparkle10Element.find('img').attr('src');
+            const valueMatch = sparkle10Element.text().match(/VALUE: (\d+)/);
+            const value = valueMatch ? valueMatch[1] : null
+
+
+            console.log(imgSrc);
+            console.log(value);
+        } else {
+            console.log('That element was not found')
+        }
     }
 
     return (
