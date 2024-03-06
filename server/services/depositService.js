@@ -7,9 +7,6 @@ import transactionModel from "../models/transaction-model.js";
 import linkedCodeService from "./linkedCodeService.js";
 import affiliateService from "./affiliateService.js";
 
-const apiKey = 'z1y8gGrA7JEOOLCz';
-const apiSecret = 'RzzQtv61DWkYUgNcivt2TZh7ccFx97WZ';
-
 class DepositService {
 
     async getAccountId(currency) {
@@ -17,10 +14,10 @@ class DepositService {
 
         const message = `${timestamp}GET/v2/accounts`;
 
-        const signature = crypto.createHmac('sha256', apiSecret).update(message).digest('hex');
+        const signature = crypto.createHmac('sha256', process.env.DEPOSIT_API_SECRET).update(message).digest('hex');
 
         const headers = {
-            'CB-ACCESS-KEY': apiKey,
+            'CB-ACCESS-KEY': process.env.DEPOSIT_API_KEY,
             'CB-ACCESS-SIGN': signature,
             'CB-ACCESS-TIMESTAMP': timestamp,
             'Content-Type': 'application/json',
@@ -35,7 +32,7 @@ class DepositService {
             return id;
 
         } catch (error) {
-            console.error('Ошибка при получении ID аккаунта:', error.message);
+            console.error('Error while trying to get accountID', error.message);
         }
     }
 
@@ -43,7 +40,7 @@ class DepositService {
         const accountId = await this.getAccountId(currency);
         function generateSignature(method, requestPath, body, timestamp) {
             const message = `${timestamp}${method}${requestPath}${JSON.stringify(body)}`;
-            return crypto.createHmac('sha256', apiSecret).update(message).digest('hex');
+            return crypto.createHmac('sha256', process.env.DEPOSIT_API_SECRET).update(message).digest('hex');
         }
         const timestamp = Math.floor(Date.now() / 1000);
 
@@ -55,13 +52,14 @@ class DepositService {
         const signature = generateSignature('POST', `/v2/accounts/${accountId}/addresses`, requestData, timestamp);
 
         const headers = {
-            'CB-ACCESS-KEY': apiKey,
+            'CB-ACCESS-KEY': process.env.DEPOSIT_API_KEY,
             'CB-ACCESS-SIGN': signature,
             'CB-ACCESS-TIMESTAMP': timestamp,
             'Content-Type': 'application/json',
         };
 
         const response = await axios.post(`https://api.coinbase.com/v2/accounts/${accountId}/addresses`, requestData, { headers });
+
         const address = response.data.data.address;
 
         await this.bindAddress(address, user, currency);
@@ -87,10 +85,10 @@ class DepositService {
 
         const message = `${timestamp}GET/v2/accounts/${accountIdBTC}/transactions`;
 
-        const signature = crypto.createHmac('sha256', apiSecret).update(message).digest('hex');
+        const signature = crypto.createHmac('sha256', process.env.DEPOSIT_API_SECRET).update(message).digest('hex');
 
         const headers = {
-            'CB-ACCESS-KEY': apiKey,
+            'CB-ACCESS-KEY': process.env.DEPOSIT_API_KEY,
             'CB-ACCESS-SIGN': signature,
             'CB-ACCESS-TIMESTAMP': timestamp,
             'Content-Type': 'application/json',
@@ -110,10 +108,10 @@ class DepositService {
 
         const message = `${timestamp}GET/v2/exchange-rates`;
 
-        const signature = crypto.createHmac('sha256', apiSecret).update(message).digest('hex');
+        const signature = crypto.createHmac('sha256', process.env.DEPOSIT_API_SECRET).update(message).digest('hex');
 
         const headers = {
-            'CB-ACCESS-KEY': apiKey,
+            'CB-ACCESS-KEY': process.env.DEPOSIT_API_KEY,
             'CB-ACCESS-SIGN': signature,
             'CB-ACCESS-TIMESTAMP': timestamp,
             'Content-Type': 'application/json',
@@ -129,10 +127,10 @@ class DepositService {
 
         const message = `${timestamp}GET/v2/notifications`;
 
-        const signature = crypto.createHmac('sha256', apiSecret).update(message).digest('hex');
+        const signature = crypto.createHmac('sha256', process.env.DEPOSIT_API_SECRET).update(message).digest('hex');
 
         const headers = {
-            'CB-ACCESS-KEY': apiKey,
+            'CB-ACCESS-KEY': process.env.DEPOSIT_API_KEY,
             'CB-ACCESS-SIGN': signature,
             'CB-ACCESS-TIMESTAMP': timestamp,
             'Content-Type': 'application/json',

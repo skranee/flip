@@ -5,6 +5,7 @@ import tokenService from "./token-service.js";
 import ApiError from "../exceptions/api-error.js";
 import historyModel from "../models/history-model.js";
 import transactionModel from "../models/transaction-model.js";
+import rewardModel from "../models/reward-model.js";
 
 class UserService {
     async getUser(username) {
@@ -103,7 +104,11 @@ class UserService {
     }
 
     async claim(id) {
-        const claim = await userModel.findByIdAndUpdate(id, {gotReward: true});
+        const claim = await userModel.updateOne({_id: id}, {gotReward: true});
+        const user = await userModel.findOne({_id: id});
+        const lvl = user.lvl;
+        const reward = await rewardModel.findOne({lvl: lvl});
+        const getBalance = await userModel.updateOne({_id: id}, {$inc: {balance: reward.gemsAmount}});
         return claim;
     }
 

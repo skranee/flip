@@ -57,22 +57,22 @@ class AdminService {
         return user;
     }
 
-    async banUser(admin, userId) {
+    async banUser(admin, username) {
         const candidate = await userModel.findOne({_id: admin});
         if(candidate.role !== 'admin') {
             return ApiError.BadRequest('Not enough rights!');
         } else {
-            const ban = await userModel.updateOne({_id: userId}, {banned: true});
+            const ban = await userModel.updateOne({username: username}, {banned: true});
             return ban;
         }
     }
 
-    async unbanUser(admin, userId) {
+    async unbanUser(admin, username) {
         const candidate = await userModel.findOne({_id: admin});
         if(candidate.role !== 'admin') {
             return ApiError.BadRequest('Not enough rights!');
         } else {
-            const unban = await userModel.updateOne({_id: userId}, {banned: false});
+            const unban = await userModel.updateOne({username: username}, {banned: false});
             return unban;
         }
     }

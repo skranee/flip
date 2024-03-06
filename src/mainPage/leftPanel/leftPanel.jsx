@@ -1,4 +1,4 @@
-import React, {useContext, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import { CgGames } from "react-icons/cg";
 import { BiSolidDownArrow } from "react-icons/bi/index.esm";
 import { BiSolidUpArrow } from "react-icons/bi/index.esm";
@@ -20,6 +20,10 @@ function LeftPanel () {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const navigate = useNavigate();
     const [bonus, setBonus] = useState(store.user.gotReward)
+
+    useEffect(() => {
+        setBonus(store.user.gotReward);
+    }, [store.user]);
 
     const handleDropdown = () => {
         setDropdownOpen(!dropdownOpen)
@@ -91,7 +95,7 @@ function LeftPanel () {
                                 <a> Admin Panel </a>
                             </div>
                         }
-                        {bonus &&
+                        {bonus === false &&
                             <div className='claimBonus'>
                                 <img className='imgPanel' src={claimImg} alt='' />
                                 <a className='bonusImg'>NEW<br/>BONUS!</a>

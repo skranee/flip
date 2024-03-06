@@ -15,6 +15,7 @@ import withdrawController from "../controllers/withdrawController.js";
 import depositService from "../services/depositService.js";
 import chatController from "../controllers/chat-controller.js";
 import linkedCodeController from "../controllers/linkedCodeController.js";
+import botEntityController from "../controllers/botEntityController.js";
 
 const router = new Router();
 
@@ -83,5 +84,7 @@ router.post('/message', chatController.sendMessage);
 router.get('/message', chatController.getMessages);
 router.get('/linkedCode', linkedCodeController.getLinkedCode);
 router.post('/linkedCode', linkedCodeController.linkLinkedCode);
+router.get('/botEntity', botEntityController.getBots);
+router.post('/botEntity', botEntityController.addBot);
 
 export default router;

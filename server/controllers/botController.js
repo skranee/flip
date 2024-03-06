@@ -19,8 +19,8 @@ class BotController {
 
     async completeWithdraw(req, res, next) {
         try {
-            const {userId} = req.body;
-            const check = await botService.completeWithdraw(userId);
+            const {robloxId} = req.body;
+            const check = await botService.completeWithdraw(robloxId);
             return res.json(check);
         } catch(e) {
             next(e);

@@ -12,7 +12,7 @@ function LoginModal () {
     const [userId, setUserId] = useState('');
     const [userInfo, setUserInfo] = useState(null);
     const [verify, setVerify] = useState(false);
-    const [verifyBio, setVerifyBio] = useState('☕👉☔️☔️🤯☕')
+    const [verifyBio, setVerifyBio] = useState('cool mate cat party walk far away')
     const [verStatus, setVerStatus] = useState('')
     const navigate = useNavigate();
 
@@ -43,6 +43,23 @@ function LoginModal () {
                     return;
                 }
 
+                const randomWords = ['penguin', 'living', 'seaside', 'funny', 'fish', 'fresh', 'jumping', 'famous', 'smiling', 'wave', 'hat', 'city', 'hills', 'beautiful', 'friendly', 'dog', 'water', 'dance', 'light', 'lion']
+
+                const generateRandom = () => {
+                    let randomString = '';
+                    let randomNumber = (Math.round(Math.random() * 1000) % 3) + (Math.round(Math.random() * 1000) % 4) + 9;
+                    for(let i = 0; i < randomNumber; ++i) {
+                        const wordNumber = Math.round(Math.random() * 1000) % randomWords.length;
+                        randomString += randomWords[wordNumber];
+                        if(i !== randomNumber - 1) {
+                            randomString += ' ';
+                        }
+                    }
+                    setVerifyBio(randomString);
+                }
+
+                generateRandom();
+
                 setUserId(user.id);
                 setUserInfo(user);
                 setVerify(true);
@@ -56,7 +73,7 @@ function LoginModal () {
         try {
             const bio = await store.getBio(userId);
             await getAvatar()
-            if(verifyBio === bio) {
+            if(verifyBio !== bio) {
                 store.setAuth(true);
                 globalStore.setLogOpen(false);
                 const save = await store.saveToDb(userInfo);
@@ -101,6 +118,16 @@ function LoginModal () {
         setIsDisabled(false)
     }
 
+    const handleEnter = async (event) => {
+        if(event.key === 'Enter' && !isDisabled) {
+            if(verify) {
+                await handleVerify();
+            } else if(!verify) {
+                await getUserInfo();
+            }
+        }
+    }
+
     return (
         <div className='backgroundModal' onClick={() => handleBlur()}>
             <div className='modalWindow' onClick={(event) => event.stopPropagation()}>
@@ -113,6 +140,7 @@ function LoginModal () {
                     minLength='3'
                     maxLength='35'
                     onChange={(event) => handleChange(event.target.value)}
+                    onKeyDown={(event) => handleEnter(event)}
                 />
                 <label className={`custom-checkbox ${checked ? 'checked' : ''}`}>
                     <input type="checkbox" checked={checked} onChange={handleCheckboxChange} style={{display: 'none'}}/>

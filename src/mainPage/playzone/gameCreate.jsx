@@ -1,6 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Context} from "../../index";
-import {items} from "./gamesInfo";
 import {currProp} from "../../market/market";
 import coin from '../../imgs/currImg.png'
 import {observer} from "mobx-react";
@@ -68,6 +67,11 @@ function GameCreate() {
         globalStore.setGemCreate(true);
     }
 
+    const handleAddItems = () => {
+        globalStore.setCreateOpen(false);
+        globalStore.setConnectModal(true);
+    }
+
     return (
         <div className='backgroundModal' onClick={handleBlur}>
             {globalStore.gemCreate &&
@@ -119,7 +123,7 @@ function GameCreate() {
                         }
                     </div>
                     {playerItems.length === 0 &&
-                        <button className='btnAddItems'>
+                        <button className='btnAddItems' onClick={handleAddItems}>
                             Add Items
                         </button>
                     }

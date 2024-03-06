@@ -20,6 +20,7 @@ import Item from "../models/Item";
 import WithdrawService from "../services/WithdrawService";
 import ChatService from "../services/ChatService";
 import LinkedCodeService from "../services/LinkedCodeService";
+import BotEntityService from "../services/BotEntityService";
 
 export default class Store {
     user = {} as IUser;
@@ -54,7 +55,7 @@ export default class Store {
     }
 
     setItemsList(items: IItem[]) {
-        this.itemsList = items;
+        this.itemsList = items.sort((a, b) => b.price - a.price);
     }
 
     async getUser(username: string) {
@@ -180,12 +181,12 @@ export default class Store {
         }
     }
 
-    async addReward(image: string, name: string, lvl: number, description: string = 'Bonus') {
+    async addReward(name: string, lvl: number, gemsAmount: number) {
         try {
             if(this.user.role !== 'admin') {
-                throw Error('Have not enough rights for this action!');
+                return Error('Have not enough rights for this action!');
             }
-            const reward = await AdminService.addReward(image, name, lvl, description);
+            const reward = await AdminService.addReward(name, lvl, gemsAmount);
             return reward;
         } catch(e: any) {
             console.log(e.response?.data?.message);
@@ -207,7 +208,7 @@ export default class Store {
     async claim(id: string) {
         try {
             const claim = await UserService.claim(id);
-            this.setUser(claim.data)
+            this.checkAuth();
             return claim;
         } catch(e: any) {
             console.log(e.response?.data?.message);
@@ -418,6 +419,7 @@ export default class Store {
     async createPaymentAddress(currency: string, user: string) {
         try {
             const address = await DepositService.createPaymentAddress(currency, user);
+            console.log(address);
             return address;
         } catch(e: any) {
             console.log(e.response?.data?.message);
@@ -643,12 +645,12 @@ export default class Store {
         }
     }
 
-    async banUser(admin: string, userId: string) {
+    async banUser(admin: string, username: string) {
         try {
             if(this.user.role !== 'admin') {
                 return new Error('Not enough rights!');
             } else {
-                const ban = await AdminService.banUser(admin, userId);
+                const ban = await AdminService.banUser(admin, username);
                 return ban;
             }
         } catch(e: any) {
@@ -656,12 +658,12 @@ export default class Store {
         }
     }
 
-    async unbanUser(admin: string, userId: string) {
+    async unbanUser(admin: string, username: string) {
         try {
             if(this.user.role !== 'admin') {
                 return new Error('Not enough rights!');
             } else {
-                const unban = await AdminService.unbanUser(admin, userId);
+                const unban = await AdminService.unbanUser(admin, username);
                 return unban;
             }
         } catch(e: any) {
@@ -682,6 +684,28 @@ export default class Store {
         try {
             const decide = await BotService.decideWhichBot(items);
             return decide;
+        } catch(e: any) {
+            console.log(e.response?.data?.message);
+        }
+    }
+
+    async getBots() {
+        try {
+            const bots = await BotEntityService.getBots();
+            return bots;
+        } catch(e: any) {
+            console.log(e.response?.data?.message);
+        }
+    }
+
+    async addBot(serverUrl: string, name: string, avatar: string, robloxId: string) {
+        try{
+            if(this.user.role === 'admin' || this.user.role === 'developer') {
+                const add = await BotEntityService.addBot(serverUrl, name, avatar, robloxId);
+                return add;
+            } else {
+                return 'Not enough rights!';
+            }
         } catch(e: any) {
             console.log(e.response?.data?.message);
         }

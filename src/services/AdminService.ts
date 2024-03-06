@@ -3,8 +3,8 @@ import {AxiosResponse} from "axios";
 import {IUser} from "../models/IUser";
 
 export default class AdminService {
-    static async addReward(image: string, name: string, lvl: number, description: string): Promise<AxiosResponse> {
-        return $api.post('/reward', {image, name, lvl, description});
+    static async addReward(name: string, lvl: number, gemsAmount: number): Promise<AxiosResponse> {
+        return $api.post('/reward', {name, lvl, gemsAmount});
     }
 
     static async changeRole(admin: string, username: string, role: string): Promise<AxiosResponse> {
@@ -35,11 +35,11 @@ export default class AdminService {
         return $api.get(`/adminUser?username=${username}`);
     }
 
-    static async banUser(admin: string, userId: string): Promise<AxiosResponse> {
-        return $api.post('/banUser', {admin, userId});
+    static async banUser(admin: string, username: string): Promise<AxiosResponse> {
+        return $api.post('/banUser', {admin, username});
     }
 
-    static async unbanUser(admin: string, userId: string): Promise<AxiosResponse> {
-        return $api.post('/unbanUser', {admin, userId});
+    static async unbanUser(admin: string, username: string): Promise<AxiosResponse> {
+        return $api.post('/unbanUser', {admin, username});
     }
 }

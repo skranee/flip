@@ -8,7 +8,6 @@ import coinTails from '../imgs/coinTails.png'
 import question from '../imgs/question.png'
 import {currProp} from "../market/market";
 import gem from "../imgs/currImg.png";
-import {items} from "../mainPage/playzone/gamesInfo";
 import { HiDotsHorizontal } from "react-icons/hi";
 import cheerio from 'cheerio';
 import axios from "axios";
@@ -71,12 +70,13 @@ function GameModal({game}) {
         //     image: '',
         //     name: 'ElderwoodScythe',
         //     price: 0,
-        //     classification: '',
         //     owner: '',
         //     id: '',
         //     rarity: '',
         //     itemId: ''
         // })
+
+        // const addBot = await store.addBot(botsInfo[0].serverUrl, botsInfo[0].name, botsInfo[0].image, botsInfo[0].robloxId);
     }
 
     const checkResult = () => {
@@ -130,9 +130,9 @@ function GameModal({game}) {
                     </div>
                     <ItemsList items={game.items1} />
                 </div>
-                <button onClick={endGame}>
-                    end
-                </button>
+                {/*<button onClick={endGame}>*/}
+                {/*    end*/}
+                {/*</button>*/}
                 <CoinFlip game={game} />
                 <div className='lobbyPlayerContainer'>
                     <div className='lobbyUpperInfo'>

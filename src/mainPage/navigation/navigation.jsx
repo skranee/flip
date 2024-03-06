@@ -11,6 +11,7 @@ import coin from "../../imgs/currImg.png";
 import CryptoDeposit from "../../cryptoDeposit/cryptoDeposit";
 import AddressWindow from "../../cryptoDeposit/addressWindow";
 import WithdrawWindow from "../../withdrawWindow/withdrawWindow";
+import ConnectModal from "../../connectModal/connectModal";
 
 function NavigationPanel () {
     const {globalStore, store} = useContext(Context)
@@ -58,18 +59,28 @@ function NavigationPanel () {
         globalStore.setWithdrawOpen(true);
     }
 
+    const handleDeposit = () => {
+        globalStore.setDepositOpen(false);
+        globalStore.setConnectModal(true);
+    }
+
     return (
         <div className='navigation'>
+            {(store.user && !store.user.banned) && <ConnectModal />}
             {globalStore.logOpen && <LoginModal />}
             <img src={logoNav} className='logoNavigation' alt='' onClick={() => handleNavigate('/')} />
             {store.isAuth ?
                 <div className='loggedNavContainer'>
-                    <div className='balanceNavContainer' onClick={openDeposit}>
-                        <img className='marketCoinImg' src={gem} alt='' style={{width: 14, height: 14}}/>
-                        <a className='balanceNav'>{store.user.balance}</a>
-                    </div>
-                    <img src={localStorage.getItem('avatarUrl')} className='avatarNav' alt='' onClick={() => handleNavigate('/profile')}/>
-                    <a className='profileNavText' onClick={() => handleNavigate('/profile')}>{localStorage.getItem('username')}</a>
+                    {(store.user && !store.user.banned) &&
+                        <div className='balanceNavContainer' onClick={openDeposit}>
+                            <img className='marketCoinImg' src={gem} alt='' style={{width: 14, height: 14}}/>
+                            <a className='balanceNav'>{store.user.balance}</a>
+                        </div>
+                    }
+                    <img src={localStorage.getItem('avatarUrl')} className='avatarNav' alt=''
+                         onClick={() => handleNavigate('/profile')}/>
+                    <a className='profileNavText'
+                       onClick={() => handleNavigate('/profile')}>{localStorage.getItem('username')}</a>
                     <IoExitOutline className='exitIconNav' onClick={handleLogout} />
                 </div>
             :
@@ -110,7 +121,6 @@ function NavigationPanel () {
                                         style={{flexBasis: 'calc(45% - 15px)'}}
                                     >
                                         <img className='marketItemImg' src={item.image} alt='' />
-                                        <a className='marketItemClass'>{item.classification}</a>
                                         <a className='marketItemName'>{item.name}</a>
                                         <div className='marketItemCostContainer'>
                                             <img className='marketCoinImg' src={coin} alt='' />
@@ -140,7 +150,7 @@ function NavigationPanel () {
                             <button className='depositBtn' onClick={handleWithdraw}>
                                 Withdraw items
                             </button>
-                            <button className='depositBtn'>
+                            <button className='depositBtn' onClick={handleDeposit}>
                                 Deposit items
                             </button>
                         </div>

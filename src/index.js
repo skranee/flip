@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import GlobalStore from "./globalStore/globalStore";
 import {BrowserRouter} from "react-router-dom";
-import Store from "./store/store.ts";
+import Store from "./store/store";
 
 const globalStore = new GlobalStore();
 const store = new Store();

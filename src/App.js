@@ -1,5 +1,5 @@
-import React, {useContext, useEffect} from 'react'
-import MainPage from "./mainPage/mainPage";
+import React, {useContext, useEffect, useState} from 'react'
+import MainPage from "./mainPage/mainPage.jsx";
 import LeftPanel from "./mainPage/leftPanel/leftPanel";
 import FaqBeneath from "./faqBeneath";
 import Chat from "./chat/chat";
@@ -15,10 +15,11 @@ import AdminPanel from "./adminPanel/adminPanel";
 import LeadersBoard from "./leadersBoard/leadersBoard";
 import TOS from "./tos/tos";
 import PrivacyPolicy from "./privacyPolicy/privacyPolicy";
+import ProvablyFair from "./provablyFair/provablyFair";
+import {observer} from "mobx-react";
 
 function App() {
     const {globalStore, store} = useContext(Context);
-    console.log(store.user.avatar)
 
     useEffect(() => {
         if(localStorage.getItem('token')) {
@@ -43,23 +44,35 @@ function App() {
     <>
         <NavigationPanel />
         <div className='background' />
-        <Routes>
-            <Route path='/' element={<MainPage />} />
-            <Route path='/profile' element={<Profile />} />
-            <Route path='/market' element={<Market />} />
-            <Route path='/rewards' element={<Rewards />} />
-            <Route path='/leaders' element={<LeadersBoard />} />
-            <Route path='/support' element={<Support />} />
-            <Route path='/answer' element={<Answer />} />
-            <Route path='/admin' element={<AdminPanel />} />
-            <Route path='/tos' element={<TOS />} />
-            <Route path='/privacy-policy' element={<PrivacyPolicy />} />
-        </Routes>
-        <LeftPanel />
-        <Chat />
-        <FaqBeneath />
+        {(!store.user || !store.user.banned) &&
+            <>
+                <Routes>
+                    <Route path='/' element={<MainPage />} />
+                    <Route path='/profile' element={<Profile />} />
+                    <Route path='/market' element={<Market />} />
+                    <Route path='/rewards' element={<Rewards />} />
+                    <Route path='/leaders' element={<LeadersBoard />} />
+                    <Route path='/support' element={<Support />} />
+                    <Route path='/answer' element={<Answer />} />
+                    <Route path='/admin' element={<AdminPanel />} />
+                    <Route path='/tos' element={<TOS />} />
+                    <Route path='/privacy-policy' element={<PrivacyPolicy />} />
+                    <Route path='/provably-fair' element={<ProvablyFair />} />
+                </Routes>
+                <LeftPanel />
+                <Chat />
+                <FaqBeneath />
+            </>
+        }
+        {(store.user && store.user.banned) &&
+            <div className='banPage'>
+                <a className='bannedMessage'>
+                    You are banned on the website. To get any information about your ban, please contact our support.
+                </a>
+            </div>
+        }
     </>
-  );
+    );
 }
 
-export default App;
+export default observer(App);

@@ -12,7 +12,6 @@ class MarketService {
                 name: item.name,
                 owner: userId,
                 rarity: item.rarity,
-                classification: item.classification,
                 price: item.price,
                 image: item.image,
                 itemId: item.itemId

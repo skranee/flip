@@ -30,7 +30,6 @@ function CancelModal({item}) {
             <div className='modalBuy' onClick={(event) => event.stopPropagation()}>
                 <a className='headerBuy'>{item.name}</a>
                 <img src={item.image} className='imageBuy' alt='' />
-                <a className='classBuy'>{item.classification}</a>
                 <a
                     className='rarityBuy'
                     style={{color: `rgba(${chooseColor(item.rarity)}, 1)`,

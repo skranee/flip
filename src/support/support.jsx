@@ -60,6 +60,7 @@ function Support() {
         if(inputMessage.trim().length) {
             const send = await store.sendQuestion(inputMessage, store.user.id);
             setInputMessage('');
+            setDisabled(true);
         }
     }
 
@@ -83,7 +84,7 @@ function Support() {
                     width: containerWidth(),
                     marginLeft: globalStore.panelOpen ? '14.5%' : '1%'
                 }}>
-                    {store.user.role === 'user' || store.user.role === 'developer' &&
+                    {(store.user.role === 'user' || store.user.role === 'developer') &&
                         <>
                             <a className='supportHeader'>NEED HELP WITH MM2FLIP.COM?</a>
                             <textarea

@@ -1,6 +1,6 @@
 export interface RewardResponse {
     name: string,
     lvl: number,
-    description: string,
+    gemsAmount: string,
     image: string
 }

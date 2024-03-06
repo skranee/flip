@@ -1,6 +1,4 @@
 import React, {useContext, useEffect, useState} from "react";
-import {players} from "./gamesInfo";
-import {items} from "./gamesInfo";
 import {Context} from "../../index";
 import {observer} from "mobx-react";
 import question from '../../imgs/question.png'

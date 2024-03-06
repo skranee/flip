@@ -40,67 +40,74 @@ function WithdrawWindow() {
     }
 
     const addToQueue = async () => {
-        const items = chosenItems.map(({name, itemId, price}) => ({
-            name,
-            itemId,
-            value: price
-        }))
-        const add = await store.addToQueue(store.user.robloxId, items);
-        if(add.status === 200) {
-            globalStore.setWithdrawStatus('Successfully added to queue!')
+        const add = await store.addToQueue(store.user.robloxId, chosenItems);
+        if(add.status === 200 && add.data && !add.data.status) {
+            globalStore.setBotRecommended(add.data.botName);
+            globalStore.setWithdrawStatus('Successfully added to the queue!')
             globalStore.setWithdrawOpen(false);
             globalStore.setConnectModal(true);
         } else {
-            globalStore.setWithdrawStatus('Could not add to queue');
-            globalStore.setWithdrawOpen(false);
-            globalStore.setConnectModal(true);
+            globalStore.setBotRecommended('');
+            if(add.data && add.data.status === 400) {
+                globalStore.setWithdrawStatus('You are already in the queue');
+                globalStore.setWithdrawOpen(false);
+                globalStore.setConnectModal(true);
+            }
+            else {
+                globalStore.setWithdrawStatus('Could not add to the queue');
+                globalStore.setWithdrawOpen(false);
+                globalStore.setConnectModal(true);
+            }
         }
+    }
+
+    const handleAddItems = () => {
+        globalStore.setWithdrawOpen(false);
+        globalStore.setConnectModal(true);
     }
 
     return (
         <div className='backgroundModal' onClick={handleBlur}>
-            <ConnectModal />
-            {/*<div className='modalWindowAdmin' onClick={(event) => event.stopPropagation()}>*/}
-            {/*    <div className='addItems'>*/}
-            {/*        <div className='createWorth'>*/}
-            {/*            <img className='marketCoinImg' src={coin} alt='' style={{height: 15, width: 15}}/>*/}
-            {/*            <a>{Math.round(totalValue)}</a>*/}
-            {/*        </div>*/}
-            {/*        <div className='itemsAddContainer' style={{padding: 10}}>*/}
-            {/*            {playerItems.length ?*/}
-            {/*                playerItems.map((item, index) => (*/}
-            {/*                    <li*/}
-            {/*                        className='addItemContainer'*/}
-            {/*                        key={index}*/}
-            {/*                        style={{*/}
-            {/*                            outline: chosenIndex.includes(index) ? 'solid 1px rgba(255, 255, 255, 0.9)' : 'none',*/}
-            {/*                            cursor: "pointer",*/}
-            {/*                            flexBasis: "calc(42% - 5px)"*/}
-            {/*                        }}*/}
-            {/*                        onClick={() => addToCart(index, item)}*/}
-            {/*                    >*/}
-            {/*                        <img className='marketItemImg' src={item.image} alt='' />*/}
-            {/*                        <a className='marketItemClass'>{item.classification}</a>*/}
-            {/*                        <a className='marketItemName'>{item.name}</a>*/}
-            {/*                        <div className='marketItemCostContainer'>*/}
-            {/*                            <img className='marketCoinImg' src={coin} alt='' />*/}
-            {/*                            <a className='marketItemCost'>{Math.round(item.price / currProp)}</a>*/}
-            {/*                        </div>*/}
-            {/*                    </li>*/}
-            {/*                )) :*/}
-            {/*                <a className='errorBet'>{errorMes}</a>*/}
-            {/*            }*/}
-            {/*        </div>*/}
-            {/*        {playerItems.length === 0 &&*/}
-            {/*            <button className='btnAddItems'>*/}
-            {/*                Add Items*/}
-            {/*            </button>*/}
-            {/*        }*/}
-            {/*    </div>*/}
-            {/*    <button className='btnAdminDone' disabled={btnDisabled} onClick={addToQueue}>*/}
-            {/*        Withdraw*/}
-            {/*    </button>*/}
-            {/*</div>*/}
+            <div className='modalWindowAdmin' onClick={(event) => event.stopPropagation()}>
+                <div className='addItems'>
+                    <div className='createWorth'>
+                        <img className='marketCoinImg' src={coin} alt='' style={{height: 15, width: 15}}/>
+                        <a>{Math.round(totalValue)}</a>
+                    </div>
+                    <div className='itemsAddContainer' style={{padding: 10}}>
+                        {playerItems.length ?
+                            playerItems.map((item, index) => (
+                                <li
+                                    className='addItemContainer'
+                                    key={index}
+                                    style={{
+                                        outline: chosenIndex.includes(index) ? 'solid 1px rgba(255, 255, 255, 0.9)' : 'none',
+                                        cursor: "pointer",
+                                        flexBasis: "calc(42% - 5px)"
+                                    }}
+                                    onClick={() => addToCart(index, item)}
+                                >
+                                    <img className='marketItemImg' src={item.image} alt='' />
+                                    <a className='marketItemName'>{item.name}</a>
+                                    <div className='marketItemCostContainer'>
+                                        <img className='marketCoinImg' src={coin} alt='' />
+                                        <a className='marketItemCost'>{Math.round(item.price / currProp)}</a>
+                                    </div>
+                                </li>
+                            )) :
+                            <a className='errorBet'>{errorMes}</a>
+                        }
+                    </div>
+                    {playerItems.length === 0 &&
+                        <button className='btnAddItems' onClick={handleAddItems}>
+                            Add Items
+                        </button>
+                    }
+                </div>
+                <button className='btnAdminDone' disabled={btnDisabled} onClick={addToQueue}>
+                    Withdraw
+                </button>
+            </div>
         </div>
     )
 }

@@ -2,13 +2,12 @@ import React, {useContext, useEffect, useState} from 'react';
 import {Context} from "../index";
 import {observer} from "mobx-react";
 import ruby from '../imgs/expImg.png'
-import {items} from "../mainPage/playzone/gamesInfo";
 
 export const maxExp = 2000;
 
 function Rewards() {
     const {globalStore, store} = useContext(Context)
-    const [reward, setReward] = useState({name: '', lvl: 0, description: 'Bonus', image: ''})
+    const [reward, setReward] = useState({})
 
     useEffect(() => {
         const getReward = async () => {
@@ -42,10 +41,6 @@ function Rewards() {
 
     const progressStatus = (store.user.experience / maxExp) * 100;
 
-    // const add = async () => {
-    //     await store.addItem(store.user.robloxId, items[4])
-    // }
-
     return (
         <div>
             <div className='background' />
@@ -54,9 +49,6 @@ function Rewards() {
                     width: containerWidth(),
                     marginLeft: globalStore.panelOpen ? '14.5%' : '1%'
                 }}>
-                    {/*<button onClick={add}>*/}
-                    {/*    add*/}
-                    {/*</button>*/}
                     <div className='expInfo'>
                         <a>Level: {store.user.lvl}</a>
                         <a>Current experience: {store.user.experience}</a>
@@ -65,8 +57,7 @@ function Rewards() {
                         <a className='nextRew'>NEXT REWARD</a>
                         <img className='rewardImg' src={reward.image} alt=''/>
                         <div className='rewardName'>
-                            {reward.description !== 'Bonus' && <a>+{reward.description}</a>}
-                            <a>{reward.name}</a>
+                            <a>{reward.name} (+{reward.gemsAmount})</a>
                         </div>
                         <div className='progressBackground'>
                             <div className='progressBar' style={{width: `${progressStatus}%`}} />

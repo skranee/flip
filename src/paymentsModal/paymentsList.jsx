@@ -4,7 +4,7 @@ import gem from "../imgs/currImg.png";
 function PaymentsList({payments}) {
     return (
         payments.map((item, index) => (
-                <li className='paymentContainer'>
+                <li key={index} className='paymentContainer'>
                     <div className='paymentInnerInfo'>
                         <a className='upperPaymentInnerInfo'>Address:</a>
                         <a className='mainPaymentInnerInfo'>{item.address}</a>

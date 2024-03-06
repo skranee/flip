@@ -36,9 +36,14 @@ export default class GlobalStore {
     checkLink = '';
     connectModal = false;
     withdrawStatus = '';
+    botRecommended = '';
 
     constructor() {
         makeAutoObservable(this)
+    }
+
+    setBotRecommended(botName) {
+        this.botRecommended = botName;
     }
 
     setWithdrawStatus(status) {

@@ -20,36 +20,40 @@ function OptionsList() {
     return (
         <>
             <li className='optionContainer' onClick={() => openModal('ROLE CHANGE')}>
-                <ImProfile className='iconAdmin' />
+                <ImProfile className='iconAdmin'/>
                 <a className='adminText'>ROLE</a>
             </li>
             <li className='optionContainer' onClick={() => openModal('BALANCE ADD')}>
-                <CiMoneyBill className='iconAdmin' />
+                <CiMoneyBill className='iconAdmin'/>
                 <a className='adminText'>+BALANCE</a>
             </li>
             <li className='optionContainer' onClick={() => openModal('BALANCE REDUCE')}>
-                <CiMoneyBill className='iconAdmin' />
+                <CiMoneyBill className='iconAdmin'/>
                 <a className='adminText'>-BALANCE</a>
             </li>
             <li className='optionContainer' onClick={() => openModal('LEVEL MANAGEMENT')}>
-                <FaArrowUp className='iconAdmin' />
+                <FaArrowUp className='iconAdmin'/>
                 <a className='adminText'>LEVEL</a>
             </li>
             <li className='optionContainer' onClick={() => openModal('ONLINE MANAGEMENT')}>
-                <IoPeople className='iconAdmin' />
+                <IoPeople className='iconAdmin'/>
                 <a className='adminText'>ONLINE</a>
             </li>
             <li className='optionContainer' onClick={() => openModal('POPUP')}>
-                <CiStreamOn className='iconAdmin' />
+                <CiStreamOn className='iconAdmin'/>
                 <a className='adminText'>POPUP</a>
             </li>
             <li className='optionContainer' onClick={() => openModal('PAYMENTS')}>
-                <SiBitcoinsv className='iconAdmin' />
+                <SiBitcoinsv className='iconAdmin'/>
                 <a className='adminText'>PAYMENTS</a>
             </li>
             <li className='optionContainer' onClick={() => openModal('BAN / UNBAN')}>
-                <FaBan className='iconAdmin' />
+                <FaBan className='iconAdmin'/>
                 <a className='adminText'>BAN / UNBAN</a>
+            </li>
+            <li className='optionContainer' onClick={() => openModal('REWARD')}>
+                <TbMedal className='iconAdmin'/>
+                <a className='adminText'>ADD REWARD</a>
             </li>
         </>
     )

@@ -10,6 +10,7 @@ function AdminPanel() {
     const {store, globalStore} = useContext(Context);
     const [username, setUsername] = useState('');
     const [value, setValue] = useState('');
+    const [level, setLevel] = useState('');
     const [isDisabled, setIsDisabled] = useState(false); //setDisabled methods
     const [roleCheck, setRoleCheck] = useState('');
     const [incDec, setIncDec] = useState('increase')
@@ -34,6 +35,7 @@ function AdminPanel() {
     const handleBlur = () => {
         setUsername('');
         setValue('');
+        setLevel('');
         globalStore.setAdminModal(false);
     }
 
@@ -43,6 +45,10 @@ function AdminPanel() {
 
     const handleValue = (event) => {
         setValue(event.target.value);
+    }
+
+    const handleLevel = (event) => {
+        setLevel(event.target.value);
     }
 
     const handleKeyDown = async (event) => {
@@ -81,7 +87,18 @@ function AdminPanel() {
                 setValue('');
                 globalStore.setAdminModal(false);
             }
-        } else if(globalStore.adminOptionStatus === 'ROLE CHANGE') {
+        } else if(globalStore.adminOptionStatus === 'BAN / UNBAN') {
+            if(banState === 'ban') {
+                const ban = await store.banUser(store.user.id, username);
+                setUsername('');
+                globalStore.setAdminModal(false);
+            } else if(banState === 'unban') {
+                const unban = await store.unbanUser(store.user.id, username);
+                setUsername('');
+                globalStore.setAdminModal(false);
+            }
+        }
+        else if(globalStore.adminOptionStatus === 'ROLE CHANGE') {
             const change = await store.changeRole(store.user.id, username, roleCheck);
             setRoleCheck('');
             globalStore.setAdminModal(false);
@@ -95,6 +112,13 @@ function AdminPanel() {
                     globalStore.setAdminModal(false);
                     globalStore.setPaymentsOpen(true);
                 }
+            }
+        } else if(globalStore.adminOptionStatus === 'REWARD') {
+            const reward = await store.addReward('Gems', parseInt(level), parseInt(value));
+            if(reward && reward.data) {
+                setValue('');
+                setLevel('');
+                globalStore.setAdminModal(false);
             }
         }
     }
@@ -153,13 +177,26 @@ function AdminPanel() {
                             </div>
                         }
                         {
+                            (globalStore.adminOptionStatus === 'REWARD') &&
+                            <div className='inputLabelAdmin'>
+                                <a className='labelAdmin'>LEVEL</a>
+                                <input
+                                    type='text'
+                                    className='inputAdmin'
+                                    placeholder='Enter the level...'
+                                    value={level}
+                                    onChange={(event) => handleLevel(event)}
+                                />
+                            </div>
+                        }
+                        {
                             (   globalStore.adminOptionStatus === 'BALANCE ADD' ||
                                 globalStore.adminOptionStatus === 'BALANCE REDUCE' ||
-                                globalStore.adminOptionStatus === 'BAN / UNBAN' ||
                                 globalStore.adminOptionStatus === 'LEVEL MANAGEMENT' ||
-                                globalStore.adminOptionStatus === 'ONLINE MANAGEMENT') &&
+                                globalStore.adminOptionStatus === 'ONLINE MANAGEMENT' ||
+                                globalStore.adminOptionStatus === 'REWARD') &&
                             <div className='inputLabelAdmin'>
-                                <a className='labelAdmin'>VALUE</a>
+                                <a className='labelAdmin'>{globalStore.adminOptionStatus === 'REWARD' ? 'GEMS AMOUNT' : 'VALUE'}</a>
                                 <input
                                     type='text'
                                     className='inputAdmin'
@@ -212,6 +249,18 @@ function AdminPanel() {
                         {
                             globalStore.adminOptionStatus === 'BAN / UNBAN' &&
                             <div className='roleChoose'>
+                                <a
+                                    className={`incDecChoice ${banState === 'ban' ? 'chosen' : ''}`}
+                                    onClick={() => setBanState('ban')}
+                                >
+                                    Ban
+                                </a>
+                                <a
+                                    className={`incDecChoice ${banState === 'unban' ? 'chosen' : ''}`}
+                                    onClick={() => setBanState('unban')}
+                                >
+                                    Unban
+                                </a>
                             </div>
                         }
                         <button className='btnAdminDone' disabled={isDisabled} onClick={handleProceed}>
@@ -220,7 +269,7 @@ function AdminPanel() {
                     </div>
                 </div>
             }
-            <div className='background' />
+            <div className='background'/>
             {store.user.role === 'admin' &&
                 <div className='mainContentPage'>
                     <div className='mainContentContainer'

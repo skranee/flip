@@ -73,8 +73,8 @@ class AdminController {
 
     async banUser(req, res, next) {
         try {
-            const {admin, userId} = req.body;
-            const ban = await adminService.banUser(admin, userId);
+            const {admin, username} = req.body;
+            const ban = await adminService.banUser(admin, username);
             return res.json(ban);
         } catch(e) {
             next(e);
@@ -83,8 +83,8 @@ class AdminController {
 
     async unbanUser(req, res, next) {
         try {
-            const {admin, userId} = req.body;
-            const unban = await adminService.unbanUser(admin, userId);
+            const {admin, username} = req.body;
+            const unban = await adminService.unbanUser(admin, username);
             return res.json(unban);
         } catch(e) {
             next(e);

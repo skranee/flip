@@ -6,7 +6,6 @@ import {observer} from "mobx-react";
 import BuyModal from "./buyModal";
 import SellModal from "./sellModal";
 import CancelModal from "./cancelModal";
-// import {items} from "../mainPage/playzone/gamesInfo";
 
 
 export const currProp = 2.5;
@@ -75,7 +74,6 @@ function Market() {
     //         items[9].name,
     //         '658fe5c64e467dcdd16a740d',
     //         'legendary',
-    //         items[9].classification,
     //         items[9].price,
     //         items[9].image
     //     )
@@ -109,7 +107,6 @@ function Market() {
         await store.addItemBot(store.user.robloxId, {
             name: items[0].name,
             rarity: items[0].rarity,
-            classification: items[0].classification,
             image: items[0].image,
             price: items[0].price
         });
@@ -139,7 +136,6 @@ function Market() {
                                             onClick={() => setItemSell(item)}
                                         >
                                             <img className='marketItemImg' src={item.image} alt='' />
-                                            <a className='marketItemClass'>{item.classification}</a>
                                             <a className='marketItemName'>{item.name}</a>
                                             <div className='marketItemCostContainer'>
                                                 <img className='marketCoinImg' src={coin} alt='' />
@@ -180,7 +176,6 @@ function Market() {
                                             onClick={() => setItemCancel(item)}
                                         >
                                             <img className='marketItemImg' src={item.image} alt='' />
-                                            <a className='marketItemClass'>{item.classification}</a>
                                             <a className='marketItemName'>{item.name}</a>
                                             <div className='marketItemCostContainer'>
                                                 <img className='marketCoinImg' src={coin} alt='' />
@@ -242,7 +237,6 @@ function Market() {
                                 onClick={() => chooseItem(item)}
                             >
                                 <img className='marketItemImg' src={item.image} alt='' />
-                                <a className='marketItemClass'>{item.classification}</a>
                                 <a className='marketItemName'>{item.name}</a>
                                 <div className='marketItemCostContainer'>
                                     <img className='marketCoinImg' src={coin} alt='' />

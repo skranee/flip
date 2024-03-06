@@ -3,8 +3,8 @@ import rewardService from "../services/rewardService.js";
 class RewardController {
     async addReward(req, res, next) {
         try {
-            const {image, name, lvl, description} = req.body;
-            const reward = await rewardService.addReward(image, name, lvl, description);
+            const {name, lvl, gemsAmount} = req.body;
+            const reward = await rewardService.addReward(name, lvl, gemsAmount);
             return res.json(reward)
         } catch(e) {
             next(e);

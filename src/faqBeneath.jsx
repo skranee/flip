@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useContext, useEffect} from "react";
 import logo from "./mainPage/navigation/logo.png";
 import inst from './imgs/inst.png'
 import kick from './imgs/kick.png'
@@ -9,9 +9,12 @@ import discord from './imgs/discord.png'
 import youtube from './imgs/youtube.png'
 import ban from './imgs/ban.png'
 import {useNavigate} from "react-router-dom";
+import {Context} from "./index";
+import {observer} from "mobx-react";
 
 function FaqBeneath () {
-    const underLogo = 'MM2Flip is a brand name of...';
+    const {globalStore} = useContext(Context);
+    const underLogo = 'MM2Flip is a brand name';
     const gmailSupport = 'support@mm2flip.com';
     const navigate = useNavigate();
 
@@ -23,27 +26,46 @@ function FaqBeneath () {
         navigate(page);
     }
 
+    const containerWidth = () => {
+        if(!globalStore.chatOpened && globalStore.panelOpen) {
+            return '84.5%'
+        }
+        else if(!globalStore.chatOpened && !globalStore.panelOpen) {
+            return '97.5%'
+        }
+        else if(globalStore.chatOpened && !globalStore.panelOpen) {
+            return '81%'
+        }
+        else {
+            return '68%'
+        }
+    }
+
     return (
-        <div className='faq'>
+        <div className='faq' style={{
+            width: containerWidth(),
+            marginLeft: globalStore.panelOpen ? '14.5%' : '1%'
+        }}>
             <div className='logoContainer'>
                 <img className='logoFaq' src={logo} alt=''/>
                 <a className='underLogoText'>{underLogo}</a>
+                <a className='underLogoText'>of THE SOLUTIONIST LLC</a>
                 <a className='gmailFaq'>{gmailSupport}</a>
             </div>
             <div className='optionsFaq'>
                 <a>Rewards</a>
-                <a className='underOptions'>Level Rewards</a>
-                <a className='underOptions'>Leaderboard</a>
+                <a className='underOptions' onClick={() => handleNavigateModals('/rewards')}>Level Rewards</a>
+                <a className='underOptions' onClick={() => handleNavigateModals('/leaders')}>Leaderboard</a>
             </div>
             <div className='optionsFaq'>
                 <a>Games</a>
-                <a className='underOptions'>Coin Flip</a>
+                <a className='underOptions' onClick={() => handleNavigateModals('/')}>Coin Flip</a>
             </div>
             <div className='optionsFaq'>
                 <a>Other</a>
                 <a className='underOptions' onClick={() => handleNavigateModals('/tos')}>Terms Of<br />Service</a>
-                <a className='underOptions'>Refund Policy</a>
-                <a className='underOptions'>Provably Fair</a>
+                {/*<a className='underOptions'>Refund Policy</a>*/}
+                <a className='underOptions' onClick={() => handleNavigateModals('/provably-fair')}>Provably Fair</a>
                 <a className='underOptions' onClick={() => handleNavigateModals('/privacy-policy')}>Privacy Policy</a>
             </div>
             <div  className='optionsFaq'>
@@ -105,4 +127,4 @@ function FaqBeneath () {
     )
 }
 
-export default FaqBeneath;
+export default observer(FaqBeneath);

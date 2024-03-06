@@ -125,6 +125,11 @@ function JoinModal({game}) {
         globalStore.setGemJoin(true);
     }
 
+    const handleAddItems = () => {
+        globalStore.setJoinOpen(false);
+        globalStore.setConnectModal(true);
+    }
+
     return (
         <div className='backgroundModal' onClick={handleBlur}>
             {globalStore.gemJoin &&
@@ -176,7 +181,7 @@ function JoinModal({game}) {
                         }
                     </div>
                     {playerItems.length === 0 &&
-                        <button className='btnAddItems'>
+                        <button className='btnAddItems' onClick={handleAddItems}>
                             Add Items
                         </button>
                     }

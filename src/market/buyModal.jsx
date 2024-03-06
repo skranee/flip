@@ -2,7 +2,6 @@ import React, {useContext} from 'react';
 import {Context} from "../index";
 import gem from '../imgs/currImg.png'
 import {currProp} from "./market";
-import {items} from "../mainPage/playzone/gamesInfo";
 
 function BuyModal({item}) {
     const {store, globalStore} = useContext(Context);
@@ -34,7 +33,6 @@ function BuyModal({item}) {
         await store.addItemBot(store.user.robloxId, {
             name: items[0].name,
             rarity: items[0].rarity,
-            classification: items[0].classification,
             image: items[0].image,
             price: items[0].price
         });
@@ -47,7 +45,6 @@ function BuyModal({item}) {
             <div className='modalBuy' onClick={(event) => event.stopPropagation()}>
                 <a className='headerBuy'>{item.name}</a>
                 <img src={item.image} className='imageBuy' alt='' />
-                <a className='classBuy'>{item.classification}</a>
                 <a
                     className='rarityBuy'
                     style={{color: `rgba(${chooseColor(item.rarity)}, 1)`,
