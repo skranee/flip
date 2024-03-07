@@ -9,10 +9,12 @@ import online from '../imgs/online.png'
 import gem from '../imgs/currImg.png'
 import axios from "axios";
 import {API_URL} from "../http";
+import {FaCrown} from "react-icons/fa";
+import {RiMacbookFill} from "react-icons/ri";
 
 function Chat() {
     const [messages, setMessages] = useState([]);
-    const {store, globalStore} = useContext(Context)
+    const {store, globalStore} = useContext(Context);
     const [mes, setMes] = useState('')
     const modalRef = useRef();
     const [btnDisabled, setBtnDisabled] = useState(true)
@@ -25,28 +27,26 @@ function Chat() {
     const socket = useRef();
 
     useEffect(() => {
-        if(user.username) { //correct so unauthorized users can see the chat messages!!!
-            let pingInterval;
-            socket.current = new WebSocket('ws://localhost:4000');
+        let pingInterval;
+        socket.current = new WebSocket('ws://localhost:4000');
+        function heartbeat() {
+            socket.current.send(JSON.stringify({ type: 'pong' }));
+        }
 
-            function heartbeat() {
-                socket.current.send(JSON.stringify({ type: 'pong' }));
-            }
+        socket.current.onopen = () => {
+            socket.current.addEventListener('ping', heartbeat);
 
-            socket.current.onopen = () => {
-                socket.current.addEventListener('ping', heartbeat);
-
-                socket.current.send(JSON.stringify({
-                    username: user.username,
-                    method: 'connection'
-                }))
-            }
-            socket.current.onmessage = (event) => {
-                let message = JSON.parse(event.data)
-                switch (message.method) {
-                    case 'message':
-                        setMessages((prevState) => [...prevState, message]);
-                        break;
+            socket.current.send(JSON.stringify({
+                username: user.username,
+                method: 'connection'
+            }))
+        }
+        socket.current.onmessage = (event) => {
+            let message = JSON.parse(event.data)
+            switch (message.method) {
+                case 'message':
+                    setMessages((prevState) => [...prevState, message]);
+                    break;
                     case 'stream':
                         if(message.streamStatus === 'live') {
                             globalStore.setStreamLive(true)
@@ -61,26 +61,33 @@ function Chat() {
                         break;
                     case 'close':
                         setUsersOnline(message.amount);
+                        break;
                     case 'joinGame':
-                        console.log(message);
-                        if(store.user.id === message.mainReceiver) {
-                            globalStore.setGameInfo(message.game);
-                            setTimeout(async () => {
-                                const updateUser = async () => {
-                                    try {
-                                        const response = await axios.get(`${API_URL}/refresh`, {withCredentials: true});
-                                        store.setUser(response.data.user);
-                                        store.setAuth(true);
-                                        localStorage.setItem('token', response.data.accessToken);
-                                        localStorage.setItem('username', response.data.user.username);
-                                    } catch(e) {
-                                        localStorage.removeItem('avatarUrl');
-                                        console.log(e.response?.data?.message);
-                                    }
+                        if(message && message.mainReceiver) {
+                            if(store.user.id === message.mainReceiver) {
+                                if(globalStore.viewOpen) {
+                                    globalStore.setViewOpen(false);
                                 }
-                                await updateUser();
-                            }, 3200)
-                            globalStore.setViewOpen(true);
+                                globalStore.setGameInfo(message.game);
+                                setTimeout(async () => {
+                                    const updateUser = async () => {
+                                        try {
+                                            const response = await axios.get(`${API_URL}/refresh`, {withCredentials: true});
+                                            store.setUser(response.data.user);
+                                            store.setAuth(true);
+                                            localStorage.setItem('token', response.data.accessToken);
+                                            localStorage.setItem('username', response.data.user.username);
+                                        } catch(e) {
+                                            localStorage.removeItem('avatarUrl');
+                                            console.log(e.response?.data?.message);
+                                        }
+                                    }
+                                    await updateUser();
+                                }, 2000)
+                                setTimeout(() => {
+                                    globalStore.setViewOpen(true);
+                                }, 500)
+                            }
                         }
                 }
             }
@@ -90,11 +97,9 @@ function Chat() {
             socket.current.onerror = (error) => {
                 console.log('WS error: ', error);
             }
-
             return () => {
                 socket.current.close();
             }
-        }
     }, [user.username, ]);
 
     useEffect(() => {
@@ -129,40 +134,45 @@ function Chat() {
     }
 
     const handleSend = async () => {
-        if(mes.length && mes.trim().length) {
-            if(mes[0] === '/') {
-                console.log(mes.substring(1, 4))
-                if(mes.substring(1, 4) === 'tip') {
-                    const params = mes.split(' ');
-                    if(params[1] && params[2]) {
-                        const sender = store.user.username;
-                        const receiver = params[1];
-                        const amount = parseInt(params[2]);
-                        const send = await store.tip(sender, receiver, amount);
+        if(!store.user.id) {
+            globalStore.setErrorMessage('Authorize first!')
+            globalStore.setErrorWindow(true);
+        } else {
+            if(mes.length && mes.trim().length) {
+                if(mes[0] === '/') {
+                    console.log(mes.substring(1, 4))
+                    if(mes.substring(1, 4) === 'tip') {
+                        const params = mes.split(' ');
+                        if(params[1] && params[2]) {
+                            const sender = store.user.username;
+                            const receiver = params[1];
+                            const amount = parseInt(params[2]);
+                            const send = await store.tip(sender, receiver, amount);
+                        }
+                        setMes('');
+                        return null;
                     }
-                    setMes('');
-                    return null;
                 }
+                const message = {
+                    message: mes,
+                    id: Date.now(),
+                    time: new Intl.DateTimeFormat('en-US', {
+                        hour: 'numeric',
+                        minute: 'numeric',
+                        hour12: true
+                    }).format(new Date()),
+                    user: user,
+                    avatar: localStorage.getItem('avatarUrl'),
+                    method: 'message'
+                }
+                setMes('');
+                socket.current.send(JSON.stringify(message));
+                // await store.sendMessage(message.user.id, message.message, message.time, (message.id).toString(), message.avatar); // ?????
+                if(messages.length > 49) {
+                    messages.splice(0, 1);
+                }
+                setMes('')
             }
-            const message = {
-                message: mes,
-                id: Date.now(),
-                time: new Intl.DateTimeFormat('en-US', {
-                    hour: 'numeric',
-                    minute: 'numeric',
-                    hour12: true
-                }).format(new Date()),
-                user: user,
-                avatar: localStorage.getItem('avatarUrl'),
-                method: 'message'
-            }
-            setMes('');
-            socket.current.send(JSON.stringify(message));
-            // await store.sendMessage(message.user.id, message.message, message.time, (message.id).toString(), message.avatar); // ?????
-            if(messages.length > 49) {
-                messages.splice(0, 1);
-            }
-            setMes('')
         }
     }
 
@@ -205,6 +215,16 @@ function Chat() {
         }
     };
 
+    const color = (user) => {
+        if (user.lvl >= 50) {
+            return '#00a1db';
+        } else if (user.lvl >= 10) {
+            return 'rgb(255, 0, 0)';
+        } else {
+            return '#FFFFFF';
+        }
+    }
+
     return (
         <div>
             {!globalStore.chatOpened &&
@@ -216,10 +236,6 @@ function Chat() {
                 {globalStore.chatOpened &&
                     <div className='chatInner'>
                         <div className='chatUpperPanel'>
-                            {/*<div className='langChoice'>*/}
-                            {/*    <a>EN</a>*/}
-                            {/*    <img src={usFlag} alt='' className='langFlag'/>*/}
-                            {/*</div>*/}
                             <div className='usersOnline'>
                                 <img src={online} className='onlineCircle' alt=''/>
                                 <a> {usersOnline}</a>
@@ -269,10 +285,29 @@ function Chat() {
                     <div className='modalPlayer' style={{maxWidth: 250}} ref={modalRef}>
                         <div className='userInfoModal'>
                             <div className='profileImageContainer'>
-                                <img className='avatarProfile' src={globalStore.profileAv} alt='' />
-                                <div className='profileLvl'>{globalStore.profileUser.lvl}</div>
+                                <img
+                                    className='avatarProfile'
+                                     style={{
+                                         boxShadow: `0 0 5px ${color(globalStore.profileUser)}`,
+                                         border: `solid 1px ${color(globalStore.profileUser)}`
+                                }}
+                                    src={globalStore.profileAv} alt=''
+                                />
+                                <div
+                                    className='profileLvl'
+                                    style={{
+                                        textShadow: 'none',
+                                        border: `solid 1px ${color(globalStore.profileUser)}`
+                                }}
+                                >
+                                    {globalStore.profileUser.lvl}
+                                </div>
                             </div>
-                            <a>{globalStore.profileUser.username}</a>
+                            <a className='profileUsername' style={{color: color(globalStore.profileUser), textShadow: `0 0 3px ${color(globalStore.profileUser)}`}}>
+                                {globalStore.profileUser.role === 'admin' && <FaCrown className='iconRoleChat' style={{color: color(globalStore.profileUser)}} />}
+                                {globalStore.profileUser.role === 'developer' && <RiMacbookFill className='iconRoleChat' style={{color: color(globalStore.profileUser)}}/>}
+                                {globalStore.profileUser.username}
+                            </a>
                         </div>
                         <div className='profileInfoPlayer'>
                             <a style={{color: 'rgba(232, 232, 232, 0.8)', textShadow: '1px 1px 4px rgba(232, 232, 232, 0.5)'}}>Total games played:</a>

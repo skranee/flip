@@ -9,7 +9,7 @@ const GameSchema = new Schema({
     items1: {type: Array},
     items2: {type: Array},
     result: {type: String},
-    side1: {type: String, default: 'black'},
+    side1: {type: String, default: 'red'},
     side2: {type: String},
     status: {type: String, default: 'Joinable'}
 })

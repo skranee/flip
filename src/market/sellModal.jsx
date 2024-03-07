@@ -11,10 +11,31 @@ function SellModal({item}) {
     }
 
     const chooseColor = (rarity) => {
-        if(rarity === 'legendary') {
+        if(rarity === 'Legendary') {
             return '237, 142, 0'
         }
-        else if(rarity === 'mythical') {
+        else if(rarity === 'Common') {
+            return '185, 0, 222'
+        }
+        else if(rarity === 'Uncommon') {
+            return '185, 0, 222'
+        }
+        else if(rarity === 'Rare') {
+            return '185, 0, 222'
+        }
+        else if(rarity === 'Godly') {
+            return '185, 0, 222'
+        }
+        else if(rarity === 'Unique') {
+            return '185, 0, 222'
+        }
+        else if(rarity === 'Ancient') {
+            return '255, 200, 0'
+        }
+        else if(rarity === 'Pets') {
+            return '185, 0, 222'
+        }
+        else if(rarity === 'Vintage') {
             return '185, 0, 222'
         }
     }

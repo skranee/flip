@@ -10,7 +10,7 @@ import gem from "../../imgs/currImg.png";
 function GameCreate() {
     const {store, globalStore} = useContext(Context);
     const [playerItems, setPlayerItems] = useState([]);
-    const [chosenSide, setChosenSide] = useState('black');
+    const [chosenSide, setChosenSide] = useState('grey');
     const [chosenIndex, setChosenIndex] = useState([]);
     const [chosenItems, setChosenItems] = useState([]);
     const [totalValue, setTotalValue] = useState(0);
@@ -43,8 +43,14 @@ function GameCreate() {
     }
     const createGame = async () => {
         const game = await store.createGame(store.user, chosenItems, chosenSide);
-        await store.checkAuth();
-        globalStore.setCreateOpen(false);
+        if(game.data && game.data.status && game.data.status === 400) {
+            globalStore.setErrorMessage('Can not create game with nothing');
+            globalStore.setCreateOpen(false);
+            globalStore.setErrorWindow(true);
+        } else {
+            await store.checkAuth();
+            globalStore.setCreateOpen(false);
+        }
     }
 
     const handleBlurGem = () => {
@@ -57,10 +63,16 @@ function GameCreate() {
 
     const createWithGems = async () => {
         const create = await store.createWithGems(store.user, gemsBet, chosenSide);
-        globalStore.setGemCreate(false);
-        globalStore.setCreateOpen(false);
-        await store.checkAuth();
-        console.log(create.data);
+        if(create.data && create.data.status && create.data.status === 400) {
+            globalStore.setErrorMessage('Can not create game with nothing');
+            globalStore.setCreateOpen(false);
+            globalStore.setGemCreate(false);
+            globalStore.setErrorWindow(true);
+        } else {
+            globalStore.setGemCreate(false);
+            globalStore.setCreateOpen(false);
+            await store.checkAuth();
+        }
     }
 
     const handleJoinGems = () => {
@@ -123,7 +135,7 @@ function GameCreate() {
                         }
                     </div>
                     {playerItems.length === 0 &&
-                        <button className='btnAddItems' onClick={handleAddItems}>
+                        <button className='btnAddItems' onClick={handleAddItems} disabled={!store.user || !store.user.id}>
                             Add Items
                         </button>
                     }
@@ -133,22 +145,22 @@ function GameCreate() {
                         <img
                             className='chooseSideImg'
                             src={heads} alt=''
-                            style={{boxShadow: chosenSide === 'black' ? '0 2px 15px rgba(239, 0, 0, 1)' : 'none'}}
-                            onClick={() => setChosenSide('black')}
+                            style={{boxShadow: chosenSide === 'red' ? '0 2px 15px rgba(239, 0, 0, 1)' : 'none'}}
+                            onClick={() => setChosenSide('red')}
                         />
                         <img
                             className='chooseSideImg'
                             src={tails} alt=''
-                            style={{boxShadow: chosenSide === 'red' ? '0 2px 15px rgba(200, 200, 200, 1)' : 'none'}}
-                            onClick={() => setChosenSide('red')}
+                            style={{boxShadow: chosenSide === 'grey' ? '0 2px 15px rgba(200, 200, 200, 1)' : 'none'}}
+                            onClick={() => setChosenSide('grey')}
                         />
                     </div>
                 </div>
                 <div className='btnsJoin'>
-                    <button className='btnCreateGame' onClick={handleJoinGems}>
+                    <button className='btnCreateGame' disabled={!store.user || !store.user.id || !store.user.balance} onClick={handleJoinGems}>
                         Create With Gems
                     </button>
-                    <button className='btnCreateGame' disabled={playerItems.length === 0} onClick={() => createGame()}>
+                    <button className='btnCreateGame' disabled={!store.user || !store.user.id || playerItems.length === 0} onClick={() => createGame()}>
                         Create Game
                     </button>
                 </div>

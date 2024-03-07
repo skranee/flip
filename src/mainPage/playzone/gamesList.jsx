@@ -223,7 +223,7 @@ function GamesList () {
                                 src={item.player1 ? item.player1.avatar : question}
                                 alt=''
                                 style={{
-                                    border: item.side1 === 'red' ? 'solid 2px rgba(200, 200, 200, 1)' :
+                                    border: item.side1 === 'grey' ? 'solid 2px rgba(200, 200, 200, 1)' :
                                         'solid 2px rgba(255, 0, 0, 1)'
                                 }}
                             />
@@ -234,13 +234,13 @@ function GamesList () {
                                     src={item.player2.avatar}
                                     alt=''
                                     style={{
-                                        border: item.side1 === 'black' ? 'solid 2px rgba(200, 200, 200, 1)' :
+                                        border: item.side1 === 'red' ? 'solid 2px rgba(200, 200, 200, 1)' :
                                             'solid 2px rgba(239, 0, 0, 1)'
                                     }}
                                 />
                                 :
                                 <div className='dotsPlayer2' style={{
-                                    border: item.side1 === 'black' ? 'solid 2px rgba(200, 200, 200, 1)' :
+                                    border: item.side1 === 'red' ? 'solid 2px rgba(200, 200, 200, 1)' :
                                         'solid 2px rgba(239, 0, 0, 1)'
                                 }}>
                                     <HiDotsHorizontal style={{fontSize: '1.6em'}} />

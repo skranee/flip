@@ -6,7 +6,7 @@ import GameModal from "../gameModal/gameModal";
 import JoinModal from "../joinModal/joinModal";
 
 function MainPage() {
-    const {globalStore} = useContext(Context)
+    const {globalStore} = useContext(Context);
 
     return (
         <div>

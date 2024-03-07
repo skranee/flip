@@ -17,8 +17,8 @@ function GameModal({game}) {
     const [pointerEvents, setPointerEvents] = useState('none');
     const [opacityFairness, setOpacityFairness] = useState(0);
     const [widthBtn, setWidthBtn] = useState(0);
-    const player1Bet = game.items1.length > 0 ? Math.round(game.items1.reduce((a, b) => a + b.price, 0) / currProp) : Math.round(game.gems1)
-    const player2Bet = game.items2.length > 0 ? Math.round(game.items2.reduce((a, b) => a + b.price, 0) / currProp) : Math.round(game.gems2)
+    const player1Bet = (game && game.items1) ? game.items1.length > 0 ? Math.round(game.items1.reduce((a, b) => a + b.price, 0) / currProp) : Math.round(game.gems1) : 0;
+    const player2Bet = (game && game.items2) ? game.items2.length > 0 ? Math.round(game.items2.reduce((a, b) => a + b.price, 0) / currProp) : Math.round(game.gems2) : 0;
 
     useEffect(() => {
         setTimeout(() => {
@@ -29,7 +29,7 @@ function GameModal({game}) {
                 setPointerEvents('none');
                 setOpacityFairness(0);
             }
-        }, 3200)
+        }, 2000)
     }, [game, ]);
 
     const handleBlur = () => {
@@ -109,9 +109,9 @@ function GameModal({game}) {
                             <img
                                 className='lobbyAvatar'
                                 style={{
-                                    boxShadow: game.side1 === 'red' ? '0 0 20px 5px rgba(200, 200, 200, 1)' :
+                                    boxShadow: game.side1 === 'grey' ? '0 0 20px 5px rgba(200, 200, 200, 1)' :
                                         '0 0 25px 5px rgba(255, 0, 0, 1)',
-                                    border: game.side1 === 'red' ? 'solid 3px rgba(200, 200, 200, 1)' :
+                                    border: game.side1 === 'grey' ? 'solid 3px rgba(200, 200, 200, 1)' :
                                         'solid 3px rgba(255, 0, 0, 1)'
                                 }}
                                 src={game.player1.avatar}
@@ -140,9 +140,9 @@ function GameModal({game}) {
                             {game.player2 ?
                                 <img className='lobbyAvatar2'
                                      style={{
-                                         boxShadow: game.side1 === 'black' ? '0 0 20px 5px rgba(200, 200, 200, 1)' :
+                                         boxShadow: game.side1 === 'red' ? '0 0 20px 5px rgba(200, 200, 200, 1)' :
                                              '0 0 25px 5px rgba(239, 0, 0, 1)',
-                                         border: game.side1 === 'black' ? 'solid 3px rgba(200, 200, 200, 1)' :
+                                         border: game.side1 === 'red' ? 'solid 3px rgba(200, 200, 200, 1)' :
                                              'solid 3px rgba(239, 0, 0, 1)'
                                      }}
                                      src={game.player2.avatar}
@@ -150,9 +150,9 @@ function GameModal({game}) {
                                 :
                                 <div className='lobbyAvatar2'
                                      style={{
-                                         boxShadow: game.side1 === 'black' ? '0 0 20px 5px rgba(200, 200, 200, 1)' :
+                                         boxShadow: game.side1 === 'red' ? '0 0 20px 5px rgba(200, 200, 200, 1)' :
                                              '0 0 20px 5px rgba(239, 0, 0, 1)',
-                                         border: game.side1 === 'black' ? 'solid 3px rgba(200, 200, 200, 1)' :
+                                         border: game.side1 === 'red' ? 'solid 3px rgba(200, 200, 200, 1)' :
                                              'solid 3px rgba(239, 0, 0, 1)'
                                      }}>
                                     <HiDotsHorizontal style={{fontSize: '1.8em'}} />

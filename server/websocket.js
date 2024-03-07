@@ -19,7 +19,6 @@ function heartbeat() {
 }
 
 wss.on('connection', function connection(ws) {
-    console.log('new commit 1')
 
     ws.isAlive = true;
 
@@ -32,7 +31,6 @@ wss.on('connection', function connection(ws) {
 
     ws.on('message', function (message) {
         message = JSON.parse(message);
-        console.log('new commit 2')
         switch(message.method) {
             case 'message':
                 if(messages.length > 50) {
@@ -67,11 +65,13 @@ wss.on('connection', function connection(ws) {
 function joinGame(message) {
     const game = message.game;
     wss.clients.forEach(client => {
-        client.send(JSON.stringify({
-            method: 'joinGame',
-            game: game,
-            mainReceiver: game.player1._id
-        }))
+        if(game && game.player1) {
+            client.send(JSON.stringify({
+                method: 'joinGame',
+                game: game,
+                mainReceiver: game.player1._id
+            }))
+        }
     })
 }
 

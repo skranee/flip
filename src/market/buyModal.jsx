@@ -11,11 +11,32 @@ function BuyModal({item}) {
     }
 
     const chooseColor = (rarity) => {
-        if(rarity === 'legendary') {
-            return '237, 142, 0'
+        if(rarity === 'Legendary') {
+            return '145, 0, 181'
         }
-        else if(rarity === 'mythical') {
-            return '185, 0, 222'
+        else if(rarity === 'Common') {
+            return '176, 166, 179'
+        }
+        else if(rarity === 'Uncommon') {
+            return '203, 207, 178'
+        }
+        else if(rarity === 'Rare') {
+            return '192, 204, 120'
+        }
+        else if(rarity === 'Godly') {
+            return '227, 255, 56'
+        }
+        else if(rarity === 'Unique') {
+            return '3, 0, 168'
+        }
+        else if(rarity === 'Ancient') {
+            return '255, 200, 0'
+        }
+        else if(rarity === 'Pets') {
+            return '242, 22, 55'
+        }
+        else if(rarity === 'Vintage') {
+            return '97, 71, 0'
         }
     }
 
@@ -27,17 +48,6 @@ function BuyModal({item}) {
         }
         globalStore.setBuyOpen(false);
         window.location.reload();
-    }
-
-    const add = async () => {
-        await store.addItemBot(store.user.robloxId, {
-            name: items[0].name,
-            rarity: items[0].rarity,
-            image: items[0].image,
-            price: items[0].price
-        });
-        // const success = await store.checkOwnership(store.user.robloxId, item);
-        // console.log(success.data)
     }
 
     return (
@@ -56,7 +66,7 @@ function BuyModal({item}) {
                     <img className='gemBuy' src={gem} alt='' />
                     <a>{Math.round(item.price / currProp)}</a>
                 </div>
-                <button className='btnBuy' style={{width: '70%', height: 30, fontSize: '1.3em'}} onClick={buy}>
+                <button className='btnBuy' disabled={!store.user || !store.user.id} style={{width: '70%', height: 30, fontSize: '1.3em'}} onClick={buy}>
                     Buy
                 </button>
             </div>

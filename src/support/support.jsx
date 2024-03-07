@@ -127,6 +127,9 @@ function Support() {
                             <QuestionsList questions={questions}/>
                         </>
                     }
+                    {(!store.user || !store.user.id) &&
+                        <a className='notAuthorizedText'>Not authorized</a>
+                    }
                 </div>
             </div>
         </div>

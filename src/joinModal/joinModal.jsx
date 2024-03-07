@@ -19,14 +19,13 @@ function JoinModal({game}) {
     const [approximate, setApproximate] = useState(0);
     const [errorMes, setErrorMes] = useState('No items to bet...');
     const [gemsBet, setGemsBet] = useState(game.bet ? Math.round(game.bet) : 0);
+    const [oneClick, setOneClick] = useState(false);
 
     const socket = useRef();
 
     useEffect(() => {
         if(store.isAuth) {
             socket.current = new WebSocket('ws://localhost:4000');
-
-
         }
     }, []);
 
@@ -45,7 +44,7 @@ function JoinModal({game}) {
 
     useEffect(() => {
         if(game.side1 === 'red') {
-            setChosenSide('black');
+            setChosenSide('grey');
         } else {
             setChosenSide('red');
         }
@@ -68,19 +67,39 @@ function JoinModal({game}) {
     }
 
     const betItems = async () => {
-        if(totalValue >= approximate * 0.9 && totalValue <= approximate * 1.1) {
+        if(totalValue >= approximate * 0.9 && totalValue <= approximate * 1.1 && totalValue > 0) {
             const join = await store.joinGame(store.user, chosenItems, chosenSide, game.gameId);
-            await store.checkAuth();
+            setTimeout(async () => {
+                const updateUser = async () => {
+                    try {
+                        const response = await axios.get(`${API_URL}/refresh`, {withCredentials: true});
+                        store.setUser(response.data.user);
+                        store.setAuth(true);
+                        localStorage.setItem('token', response.data.accessToken);
+                        localStorage.setItem('username', response.data.user.username);
+                    } catch(e) {
+                        localStorage.removeItem('avatarUrl');
+                        console.log(e.response?.data?.message);
+                    }
+                }
+                await updateUser();
+            }, 2000)
             globalStore.setJoinOpen(false);
-            console.log(join.data.link)
-            console.log(join.data.number);
-            console.log(join.data.game)
+            globalStore.setCheckLink(join.data.link);
+            globalStore.setGameInfo(join.data.game);
+            globalStore.setViewOpen(true);
+            const message = {
+                method: 'joinGame',
+                game: join.data.game
+            }
+            socket.current.send(JSON.stringify(message));
         } else {
             setErrorMes(`Items value must be between ${Math.round(approximate * 0.9)} and ${Math.round(approximate * 1.1)}`);
         }
     }
 
     const handleBlurGem = () => {
+        setOneClick(false);
         globalStore.setGemJoin(false);
     }
 
@@ -89,7 +108,8 @@ function JoinModal({game}) {
     }
 
     const joinWithGems = async () => {
-        if(gemsBet >= approximate * 0.9 && gemsBet <= approximate * 1.1) {
+        if(gemsBet >= approximate * 0.9 && gemsBet <= approximate * 1.1 && store.user.balance >= gemsBet && gemsBet > 0) {
+            setOneClick(true);
             const join = await store.joinWithGems(store.user, chosenSide, game.gameId, gemsBet);
             setTimeout(async () => {
                 const updateUser = async () => {
@@ -105,18 +125,21 @@ function JoinModal({game}) {
                     }
                 }
                 await updateUser();
-            }, 3200)
+            }, 2000)
             globalStore.setCheckLink(join.data.link);
             globalStore.setGemJoin(false);
             globalStore.setJoinOpen(false);
             globalStore.setGameInfo(join.data.game);
             globalStore.setViewOpen(true);
+            setOneClick(false);
             const message = {
                 method: 'joinGame',
                 game: join.data.game
             }
+            console.log(join.data.number, join.data.game.result);
             socket.current.send(JSON.stringify(message));
         } else {
+            globalStore.setGemJoin(false);
             setErrorMes(`Gems amount must be between ${Math.round(approximate * 0.9)} and ${Math.round(approximate * 1.1)}`)
         }
     }
@@ -147,7 +170,7 @@ function JoinModal({game}) {
                             max={Math.round(approximate * 1.1)}
                             className='gemSlider'
                         />
-                        <button className='btnCreateGame' style={{alignSelf: "center"}} onClick={joinWithGems}>
+                        <button className='btnCreateGame' disabled={oneClick} style={{alignSelf: "center"}} onClick={joinWithGems}>
                             Bet Gems
                         </button>
                     </div>
@@ -181,7 +204,7 @@ function JoinModal({game}) {
                         }
                     </div>
                     {playerItems.length === 0 &&
-                        <button className='btnAddItems' onClick={handleAddItems}>
+                        <button className='btnAddItems' onClick={handleAddItems} disabled={!store.user || !store.user.id}>
                             Add Items
                         </button>
                     }
@@ -190,19 +213,19 @@ function JoinModal({game}) {
                     <img
                         className='chooseSideImg'
                         src={heads} alt=''
-                        style={{boxShadow: chosenSide === 'black' ? '0 2px 15px rgba(239, 0, 0, 1)' : 'none', cursor: "default"}}
+                        style={{boxShadow: chosenSide === 'red' ? '0 2px 15px rgba(239, 0, 0, 1)' : 'none', cursor: "default"}}
                     />
                     <img
                         className='chooseSideImg'
                         src={tails} alt=''
-                        style={{boxShadow: chosenSide === 'red' ? '0 2px 15px rgba(200, 200, 200, 1)' : 'none', cursor: "default"}}
+                        style={{boxShadow: chosenSide === 'grey' ? '0 2px 15px rgba(200, 200, 200, 1)' : 'none', cursor: "default"}}
                     />
                 </div>
                 <div className='btnsJoin'>
-                    <button className='btnCreateGame' onClick={handleJoinGems}>
+                    <button className='btnCreateGame' onClick={handleJoinGems} disabled={!store.user || !store.user.id || !store.user.balance}>
                         Join With Gems
                     </button>
-                    <button className='btnCreateGame' disabled={playerItems.length === 0} onClick={() => betItems()}>
+                    <button className='btnCreateGame' disabled={!store.user || !store.user.id || playerItems.length === 0} onClick={() => betItems()}>
                         Join Game
                     </button>
                 </div>

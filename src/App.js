@@ -17,6 +17,7 @@ import TOS from "./tos/tos";
 import PrivacyPolicy from "./privacyPolicy/privacyPolicy";
 import ProvablyFair from "./provablyFair/provablyFair";
 import {observer} from "mobx-react";
+import ErrorWindow from "./errorWindow/errorWindow";
 
 function App() {
     const {globalStore, store} = useContext(Context);
@@ -41,9 +42,12 @@ function App() {
     return (
         //<Redirect /> !!!
         //handle 404 (don't show elements like chat, faq etc when the page is .../rekfdosf) => 404 page
-    <>
+    <div className='main'>
         <NavigationPanel />
         <div className='background' />
+        {globalStore.errorWindow &&
+            <ErrorWindow />
+        }
         {(!store.user || !store.user.banned) &&
             <>
                 <Routes>
@@ -71,7 +75,7 @@ function App() {
                 </a>
             </div>
         }
-    </>
+    </div>
     );
 }
 

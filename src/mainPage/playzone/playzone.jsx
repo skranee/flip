@@ -17,7 +17,7 @@ function Playzone () {
             const his = async () => {
                 const response = await store.getHistory(store.user.id);
                 if(response && response.data) {
-                    setHistory(response.data);
+                    setHistory(response.data.reverse());
                 }
             }
             his();
@@ -46,7 +46,7 @@ function Playzone () {
     const handleHistory = async () => {
         const response = await store.getHistory(store.user.id);
         if(response && response.data) {
-            setHistory(response.data);
+            setHistory(response.data.reverse());
         }
         globalStore.setHistoryOpen(true)
     }

@@ -37,9 +37,19 @@ export default class GlobalStore {
     connectModal = false;
     withdrawStatus = '';
     botRecommended = '';
+    errorWindow = false;
+    errorMessage = '';
 
     constructor() {
         makeAutoObservable(this)
+    }
+
+    setErrorMessage(message) {
+        this.errorMessage = message;
+    }
+
+    setErrorWindow(bool) {
+        this.errorWindow = bool;
     }
 
     setBotRecommended(botName) {

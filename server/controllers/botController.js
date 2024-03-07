@@ -7,16 +7,6 @@ class BotController {
         return res.json(response);
     }
 
-    async parseHtml(req, res, next) {
-        try {
-            const {itemName} = req.body;
-            const item = await botService.parseHtml(itemName);
-            return res.json(item);
-        } catch(e) {
-            next(e);
-        }
-    }
-
     async completeWithdraw(req, res, next) {
         try {
             const {robloxId} = req.body;
