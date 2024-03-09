@@ -79,30 +79,6 @@ class DepositService {
         await cryptoAddressModel.create({address: address, user: user, currency: curr});
     }
 
-    async getTransactions() {
-        const accountIdBTC = await this.getAccountId('LTC');
-        const timestamp = Math.floor(Date.now() / 1000);
-
-        const message = `${timestamp}GET/v2/accounts/${accountIdBTC}/transactions`;
-
-        const signature = crypto.createHmac('sha256', process.env.DEPOSIT_API_SECRET).update(message).digest('hex');
-
-        const headers = {
-            'CB-ACCESS-KEY': process.env.DEPOSIT_API_KEY,
-            'CB-ACCESS-SIGN': signature,
-            'CB-ACCESS-TIMESTAMP': timestamp,
-            'Content-Type': 'application/json',
-        };
-
-        const response = await axios.get(`https://api.coinbase.com/v2/accounts/${accountIdBTC}/transactions`, { headers });
-        await this.listNotifications();
-        // if(response.data.data[0].native_amount.currency !== 'USD') {
-        //     const exchanged = await this.exchangeDeposit(response.data.data[0].amount.amount, 'LTC');
-        //     console.log(exchanged);
-        // }
-        // console.log(response.data)
-    }
-
     async exchangeDeposit(amount, currency) {
         const timestamp = Math.floor(Date.now() / 1000);
 

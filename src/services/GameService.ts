@@ -26,15 +26,7 @@ export default class GameService {
         return $api.post('/cancelGame', {user, game});
     }
 
-    static async findWinner(gameId: string): Promise<AxiosResponse<WinnerResponse>> {
-        return $api.get(`/winner?gameId=${gameId}`);
-    }
-
     static async getGames(): Promise<AxiosResponse<IGame[]>> {
         return $api.get('/game');
-    }
-
-    static async endGame(gameId: string): Promise<AxiosResponse> {
-        return $api.post('/endGame', {gameId});
     }
 }

@@ -7,6 +7,7 @@ import { IoPeople } from "react-icons/io5";
 import { CiStreamOn } from "react-icons/ci";
 import { SiBitcoinsv } from "react-icons/si";
 import { FaBan } from "react-icons/fa";
+import { FaGift } from "react-icons/fa6";
 import {Context} from "../index";
 
 function OptionsList() {
@@ -14,7 +15,9 @@ function OptionsList() {
 
     const openModal = (status) => {
         globalStore.setAdminOptionStatus(status);
-        globalStore.setAdminModal(true);
+        if(status !== 'GIVEAWAY') {
+            globalStore.setAdminModal(true);
+        }
     }
 
     return (
@@ -54,6 +57,10 @@ function OptionsList() {
             <li className='optionContainer' onClick={() => openModal('REWARD')}>
                 <TbMedal className='iconAdmin'/>
                 <a className='adminText'>ADD REWARD</a>
+            </li>
+            <li className='optionContainer' onClick={() => openModal('GIVEAWAY')}>
+                <FaGift className='iconAdmin' />
+                <a className='adminText'>GIVEAWAY</a>
             </li>
         </>
     )

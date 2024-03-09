@@ -51,16 +51,6 @@ class GameController {
         }
     }
 
-    async findWinner(req, res, next) {
-        try {
-            const gameId = req.query.gameId;
-            const response = await gameService.findWinner(gameId);
-            return res.json(response);
-        } catch(e) {
-            next(e);
-        }
-    }
-
     async getGames(req, res, next) {
         try {
             const games = await gameService.getGames();

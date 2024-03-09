@@ -19,6 +19,14 @@ import ProvablyFair from "./provablyFair/provablyFair";
 import {observer} from "mobx-react";
 import ErrorWindow from "./errorWindow/errorWindow";
 
+export function notify() {
+    const notificationSound = document.getElementById('notificationSound');
+
+    if ('play' in notificationSound) {
+        notificationSound.play();
+    }
+}
+
 function App() {
     const {globalStore, store} = useContext(Context);
 
@@ -58,7 +66,9 @@ function App() {
                     <Route path='/leaders' element={<LeadersBoard />} />
                     <Route path='/support' element={<Support />} />
                     <Route path='/answer' element={<Answer />} />
-                    <Route path='/admin' element={<AdminPanel />} />
+                    {store.user.role === 'admin' &&
+                        <Route path='/admin' element={<AdminPanel />} />
+                    }
                     <Route path='/tos' element={<TOS />} />
                     <Route path='/privacy-policy' element={<PrivacyPolicy />} />
                     <Route path='/provably-fair' element={<ProvablyFair />} />

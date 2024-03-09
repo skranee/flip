@@ -7,9 +7,6 @@ import BuyModal from "./buyModal";
 import SellModal from "./sellModal";
 import CancelModal from "./cancelModal";
 
-
-export const currProp = 2.5;
-
 function Market() {
     const {store, globalStore} = useContext(Context);
     const [itemsValue, setItemsValue] = useState(0);
@@ -24,7 +21,7 @@ function Market() {
         const getItems = async () => {
             const response = await store.getItemsMarket();
             if(response) {
-                setItems(response.data);
+                setItems(response.data.sort((a, b) => b.price - a.price));
             }
         }
         getItems();
@@ -39,7 +36,7 @@ function Market() {
     useEffect(() => {
         if (store.user && store.itemsList && store.itemsList.length) {
             const value = store.itemsList.reduce((a, b) => a + b.price, 0);
-            setItemsValue(Math.round(value / currProp));
+            setItemsValue(Math.round(value));
         }
     }, [items, store.itemsList, store.itemsList.length, store.user, store.isAuth, ]);
 
@@ -139,7 +136,7 @@ function Market() {
                                             <a className='marketItemName'>{item.name}</a>
                                             <div className='marketItemCostContainer'>
                                                 <img className='marketCoinImg' src={coin} alt='' />
-                                                <a className='marketItemCost'>{Math.round(item.price / currProp)}</a>
+                                                <a className='marketItemCost'>{Math.round(item.price)}</a>
                                             </div>
                                         </li>
                                     )) :
@@ -179,7 +176,7 @@ function Market() {
                                             <a className='marketItemName'>{item.name}</a>
                                             <div className='marketItemCostContainer'>
                                                 <img className='marketCoinImg' src={coin} alt='' />
-                                                <a className='marketItemCost'>{Math.round(item.price / currProp)}</a>
+                                                <a className='marketItemCost'>{Math.round(item.price)}</a>
                                             </div>
                                         </li>
                                     )) :
@@ -240,7 +237,7 @@ function Market() {
                                 <a className='marketItemName'>{item.name}</a>
                                 <div className='marketItemCostContainer'>
                                     <img className='marketCoinImg' src={coin} alt='' />
-                                    <a className='marketItemCost'>{Math.round(item.price / currProp)}</a>
+                                    <a className='marketItemCost'>{Math.round(item.price)}</a>
                                 </div>
                             </li>
                         ))}

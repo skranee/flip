@@ -1,6 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Context} from "../../index";
-import {currProp} from "../../market/market";
 import coin from '../../imgs/currImg.png'
 import {observer} from "mobx-react";
 import heads from '../../imgs/heads.png'
@@ -17,6 +16,8 @@ function GameCreate() {
     const [approximate, setApproximate] = useState(0);
     const [errorMes, setErrorMes] = useState('No items to bet...');
     const [gemsBet, setGemsBet] = useState(0);
+    const [oneClickGems, setOneClickGems] = useState(false);
+    const [oneClickItems, setOneClickItems] = useState(false);
 
     useEffect(() => {
         const getUserItems = async () => {
@@ -34,22 +35,25 @@ function GameCreate() {
         if(chosenIndex.includes(index)) {
             setChosenIndex(chosenIndex.filter(item => item !== index));
             setChosenItems(chosenItems.filter(chosenItem => chosenItem.itemId !== item.itemId));
-            setTotalValue(prevState => prevState -= item.price / 2.5);
+            setTotalValue(prevState => prevState -= item.price);
         } else {
             setChosenIndex((prevState) => prevState.concat(index));
             setChosenItems(prevState => prevState.concat(item));
-            setTotalValue(prevState => prevState += item.price / 2.5);
+            setTotalValue(prevState => prevState += item.price);
         }
     }
     const createGame = async () => {
+        setOneClickItems(true);
         const game = await store.createGame(store.user, chosenItems, chosenSide);
         if(game.data && game.data.status && game.data.status === 400) {
             globalStore.setErrorMessage('Can not create game with nothing');
             globalStore.setCreateOpen(false);
             globalStore.setErrorWindow(true);
+            setOneClickGems(false);
         } else {
             await store.checkAuth();
             globalStore.setCreateOpen(false);
+            setOneClickItems(false);
         }
     }
 
@@ -62,13 +66,16 @@ function GameCreate() {
     }
 
     const createWithGems = async () => {
+        setOneClickGems(true);
         const create = await store.createWithGems(store.user, gemsBet, chosenSide);
         if(create.data && create.data.status && create.data.status === 400) {
             globalStore.setErrorMessage('Can not create game with nothing');
             globalStore.setCreateOpen(false);
             globalStore.setGemCreate(false);
             globalStore.setErrorWindow(true);
+            setOneClickGems(false);
         } else {
+            setOneClickGems(false);
             globalStore.setGemCreate(false);
             globalStore.setCreateOpen(false);
             await store.checkAuth();
@@ -101,7 +108,7 @@ function GameCreate() {
                             max='10000'
                             className='gemSlider'
                         />
-                        <button className='btnCreateGame' style={{alignSelf: "center"}} onClick={createWithGems}>
+                        <button disabled={oneClickGems === true} className='btnCreateGame' style={{alignSelf: "center"}} onClick={createWithGems}>
                             Bet Gems
                         </button>
                     </div>
@@ -127,7 +134,7 @@ function GameCreate() {
                                     <a className='marketItemName'>{item.name}</a>
                                     <div className='marketItemCostContainer'>
                                         <img className='marketCoinImg' src={coin} alt='' />
-                                        <a className='marketItemCost'>{Math.round(item.price / currProp)}</a>
+                                        <a className='marketItemCost'>{Math.round(item.price)}</a>
                                     </div>
                                 </li>
                             )) :
@@ -160,7 +167,7 @@ function GameCreate() {
                     <button className='btnCreateGame' disabled={!store.user || !store.user.id || !store.user.balance} onClick={handleJoinGems}>
                         Create With Gems
                     </button>
-                    <button className='btnCreateGame' disabled={!store.user || !store.user.id || playerItems.length === 0} onClick={() => createGame()}>
+                    <button className='btnCreateGame' disabled={oneClickItems === true || !store.user || !store.user.id || playerItems.length === 0} onClick={() => createGame()}>
                         Create Game
                     </button>
                 </div>

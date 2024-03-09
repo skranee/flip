@@ -10,6 +10,15 @@ class HistoryController {
             next(e);
         }
     }
+
+    async get24hours(req, res, next) {
+        try {
+            const list = await historyService.get24hours();
+            return res.json(list);
+        } catch(e) {
+            next(e);
+        }
+    }
 }
 
 export default new HistoryController();

@@ -2,7 +2,6 @@ import React, {useContext, useEffect, useState} from "react";
 import {Context} from "../../index";
 import {observer} from "mobx-react";
 import question from '../../imgs/question.png'
-import {currProp} from "../../market/market";
 import gem from '../../imgs/currImg.png'
 import { HiDotsHorizontal } from "react-icons/hi";
 
@@ -20,6 +19,7 @@ export class Game {
     side1;
     side2;
     result;
+    checkLink;
 
     constructor(obj) {
         this.player1 = obj.player1;
@@ -35,6 +35,7 @@ export class Game {
         this.side1 = obj.side1;
         this.side2 = obj.side2;
         this.result = obj.result;
+        this.checkLink = obj.checkLink;
     }
 
     combineItems() {
@@ -43,7 +44,7 @@ export class Game {
 
     combineBets() {
         if(this.items1.length > 0) {
-            return Math.round(this.items.reduce((a, b) => a + b.price, 0) / currProp);
+            return Math.round(this.items.reduce((a, b) => a + b.price, 0));
         } else {
             return Math.round(this.gems1);
         }
@@ -74,7 +75,8 @@ function GamesList () {
                         side2: item.side2,
                         gems1: item.gems1,
                         gems2: item.gems2,
-                        result: item.result
+                        result: item.result,
+                        checkLink: item.checkLink
                     })
                     setGames(prev => [...prev, gameObj]);
                 })

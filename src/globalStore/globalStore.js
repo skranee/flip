@@ -39,9 +39,40 @@ export default class GlobalStore {
     botRecommended = '';
     errorWindow = false;
     errorMessage = '';
+    giveawayGoing = false;
+    giveawayData = {};
+    giveawayParticipants = [];
+    giveawayWinner = '';
+    allowedToParticipate = false;
 
     constructor() {
         makeAutoObservable(this)
+    }
+
+    setAllowedToParticipate(bool) {
+        this.allowedToParticipate = bool;
+    }
+
+    setGiveawayWinner(winner) {
+        this.giveawayWinner = winner;
+    }
+
+    setGiveawayTimer(time) {
+        if(this.giveawayData && this.giveawayData.timer) {
+            this.giveawayData.timer = time;
+        }
+    }
+
+    setGiveawayParticipants(users) {
+        this.giveawayParticipants = users;
+    }
+
+    setGiveawayData(data) {
+        this.giveawayData = data;
+    }
+
+    setGiveawayGoing(bool) {
+        this.giveawayGoing = bool;
     }
 
     setErrorMessage(message) {

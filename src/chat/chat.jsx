@@ -11,6 +11,7 @@ import axios from "axios";
 import {API_URL} from "../http";
 import {FaCrown} from "react-icons/fa";
 import {RiMacbookFill} from "react-icons/ri";
+import {notify} from "../App";
 
 function Chat() {
     const [messages, setMessages] = useState([]);
@@ -47,59 +48,90 @@ function Chat() {
                 case 'message':
                     setMessages((prevState) => [...prevState, message]);
                     break;
-                    case 'stream':
-                        if(message.streamStatus === 'live') {
-                            globalStore.setStreamLive(true)
-                        } else {
-                            globalStore.setStreamLive(false)
-                        }
-                        break;
-                    case 'connection':
-                        const msgs = message.messages;
-                        setMessages(msgs);
-                        setUsersOnline(message.amount);
-                        break;
-                    case 'close':
-                        setUsersOnline(message.amount);
-                        break;
-                    case 'joinGame':
-                        if(message && message.mainReceiver) {
-                            if(store.user.id === message.mainReceiver) {
-                                if(globalStore.viewOpen) {
-                                    globalStore.setViewOpen(false);
-                                }
-                                globalStore.setGameInfo(message.game);
-                                setTimeout(async () => {
-                                    const updateUser = async () => {
-                                        try {
-                                            const response = await axios.get(`${API_URL}/refresh`, {withCredentials: true});
-                                            store.setUser(response.data.user);
-                                            store.setAuth(true);
-                                            localStorage.setItem('token', response.data.accessToken);
-                                            localStorage.setItem('username', response.data.user.username);
-                                        } catch(e) {
-                                            localStorage.removeItem('avatarUrl');
-                                            console.log(e.response?.data?.message);
-                                        }
-                                    }
-                                    await updateUser();
-                                }, 2000)
-                                setTimeout(() => {
-                                    globalStore.setViewOpen(true);
-                                }, 500)
+                case 'stream':
+                    if(message.streamStatus === 'live') {
+                        globalStore.setStreamLive(true)
+                    } else {
+                        globalStore.setStreamLive(false)
+                    }
+                    break;
+                case 'connection':
+                    const msgs = message.messages;
+                    setMessages(msgs);
+                    setUsersOnline(message.amount);
+                    break;
+                case 'close':
+                    setUsersOnline(message.amount);
+                    break;
+                case 'joinGame':
+                    if(message && message.mainReceiver) {
+                        if(store.user.id === message.mainReceiver) {
+                            if(globalStore.viewOpen) {
+                                globalStore.setViewOpen(false);
                             }
+                            globalStore.setGameInfo(message.game);
+                            setTimeout(async () => {
+                                const updateUser = async () => {
+                                    try {
+                                        const response = await axios.get(`${API_URL}/refresh`, {withCredentials: true});
+                                        store.setUser(response.data.user);
+                                        store.setAuth(true);
+                                        localStorage.setItem('token', response.data.accessToken);
+                                        localStorage.setItem('username', response.data.user.username);
+                                    } catch(e) {
+                                        localStorage.removeItem('avatarUrl');
+                                        console.log(e.response?.data?.message);
+                                    }
+                                }
+                                await updateUser();
+                            }, 1800)
+                            setTimeout(() => {
+                                globalStore.setViewOpen(true);
+                            }, 500)
                         }
-                }
+                    }
+                    break;
+                case 'giveaway':
+                    globalStore.setGiveawayGoing(message.giveawayStatus);
+                    if(message.firstAnnounce) {
+                        notify();
+                    }
+                    globalStore.setGiveawayData(message.giveaway);
+                    globalStore.setGiveawayTimer(message.giveaway.timer);
+                    globalStore.setGiveawayParticipants(message.participants);
+                    break;
+                case 'timeUpdate':
+                    globalStore.setGiveawayTimer(message.time);
+                    break;
+                case 'giveawayEnded':
+                    if(message.winner) {
+                        globalStore.setGiveawayWinner(message.winner);
+                    }
+                    globalStore.setGiveawayTimer('');
+                    socket.current.send(JSON.stringify({
+                        method: 'endGiveaway'
+                    }))
+                    setTimeout(() => {
+                        globalStore.setGiveawayWinner('');
+                        globalStore.setGiveawayData({});
+                        globalStore.setGiveawayParticipants(0);
+                        globalStore.setGiveawayGoing(false);
+                    }, 30 * 1000)
+                    break;
+                case 'participate':
+                    globalStore.setGiveawayParticipants(message.participants);
+                    break;
             }
-            socket.current.onclose = () => {
-                clearInterval(pingInterval);
-            }
-            socket.current.onerror = (error) => {
-                console.log('WS error: ', error);
-            }
-            return () => {
-                socket.current.close();
-            }
+        }
+        socket.current.onclose = () => {
+            clearInterval(pingInterval);
+        }
+        socket.current.onerror = (error) => {
+            console.log('WS error: ', error);
+        }
+        return () => {
+            socket.current.close();
+        }
     }, [user.username, ]);
 
     useEffect(() => {

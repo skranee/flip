@@ -1,10 +1,12 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {Context} from "../index";
 import {FaMedal} from "react-icons/fa6";
 import LeadersList from "../leadersBoard/leadersList";
 import {observer} from "mobx-react";
 import OptionsList from "./optionsList";
 import PaymentsList from "../paymentsModal/paymentsList";
+import { RxCross2 } from "react-icons/rx";
+import gem from '../imgs/currImg.png'
 
 function AdminPanel() {
     const {store, globalStore} = useContext(Context);
@@ -16,6 +18,27 @@ function AdminPanel() {
     const [incDec, setIncDec] = useState('increase')
     const [payments, setPayments] = useState([]);
     const [banState, setBanState] = useState('ban');
+    const [giveawayInventory, setGiveawayInventory] = useState([]);
+    const [chosenItems, setChosenItems] = useState([]);
+    const [chosenIndex, setChosenIndex] = useState([]);
+    const [giveawayValue, setGiveawayValue] = useState(0);
+    const [timer, setTimer] = useState(0);
+
+    const socket = useRef();
+
+    useEffect(() => {
+        socket.current = new WebSocket('ws://localhost:4000');
+    }, []);
+
+    useEffect(() => {
+        const getInventory = async () => {
+            const inventory = await store.getGiveawayItems(store.user.id);
+            if(inventory && inventory.data) {
+                setGiveawayInventory(inventory.data.sort((a, b) => b.price - a.price));
+            }
+        }
+        getInventory();
+    }, [globalStore.adminOptionStatus === 'GIVEAWAY', ]);
 
     const containerWidth = () => {
         if(!globalStore.chatOpened && globalStore.panelOpen) {
@@ -123,6 +146,31 @@ function AdminPanel() {
         }
     }
 
+    const createGiveaway = () => {
+        if(!chosenItems.length || !timer) {
+            globalStore.setErrorMessage('Set all settings to create a giveaway');
+            globalStore.setErrorWindow(true);
+            globalStore.setAdminOptionStatus('');
+        } else {
+            const giveaway = {
+                items: chosenItems,
+                timer: timer,
+                totalValue: giveawayValue
+            }
+            const message = {
+                method: 'giveaway',
+                giveaway: giveaway,
+                giveawayStatus: true
+            }
+            socket.current.send(JSON.stringify(message));
+            setChosenItems([]);
+            setChosenIndex([]);
+            setTimer(0);
+            setGiveawayValue(0);
+            globalStore.setAdminOptionStatus('');
+        }
+    }
+
     const handleRoleCheck = (role) => {
         setRoleCheck(role);
     }
@@ -133,6 +181,56 @@ function AdminPanel() {
 
     const handleBlurPayments = () => {
         globalStore.setPaymentsOpen(false);
+    }
+
+    const addToGiveaway = (index, item) => {
+        if(chosenIndex.includes(index)) {
+            setChosenIndex(chosenIndex.filter(item => item !== index));
+            setChosenItems(chosenItems.filter(chosenItem => chosenItem.itemId !== item.itemId));
+            setGiveawayValue(prevState => prevState -= item.price);
+        } else {
+            setChosenIndex((prevState) => prevState.concat(index));
+            setChosenItems(prevState => prevState.concat(item));
+            setGiveawayValue(prevState => prevState += item.price);
+        }
+    }
+
+    const chooseColor = (rarity) => {
+        if(rarity === 'Legendary') {
+            return '145, 0, 181'
+        }
+        else if(rarity === 'Common') {
+            return '176, 166, 179'
+        }
+        else if(rarity === 'Uncommon') {
+            return '203, 207, 178'
+        }
+        else if(rarity === 'Rare') {
+            return '192, 204, 120'
+        }
+        else if(rarity === 'Godly') {
+            return '227, 255, 56'
+        }
+        else if(rarity === 'Unique') {
+            return '3, 0, 168'
+        }
+        else if(rarity === 'Ancient') {
+            return '255, 200, 0'
+        }
+        else if(rarity === 'Pets') {
+            return '242, 22, 55'
+        }
+        else if(rarity === 'Vintage') {
+            return '97, 71, 0'
+        }
+    }
+
+    const handleBlurGiveaway = () => {
+        globalStore.setAdminOptionStatus('');
+        setChosenItems([]);
+        setChosenIndex([]);
+        setTimer(0);
+        setGiveawayValue(0);
     }
 
     return (
@@ -146,14 +244,95 @@ function AdminPanel() {
                     >
                         <a className='upperTextPayments'>{username.toUpperCase()}'S PAYMENTS</a>
                         <div className='paymentsSpace'>
-                            <PaymentsList payments={payments} />
+                            <PaymentsList payments={payments}/>
                         </div>
+                    </div>
+                </div>
+            }
+            {globalStore.adminOptionStatus === 'GIVEAWAY' &&
+                <div className='backgroundModal' onClick={() => handleBlurGiveaway()}>
+                    <div className='modalWindowMain' onClick={(event) => event.stopPropagation()}>
+                        <a className='optionStatus'>
+                            {globalStore.adminOptionStatus}
+                        </a>
+                        <a className='giveawayChosenTotalValue'>
+                            Total value: <img src={gem} className='gemWorth' alt='gem' />{giveawayValue}
+                        </a>
+                        <a className='giveawayChosenAmount'>
+                            Total items: {(chosenItems && chosenItems.length) ? chosenItems.length : 0}
+                        </a>
+                        <div className='inventoryContainer'>
+                            {(giveawayInventory.length > 0) &&
+                                giveawayInventory.map((item, index) => (
+                                    <li
+                                        key={index}
+                                        className={`inventoryItemContainer + ${chosenIndex.includes(index) ? 'chosenItem' : ''}`}
+                                        onClick={() => addToGiveaway(index, item)}
+                                        style={{outline: chosenIndex.includes(index) ? 'solid 1px rgba(255, 255, 255, 0.75)' : 'none'}}
+                                    >
+                                        <img
+                                            className='imgItemContainer'
+                                            src={item.image}
+                                            alt={item.name}
+                                        />
+                                        <a className='nameItemContainer'>
+                                            {item.name}
+                                        </a>
+                                        <a className='rarityItemContainer' style={{
+                                            color: `rgba(${chooseColor(item.rarity)}, 1)`,
+                                            textShadow: `0 2px 10px rgba(${chooseColor(item.rarity)}, 0.6)`
+                                        }}>
+                                            {item.rarity}
+                                        </a>
+                                        <a className='priceItemContainer'>
+                                            <img src={gem} className='gemWorth' alt='gem'/>{Math.round(item.price)}
+                                        </a>
+                                    </li>
+                                ))
+                            }
+                        </div>
+                        <div className='timersContainer'>
+                            <div
+                                className={`chooseTimer + ${timer === 1000 * 60 * 5 ? 'chosenTimer' : ''}`}
+                                onClick={() => setTimer(1000 * 60 * 5)}
+                            >
+                                5 Min
+                            </div>
+                            <div
+                                className={`chooseTimer + ${timer === 1000 * 60 * 30 ? 'chosenTimer' : ''}`}
+                                onClick={() => setTimer(1000 * 60 * 30)}
+                            >
+                                30 Min
+                            </div>
+                            <div
+                                className={`chooseTimer + ${timer === 1000 * 60 * 60 * 2 ? 'chosenTimer' : ''}`}
+                                onClick={() => setTimer(1000 * 60 * 60 * 2)}
+                            >
+                                2 Hours
+                            </div>
+                            <div
+                                className={`chooseTimer + ${timer === 1000 * 60 * 60 * 10 ? 'chosenTimer' : ''}`}
+                                onClick={() => setTimer(1000 * 60 * 60 * 10)}
+                            >
+                                10 Hours
+                            </div>
+                            <div
+                                className={`chooseTimer + ${timer === 1000 * 60 * 60 * 24 ? 'chosenTimer' : ''}`}
+                                onClick={() => setTimer(1000 * 60 * 60 * 24)}
+                            >
+                                24 Hours
+                            </div>
+                        </div>
+                        <button className='btnAdminDone' onClick={createGiveaway}>
+                        CREATE
+                        </button>
                     </div>
                 </div>
             }
             {globalStore.adminModal &&
                 <div className='backgroundModal' onClick={handleBlur}>
-                    <div className='modalWindowAdmin' onClick={(event) => event.stopPropagation()} onKeyDown={(event) => handleKeyDown(event)}>
+                    <div className='modalWindowAdmin' onClick={(event) => event.stopPropagation()}
+                         onKeyDown={(event) => handleKeyDown(event)}>
                         <a className='optionStatus'>{globalStore.adminOptionStatus}</a>
                         {
                             (
@@ -190,7 +369,7 @@ function AdminPanel() {
                             </div>
                         }
                         {
-                            (   globalStore.adminOptionStatus === 'BALANCE ADD' ||
+                            (globalStore.adminOptionStatus === 'BALANCE ADD' ||
                                 globalStore.adminOptionStatus === 'BALANCE REDUCE' ||
                                 globalStore.adminOptionStatus === 'LEVEL MANAGEMENT' ||
                                 globalStore.adminOptionStatus === 'ONLINE MANAGEMENT' ||
@@ -278,7 +457,7 @@ function AdminPanel() {
                              marginLeft: globalStore.panelOpen ? '14.5%' : '1%'
                          }}>
                         <div className='adminOptions'>
-                            <OptionsList />
+                            <OptionsList/>
                         </div>
                     </div>
                 </div>

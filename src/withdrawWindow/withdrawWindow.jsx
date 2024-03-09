@@ -2,8 +2,6 @@ import React, {useContext, useEffect, useState} from 'react';
 import {observer} from "mobx-react";
 import {Context} from "../index";
 import coin from "../imgs/currImg.png";
-import {currProp} from "../market/market";
-import ConnectModal from "../connectModal/connectModal";
 
 function WithdrawWindow() {
     const {store, globalStore} = useContext(Context);
@@ -31,11 +29,11 @@ function WithdrawWindow() {
         if(chosenIndex.includes(index)) {
             setChosenIndex(chosenIndex.filter(chosenIndex => chosenIndex !== index));
             setChosenItems(chosenItems.filter(chosenItem => chosenItem.itemId !== item.itemId));
-            setTotalValue(prevState => prevState -= Math.round(item.price / 2.5));
+            setTotalValue(prevState => prevState -= Math.round(item.price));
         } else {
             setChosenIndex((prevState) => prevState.concat(index));
             setChosenItems(prevState => prevState.concat(item));
-            setTotalValue(prevState => prevState += Math.round(item.price / 2.5));
+            setTotalValue(prevState => prevState += Math.round(item.price));
         }
     }
 
@@ -91,7 +89,7 @@ function WithdrawWindow() {
                                     <a className='marketItemName'>{item.name}</a>
                                     <div className='marketItemCostContainer'>
                                         <img className='marketCoinImg' src={coin} alt='' />
-                                        <a className='marketItemCost'>{Math.round(item.price / currProp)}</a>
+                                        <a className='marketItemCost'>{Math.round(item.price)}</a>
                                     </div>
                                 </li>
                             )) :

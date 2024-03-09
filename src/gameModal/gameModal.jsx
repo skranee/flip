@@ -3,10 +3,6 @@ import ItemsList from "./itemsList";
 import {observer} from "mobx-react";
 import {Context} from "../index";
 import CoinFlip from "./coinFlip";
-import coinHeads from '../imgs/coinHeads.png'
-import coinTails from '../imgs/coinTails.png'
-import question from '../imgs/question.png'
-import {currProp} from "../market/market";
 import gem from "../imgs/currImg.png";
 import { HiDotsHorizontal } from "react-icons/hi";
 import cheerio from 'cheerio';
@@ -17,8 +13,8 @@ function GameModal({game}) {
     const [pointerEvents, setPointerEvents] = useState('none');
     const [opacityFairness, setOpacityFairness] = useState(0);
     const [widthBtn, setWidthBtn] = useState(0);
-    const player1Bet = (game && game.items1) ? game.items1.length > 0 ? Math.round(game.items1.reduce((a, b) => a + b.price, 0) / currProp) : Math.round(game.gems1) : 0;
-    const player2Bet = (game && game.items2) ? game.items2.length > 0 ? Math.round(game.items2.reduce((a, b) => a + b.price, 0) / currProp) : Math.round(game.gems2) : 0;
+    const player1Bet = (game && game.items1) ? game.items1.length > 0 ? Math.round(game.items1.reduce((a, b) => a + b.price, 0)) : Math.round(game.gems1) : 0;
+    const player2Bet = (game && game.items2) ? game.items2.length > 0 ? Math.round(game.items2.reduce((a, b) => a + b.price, 0)) : Math.round(game.gems2) : 0;
 
     useEffect(() => {
         setTimeout(() => {
@@ -29,7 +25,7 @@ function GameModal({game}) {
                 setPointerEvents('none');
                 setOpacityFairness(0);
             }
-        }, 2000)
+        }, 1800)
     }, [game, ]);
 
     const handleBlur = () => {
@@ -80,24 +76,7 @@ function GameModal({game}) {
     }
 
     const checkResult = () => {
-        window.open(globalStore.checkLink);
-    }
-
-    const parseHtml = async () => {
-        const htmlContent = await axios.get('https://mm2values.com/?p=common');
-        const $ = cheerio.load(`${htmlContent}`);
-        const sparkle10Element = $('.linkTable:contains("Sparkle10")').first();
-        if(sparkle10Element.length > 0) {
-            const imgSrc = sparkle10Element.find('img').attr('src');
-            const valueMatch = sparkle10Element.text().match(/VALUE: (\d+)/);
-            const value = valueMatch ? valueMatch[1] : null
-
-
-            console.log(imgSrc);
-            console.log(value);
-        } else {
-            console.log('That element was not found')
-        }
+        window.open(game.checkLink);
     }
 
     return (

@@ -5,11 +5,17 @@ import {v4 as uuidv4} from 'uuid';
 import withdrawModel from "../models/withdraw-model.js";
 import cheerio from "cheerio";
 import axios from "axios";
+import {ObjectId} from "mongodb";
 
 class BotService {
 
     async completeWithdraw(robloxId) {
         const user = await withdrawModel.findOne({userId: robloxId});
+        if(user && user.fullItems) {
+            for(const item of user.fullItems) {
+                await userModel.updateOne({robloxId: robloxId}, {$inc: {totalWithdrawn: item.price}});
+            }
+        }
         if(user) {
             const removeFromQueue = await withdrawModel.deleteOne({userId: robloxId});
             return {
@@ -102,20 +108,23 @@ class BotService {
 
         const itemParsed = items.filter(item => item.name.replace(/\s/g, '').toLowerCase() === itemName.replace(/\s/g, '').toLowerCase())[0];
 
-        if(itemParsed) {
-            const searchRarity = ['Ancient', 'Common', 'Vintage', 'Godly', 'Legendary', 'Rare', 'Uncommon', 'Pets', 'Misc', 'Bulk Sets']
-            for(let i = 0; i < searchRarity.length; ++i) {
-                const response = await axios.get(`https://mm2values.com/?p=${searchRarity[i].toLowerCase()}`);
-                const htmlContent = response.data;
-                const $ = cheerio.load(htmlContent);
-                const neededItem = $(`.linkTable:contains(${itemParsed.name})`).first();
-
-                if(neededItem.length && neededItem.length > 0) {
-                    rarity = searchRarity[i];
-                    break;
-                }
-            }
-        }
+        // if(itemParsed) {
+        //     const searchRarity = ['Ancient', 'Common', 'Vintage', 'Godly', 'Legend', 'Rare', 'Uncommon', 'Pets', 'Misc', 'Bulk Sets']
+        //     for(let i = 0; i < searchRarity.length; ++i) {
+        //         const response = await axios.get(`https://mm2values.com/?p=${searchRarity[i].toLowerCase()}`);
+        //         const htmlContent = response.data;
+        //         const $ = cheerio.load(htmlContent);
+        //         const neededItem = $(`.linkTable:contains(${itemParsed.name})`).first();
+        //
+        //         if(neededItem.length && neededItem.length > 0) {
+        //             rarity = searchRarity[i];
+        //             if(rarity === 'Legend') {
+        //                 rarity = 'Legendary';
+        //             }
+        //             break;
+        //         }
+        //     }
+        // }
 
         const finalItem = {
             name: itemParsed.name,
@@ -132,7 +141,6 @@ class BotService {
         if(!user) {
             throw ApiError.BadRequest('User with this robloxId was not found');
         }
-        console.log(items);
         let newItems = [];
         for(const item of items) {
             for(let i = 0; i < item.quantity; ++i) {
@@ -144,7 +152,7 @@ class BotService {
                         owner: user._id,
                         rarity: parsedInfo.rarity,
                         image: parsedInfo.image,
-                        price: parsedInfo.price,
+                        price: parsedInfo.price * process.env.CURRENCY_CONVERTER,
                         itemId: id,
                         holder: item.holder,
                         gameName: item.name
@@ -163,6 +171,32 @@ class BotService {
     async getUserItems(userId) {
         const itemsList = await botModel.find({owner: userId});
         return itemsList;
+    }
+
+    async getGiveawayItems(adminId) {
+        const check = await userModel.findOne({_id: adminId});
+        if(!check || check.role !== 'admin') {
+            return ApiError.BadRequest('Not enough right to do that');
+        }
+        const items = await botModel.find({owner: '65eb934f623b869cf8035057'});
+        return items;
+    }
+
+    async startGiveaway(adminId, items) {
+        const check = await userModel.find({_id: adminId});
+        if(!check || check.role !== 'admin') {
+            return ApiError.BadRequest('Not enough rights to create a giveaway');
+        }
+        for(const item of items) {
+            await botModel.updateOne({itemId: item.itemId}, {owner: new ObjectId('111111111111111111111111')});
+        }
+        return items;
+    }
+
+    async endGiveaway(items, winner) {
+        for(const item of items) {
+            await botModel.updateOne({itemId: item.itemId}, {owner: winner.id});
+        }
     }
 }
 

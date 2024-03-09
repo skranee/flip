@@ -15,10 +15,8 @@ import SupportService from "../services/SupportService";
 import MarketService from "../services/MarketService";
 import BotService from "../services/BotService";
 import DepositService from "../services/DepositService";
-import ItemService from "../services/ItemService";
 import Item from "../models/Item";
 import WithdrawService from "../services/WithdrawService";
-import ChatService from "../services/ChatService";
 import LinkedCodeService from "../services/LinkedCodeService";
 import BotEntityService from "../services/BotEntityService";
 
@@ -117,7 +115,6 @@ export default class Store {
             localStorage.setItem('token', response.data.accessToken);
             localStorage.setItem('username', response.data.user.username);
         } catch(e: any) {
-            localStorage.removeItem('avatarUrl');
             console.log(e.response?.data?.message);
         } finally {
             this.setLoading(false);
@@ -128,6 +125,7 @@ export default class Store {
         try {
             const items = await BotService.getUserItems(userId);
             this.setItemsList(items.data);
+            return items.data;
         } catch(e: any) {
             console.log(e.response?.data?.message);
         }
@@ -193,22 +191,19 @@ export default class Store {
         }
     }
 
-    async addExp(id: string, exp: number) {
-        try {
-            if(this.user.role !== 'admin') {
-                throw Error ('Have not enough rights for this action!');
-            }
-            const update = await UserService.addExp(id, exp);
-            return update;
-        } catch(e: any) {
-            console.log(e.response?.data?.message);
-        }
-    }
-
     async claim(id: string) {
         try {
             const claim = await UserService.claim(id);
-            this.checkAuth();
+            try {
+                const response = await axios.get(`${API_URL}/refresh`, {withCredentials: true});
+                this.setUser(response.data.user);
+                this.setAuth(true);
+                localStorage.setItem('token', response.data.accessToken);
+                localStorage.setItem('username', response.data.user.username);
+            } catch(e: any) {
+                localStorage.removeItem('avatarUrl');
+                console.log(e.response?.data?.message);
+            }
             return claim;
         } catch(e: any) {
             console.log(e.response?.data?.message);
@@ -260,15 +255,6 @@ export default class Store {
         }
     }
 
-    async findWinner(gameId: string) {
-        try {
-            const response = await GameService.findWinner(gameId);
-            return response;
-        } catch(e: any) {
-            console.log(e.response?.data?.message);
-        }
-    }
-
     async getGames() {
         try {
             const games = await GameService.getGames();
@@ -282,23 +268,6 @@ export default class Store {
         try {
             const history = await UserService.getHistory(userId);
             return history;
-        } catch(e: any) {
-            console.log(e.response?.data?.message);
-        }
-    }
-
-    async addHistory(userId: string, game: IGame) {
-        try {
-            const add = await UserService.addHistory(userId, game);
-        } catch(e: any) {
-            console.log(e.response?.data?.message);
-        }
-    }
-
-    async endGame(gameId: string) {
-        try {
-            const end = await GameService.endGame(gameId);
-            return end;
         } catch(e: any) {
             console.log(e.response?.data?.message);
         }
@@ -380,15 +349,6 @@ export default class Store {
         }
     }
 
-    async completeWithdraw(robloxId: string) {
-        try {
-             const check = await BotService.completeWithdraw(robloxId);
-             return check;
-        } catch(e: any) {
-            console.log(e.response?.data?.message);
-        }
-    }
-
     async getWithdrawData() {
         try {
             const response = await BotService.getWithdrawData();
@@ -402,15 +362,6 @@ export default class Store {
         try {
             const add = await BotService.addItemBot(robloxId, item);
             return add;
-        } catch(e: any) {
-            console.log(e.response?.data?.message);
-        }
-    }
-
-    async getAccountId(currency: string) {
-        try {
-            const id = await DepositService.getAccountId(currency);
-            return id;
         } catch(e: any) {
             console.log(e.response?.data?.message);
         }
@@ -430,15 +381,6 @@ export default class Store {
         try {
             const address = await DepositService.findAddress(user, currency);
             return address;
-        } catch(e: any) {
-            console.log(e.response?.data?.message);
-        }
-    }
-
-    async getTransactions() {
-        try {
-            const response = await DepositService.getTransactions();
-            return response;
         } catch(e: any) {
             console.log(e.response?.data?.message);
         }
@@ -528,15 +470,6 @@ export default class Store {
         }
     }
 
-    async createItem(name: string, value: number) {
-        try {
-            const item = await ItemService.createItem(name, value);
-            return item;
-        } catch(e: any) {
-            console.log(e.response?.data?.message);
-        }
-    }
-
     async addToQueue(robloxId: string, items: Item[]) {
         try {
             const add = await WithdrawService.addToQueue(robloxId, items);
@@ -568,24 +501,6 @@ export default class Store {
         try{
             const create = await GameService.createWithGems(player1, gemsAmount, side);
             return create;
-        } catch(e: any) {
-            console.log(e.response?.data?.message);
-        }
-    }
-
-    async sendMessage(user: IUser, message: string, time: string, id: string, avatar: string) {
-        try {
-            const send = await ChatService.sendMessage(user, message, time, id, avatar);
-            return send;
-        } catch(e: any) {
-            console.log(e.response?.data?.message);
-        }
-    }
-
-    async getMessages() {
-        try {
-            const messages = await ChatService.getMessages();
-            return messages;
         } catch(e: any) {
             console.log(e.response?.data?.message);
         }
@@ -671,15 +586,6 @@ export default class Store {
         }
     }
 
-    async decideWhichBot(items: IItem[]) {
-        try {
-            const decide = await BotService.decideWhichBot(items);
-            return decide;
-        } catch(e: any) {
-            console.log(e.response?.data?.message);
-        }
-    }
-
     async getBots() {
         try {
             const bots = await BotEntityService.getBots();
@@ -697,6 +603,39 @@ export default class Store {
             } else {
                 return 'Not enough rights!';
             }
+        } catch(e: any) {
+            console.log(e.response?.data?.message);
+        }
+    }
+
+    async getGiveawayItems(adminId: string) {
+        try {
+            if(this.user.role !== 'admin') {
+                return null;
+            }
+            const items = await BotService.getGiveawayItems(adminId);
+            return items;
+        } catch(e: any) {
+            console.log(e.response?.data?.message);
+        }
+    }
+
+    async startGiveaway(adminId: string, items: IItem[]) {
+        try {
+            if(this.user.role === 'admin') {
+                const start = await BotService.startGiveaway(adminId, items);
+                return start;
+            }
+            return null;
+        } catch(e: any) {
+            console.log(e.response?.data?.message);
+        }
+    }
+
+    async get24hours() {
+        try {
+            const list = await UserService.get24hours();
+            return list;
         } catch(e: any) {
             console.log(e.response?.data?.message);
         }

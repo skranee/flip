@@ -17,10 +17,6 @@ export default class UserService {
         return $api.post(`/getReward`, {lvl});
     }
 
-    static async addExp(id: string, exp: number): Promise<AxiosResponse> {
-        return $api.put('/boost',{id, exp});
-    }
-
     static async claim(id: string): Promise<AxiosResponse> {
         return $api.put('/claim', {id});
     }
@@ -37,11 +33,11 @@ export default class UserService {
         return $api.get(`/history?userId=${userId}`)
     }
 
-    static async addHistory(userId: string, game: IGame): Promise <AxiosResponse> {
-        return $api.post('/history', {userId, game})
-    }
-
     static async getPayments(userId: string): Promise<AxiosResponse<IPayment[]>> {
         return $api.get(`/payments?userId=${userId}`);
+    }
+
+    static async get24hours(): Promise<AxiosResponse> {
+        return $api.get('/24hours');
     }
 }

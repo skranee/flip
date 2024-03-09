@@ -12,5 +12,6 @@ export default interface IGame {
     status: string,
     result: string,
     gems1: number,
-    gems2: number
+    gems2: number,
+    checkLink: string
 }

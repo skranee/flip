@@ -6,7 +6,6 @@ import { IoExitOutline } from "react-icons/io5/index.esm";
 import {useNavigate} from "react-router-dom";
 import gem from '../../imgs/currImg.png'
 import LoginModal from "../loginModal/loginModal";
-import {currProp} from "../../market/market";
 import coin from "../../imgs/currImg.png";
 import CryptoDeposit from "../../cryptoDeposit/cryptoDeposit";
 import AddressWindow from "../../cryptoDeposit/addressWindow";
@@ -106,7 +105,7 @@ function NavigationPanel () {
                                 <a className='depositWorth'>
                                     {
                                         store.itemsList && store.user && store.itemsList.length ?
-                                        Math.round(store.itemsList.reduce((a, b) => a + b.price, 0) / currProp) :
+                                        Math.round(store.itemsList.reduce((a, b) => a + b.price, 0)) :
                                             0
                                     }
                                 </a>
@@ -124,7 +123,7 @@ function NavigationPanel () {
                                         <a className='marketItemName'>{item.name}</a>
                                         <div className='marketItemCostContainer'>
                                             <img className='marketCoinImg' src={coin} alt='' />
-                                            <a className='marketItemCost'>{Math.round(item.price / currProp)}</a>
+                                            <a className='marketItemCost'>{Math.round(item.price)}</a>
                                         </div>
                                     </li>
                                 )) :

@@ -1,7 +1,6 @@
 import React, {useContext} from 'react';
 import {Context} from "../index";
 import gem from '../imgs/currImg.png'
-import {currProp} from "./market";
 
 function BuyModal({item}) {
     const {store, globalStore} = useContext(Context);
@@ -41,7 +40,7 @@ function BuyModal({item}) {
     }
 
     const buy = async () => {
-        if(store.user.balance >= item.price / 2.5) {
+        if(store.user.balance >= item.price) {
             const buy = await store.buyItemMarket(item.owner, store.user.id, item.itemId);
         } else {
             return Error('Not enough balance');
@@ -64,7 +63,7 @@ function BuyModal({item}) {
                 </a>
                 <div className='priceBuy'>
                     <img className='gemBuy' src={gem} alt='' />
-                    <a>{Math.round(item.price / currProp)}</a>
+                    <a>{Math.round(item.price)}</a>
                 </div>
                 <button className='btnBuy' disabled={!store.user || !store.user.id} style={{width: '70%', height: 30, fontSize: '1.3em'}} onClick={buy}>
                     Buy

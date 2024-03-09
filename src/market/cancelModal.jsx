@@ -1,7 +1,6 @@
 import React, {useContext} from 'react';
 import {Context} from "../index";
 import gem from '../imgs/currImg.png'
-import {currProp} from "./market";
 
 function CancelModal({item}) {
     const {store, globalStore} = useContext(Context);
@@ -39,7 +38,7 @@ function CancelModal({item}) {
                 </a>
                 <div className='priceBuy'>
                     <img className='gemBuy' src={gem} alt='' />
-                    <a>{Math.round(item.price / currProp)}</a>
+                    <a>{Math.round(item.price)}</a>
                 </div>
                 <button className='btnBuy' style={{width: '70%', height: 30, fontSize: '1.3em'}} onClick={cancel}>
                     Cancel

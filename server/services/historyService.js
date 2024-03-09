@@ -10,12 +10,12 @@ class HistoryService {
         const update = await userModel.updateMany(
             {$or: [{_id: game.player1}, {_id: game.player2}]}, {$inc: {gamesPlayed: 1}});
         if(game.items1) {
-            await userModel.updateOne({_id: game.player1}, {$inc: {totalWagered: game.items1.reduce((a, b) => a + b.price, 0) / 2.5}});
-            bet1 = Math.round(game.items1.reduce((a, b) => a + b.price, 0) / 2.5);
+            await userModel.updateOne({_id: game.player1}, {$inc: {totalWagered: game.items1.reduce((a, b) => a + b.price, 0)}});
+            bet1 = Math.round(game.items1.reduce((a, b) => a + b.price, 0));
         }
         if(game.items2) {
-            await userModel.updateOne({_id: game.player2}, {$inc: {totalWagered: game.items2.reduce((a, b) => a + b.price, 0) / 2.5}});
-            bet2 = Math.round(game.items2.reduce((a, b) => a + b.price, 0) / 2.5);
+            await userModel.updateOne({_id: game.player2}, {$inc: {totalWagered: game.items2.reduce((a, b) => a + b.price, 0)}});
+            bet2 = Math.round(game.items2.reduce((a, b) => a + b.price, 0));
         }
         if(game.gems1) {
             await userModel.updateOne({_id: game.player1}, {$inc: {totalWagered: game.gems1}});
@@ -44,6 +44,15 @@ class HistoryService {
         const add = await historyModel.create({
             date: formattedDate, result: result, player1: player1._id, player2: player2._id, totalWorth: totalWorth});
         return add;
+    }
+
+    async get24hours() {
+        const currentDate = new Date();
+        const twentyFourHoursAgo = new Date(currentDate);
+        twentyFourHoursAgo.setHours(currentDate.getHours() - 24);
+
+        const list = await historyModel.find({timestamp: {$gte: twentyFourHoursAgo, $lte: currentDate}});
+        return list;
     }
 }
 

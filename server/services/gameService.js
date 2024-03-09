@@ -49,29 +49,69 @@ class GameService {
             for (const item of items) {
                 await botModel.updateOne({itemId: item.itemId}, {owner: new ObjectId('000000000000000000000000')})
             }
-            const game = await gameModel.updateOne({gameId: gameId}, {player2: player2.id, items2: items, side2: side, status: 'Ongoing'}, {new: true});
+            const game = await gameModel.findOneAndUpdate({gameId: gameId}, {player2: player2.id, items2: items, side2: side, status: 'Ongoing'}, {new: true});
 
             const random = await this.findWinner(gameId);
             const result = random.winner === 'first' ? 'First player won' : 'Second player won';
             const updateWinner = await gameModel.updateOne({gameId: gameId}, {result: result});
 
-            if(game.items1.length > 0) {
+            if(game.items1 && game.items1.length > 0) {
                 const itemsFirst = game.items1;
-                for(const item of itemsFirst) {
+                const totalValue = itemsFirst.reduce((a, b) => a + b.price, 0);
+
+                const cutter = Math.round(totalValue * 0.1);
+                const sorted = itemsFirst.sort((a, b) => b.price - a.price);
+                let itemsToProceed = [];
+                let itemsCut = [];
+                for(const item of sorted) {
+                    if(item.price <= cutter
+                        && itemsCut.reduce((a, b) => a + b.price, 0) <= cutter
+                        && itemsCut.reduce((a, b) => a + b.price, 0) + item.price <= cutter) {
+                        itemsCut.push(item);
+                    } else {
+                        itemsToProceed.push(item);
+                    }
+                }
+
+                for(const item of itemsCut) {
+                    await botModel.updateOne({itemId: item.itemId}, {owner: '65eb934f623b869cf8035057'});
+                }
+
+                for(const item of itemsToProceed) {
                     await botModel.updateOne({itemId: item.itemId}, {owner: result === 'First player won' ? game.player1 : player2.id});
                 }
             }
             if(game.gems1) {
                 const gems = game.gems1;
-                await userModel.updateOne({_id: result === 'First player won' ? game.player1 : player2.id}, {$inc: {balance: gems}});
+                await userModel.updateOne({_id: result === 'First player won' ? game.player1 : player2.id}, {$inc: {balance: Math.round(0.9 * gems)}});
             }
-            for(const item of items) {
-                await botModel.updateOne({itemId: item.itemId}, {owner: result === 'First player won' ? game.player1 : player2.id});
+            if(items) {
+                const totalValue = items.reduce((a, b) => a + b.price, 0);
+
+                const cutter = Math.round(totalValue * 0.1);
+                const sorted = items.sort((a, b) => b.price - a.price);
+                let itemsToProceed = [];
+                let itemsCut = [];
+                for(const item of sorted) {
+                    if(item.price <= cutter
+                        && itemsCut.reduce((a, b) => a + b.price, 0) <= cutter
+                        && itemsCut.reduce((a, b) => a + b.price, 0) + item.price <= cutter) {
+                        itemsCut.push(item);
+                    } else {
+                        itemsToProceed.push(item);
+                    }
+                }
+
+                for(const item of itemsCut) {
+                    await botModel.updateOne({itemId: item.itemId}, {owner: '65eb934f623b869cf8035057'});
+                }
+
+                for(const item of itemsToProceed) {
+                    await botModel.updateOne({itemId: item.itemId}, {owner: result === 'First player won' ? game.player1 : player2.id});
+                }
             }
 
-            const gameToPass = await gameModel.findOne({gameId: gameId});
-
-            const history = await historyService.addHistory(gameToPass);
+            const gameToPass = await gameModel.findOne({gameId: gameId}).populate('player1').populate('player2');
 
             if(game.items1) {
                 const price = game.items1.reduce((a, b) => a + b.price / 2,5, 0);
@@ -80,8 +120,10 @@ class GameService {
             if(game.gems1) {
                 await userService.addExp(game.player1, Math.round(game.gems1 / 40));
             }
-            const itemsPrice = items.reduce((a, b) => a + b.price / 2.5, 0);
+            const itemsPrice = items.reduce((a, b) => a + b.price, 0);
             await userService.addExp(player2.id, Math.round(itemsPrice / 40));
+
+            const history = await historyService.addHistory(gameToPass);
 
             setTimeout(async () => {
                 const deleteGame = await this.deleteGame(gameId);
@@ -107,25 +149,45 @@ class GameService {
             return ApiError.BadRequest('The game is already going');
         } else {
             const reduceBalance = await userModel.updateOne({_id: player2.id}, {$inc: {balance: -gemsAmount}});
-            const game = await gameModel.updateOne({gameId: gameId}, {player2: player2.id, gems2: gemsAmount, side2: side, status: 'Ongoing'});
+            const game = await gameModel.findOneAndUpdate({gameId: gameId}, {player2: player2.id, gems2: gemsAmount, side2: side, status: 'Ongoing'});
             let gems1 = 0;
             if(game && game.gems1) {
                 gems1 = game.gems1;
             }
             const random = await this.findWinner(gameId);
             const result = random.winner === 'first' ? 'First player won' : 'Second player won'
-            const updateWinner = await gameModel.updateOne({gameId: gameId}, {result: result});
+            const updateWinner = await gameModel.updateOne({gameId: gameId}, {result: result, checkLink: random.link});
             if(game.items1 && game.items1.length > 0) {
                 const itemsFirst = game.items1;
-                for(const item of itemsFirst) {
+                const totalValue = itemsFirst.reduce((a, b) => a + b.price, 0);
+
+                const cutter = Math.round(totalValue * 0.1);
+                const sorted = itemsFirst.sort((a, b) => b.price - a.price);
+                let itemsToProceed = [];
+                let itemsCut = [];
+                for(const item of sorted) {
+                    if(item.price <= cutter
+                        && itemsCut.reduce((a, b) => a + b.price, 0) <= cutter
+                        && itemsCut.reduce((a, b) => a + b.price, 0) + item.price <= cutter) {
+                        itemsCut.push(item);
+                    } else {
+                        itemsToProceed.push(item);
+                    }
+                }
+
+                for(const item of itemsCut) {
+                    await botModel.updateOne({itemId: item.itemId}, {owner: '65eb934f623b869cf8035057'});
+                }
+
+                for(const item of itemsToProceed) {
                     await botModel.updateOne({itemId: item.itemId}, {owner: result === 'First player won' ? game.player1 : player2.id});
                 }
             }
 
             if(result === 'First player won') {
-                const addBalance = await userModel.updateOne({_id: game.player1}, {$inc: {balance: gemsAmount + gems1}});
+                const addBalance = await userModel.updateOne({_id: game.player1}, {$inc: {balance: Math.round(0.9 * (gemsAmount + gems1))}});
             } else {
-                const addBalance = await userModel.updateOne({_id: player2.id}, {$inc: {balance: gemsAmount + gems1}});
+                const addBalance = await userModel.updateOne({_id: player2.id}, {$inc: {balance: Math.round(0.9 * (gemsAmount + gems1))}});
             }
 
             const gameToPass = await gameModel.findOne({gameId: gameId}).populate('player1').populate('player2');
@@ -189,12 +251,12 @@ class GameService {
         }
 
         if(game.items1.length > 0) {
-            bet1 = game.items1.reduce((a, b) => a + b.price / 2.5, 0);
+            bet1 = game.items1.reduce((a, b) => a + b.price, 0);
         } else if(game.gems1) {
             bet1 = game.gems1;
         }
         if(game.items2.length > 0) {
-            bet2 = game.items2.reduce((a, b) => a + b.price / 2.5, 0);
+            bet2 = game.items2.reduce((a, b) => a + b.price, 0);
         } else if(game.gems2) {
             bet2 = game.gems2;
         }

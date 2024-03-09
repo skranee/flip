@@ -11,7 +11,8 @@ const GameSchema = new Schema({
     result: {type: String},
     side1: {type: String, default: 'red'},
     side2: {type: String},
-    status: {type: String, default: 'Joinable'}
+    status: {type: String, default: 'Joinable'},
+    checkLink: {type: String}
 })
 
 export default model('Game', GameSchema);

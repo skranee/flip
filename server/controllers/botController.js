@@ -1,12 +1,6 @@
 import botService from "../services/botService.js";
 
 class BotController {
-    async decideWhichBot(req, res, next) {
-        const {items} = req.body;
-        const response = await botService.decideWhichBot(items);
-        return res.json(response);
-    }
-
     async completeWithdraw(req, res, next) {
         try {
             const {robloxId} = req.body;
@@ -41,6 +35,26 @@ class BotController {
             const userId = req.query.userId;
             const items = await botService.getUserItems(userId);
             return res.json(items);
+        } catch(e) {
+            next(e);
+        }
+    }
+
+    async getGiveawayItems(req, res, next) {
+        try {
+            const adminId = req.query.adminId;
+            const items = await botService.getGiveawayItems(adminId);
+            return res.json(items);
+        } catch(e) {
+            next(e);
+        }
+    }
+
+    async startGiveaway(req, res, next) {
+        try {
+            const {adminId, items} = req.body;
+            const create = await botService.startGiveaway(adminId, items);
+            return res.json(create);
         } catch(e) {
             next(e);
         }
