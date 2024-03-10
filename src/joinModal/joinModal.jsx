@@ -84,19 +84,17 @@ function JoinModal({game}) {
                     }
                 }
                 await updateUser();
-            }, 2300)
-            setTimeout(() => {
-                setOneClickItems(false);
-                globalStore.setJoinOpen(false);
-                globalStore.setCheckLink(join.data.link);
-                globalStore.setGameInfo(join.data.game);
-                globalStore.setViewOpen(true);
-                const message = {
-                    method: 'joinGame',
-                    game: join.data.game
-                }
-                socket.current.send(JSON.stringify(message));
-            }, 500)
+                }, 1800)
+            setOneClickItems(false);
+            globalStore.setJoinOpen(false);
+            globalStore.setCheckLink(join.data.link);
+            globalStore.setGameInfo(join.data.game);
+            globalStore.setViewOpen(true);
+            const message = {
+                method: 'joinGame',
+                game: join.data.game
+            }
+            socket.current.send(JSON.stringify(message));
         } else {
             setOneClickItems(false);
             setErrorMes(`Items value must be between ${Math.round(approximate * 0.9)} and ${Math.round(approximate * 1.1)}`);
@@ -130,20 +128,19 @@ function JoinModal({game}) {
                     }
                 }
                 await updateUser();
-            }, 2300)
-            setTimeout(() => {
-                globalStore.setCheckLink(join.data.link);
-                globalStore.setGemJoin(false);
-                globalStore.setJoinOpen(false);
-                globalStore.setGameInfo(join.data.game);
-                globalStore.setViewOpen(true);
-                setOneClick(false);
-                const message = {
-                    method: 'joinGame',
-                    game: join.data.game
-                }
-                socket.current.send(JSON.stringify(message));
-            }, 500)
+            }, 1800)
+
+            globalStore.setCheckLink(join.data.link);
+            globalStore.setGemJoin(false);
+            globalStore.setJoinOpen(false);
+            globalStore.setGameInfo(join.data.game);
+            globalStore.setViewOpen(true);
+            setOneClick(false);
+            const message = {
+                method: 'joinGame',
+                game: join.data.game
+            }
+            socket.current.send(JSON.stringify(message));
         } else {
             setOneClick(false);
             globalStore.setGemJoin(false);
