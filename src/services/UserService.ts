@@ -4,7 +4,6 @@ import {IItem} from "../models/IItem";
 import {RewardResponse} from "../models/response/RewardResponse";
 import {IUser} from "../models/IUser";
 import IHistory from "../models/IHistory";
-import IGame from "../models/IGame";
 import IPayment from "../models/IPayment";
 
 

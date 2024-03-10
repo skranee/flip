@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react'
+import React, {useContext, useEffect} from 'react'
 import MainPage from "./mainPage/mainPage.jsx";
 import LeftPanel from "./mainPage/leftPanel/leftPanel";
 import FaqBeneath from "./faqBeneath";
@@ -34,7 +34,7 @@ function App() {
         if(localStorage.getItem('token')) {
             store.checkAuth();
         }
-    }, []);
+    }, [store]);
 
     useEffect(() => {
         if(store.isAuth) {
@@ -45,7 +45,7 @@ function App() {
             }
             av();
         }
-    }, []);
+    }, [store]);
 
     return (
         //<Redirect /> !!!
@@ -80,9 +80,9 @@ function App() {
         }
         {(store.user && store.user.banned) &&
             <div className='banPage'>
-                <a className='bannedMessage'>
+                <span className='bannedMessage'>
                     You are banned on the website. To get any information about your ban, please contact our support.
-                </a>
+                </span>
             </div>
         }
     </div>

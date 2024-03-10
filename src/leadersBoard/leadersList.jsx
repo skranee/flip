@@ -12,7 +12,7 @@ function LeadersList() {
             setLeaders(board.data);
         }
         getBoard();
-    }, []);
+    }, [store]);
 
     return (
         <div className='leadersSpace'>
@@ -20,19 +20,19 @@ function LeadersList() {
                 <li className='leaderContainer' key={index}>
                     <div className='leaderUserInfo'>
                         <img className='leaderImg' src={item.avatar} alt=''/>
-                        <a className='leaderUsername'>{item.username}</a>
+                        <span className='leaderUsername'>{item.username}</span>
                     </div>
                     <div className='leaderTotal'>
-                        <a className='totalUpper'>Total wagered</a>
-                        <a style={{color: 'rgba(255, 255, 255, 0.92)', textShadow: '0 2px 8px rgba(255, 255, 255, 0.7)'}}>{Math.round(item.totalWagered)} <img src={gem} className='gemWorth' alt='' /></a>
+                        <span className='totalUpper'>Total wagered</span>
+                        <span style={{color: 'rgba(255, 255, 255, 0.92)', textShadow: '0 2px 8px rgba(255, 255, 255, 0.7)'}}>{Math.round(item.totalWagered)} <img src={gem} className='gemWorth' alt='' /></span>
                     </div>
                     <div className='leaderTotal'>
-                        <a className='totalUpper'>Games played</a>
-                        <a style={{color: 'rgba(255, 255, 255, 0.92)', textShadow: '0 2px 8px rgba(255, 255, 255, 0.7)'}}>{item.gamesPlayed}</a>
+                        <span className='totalUpper'>Games played</span>
+                        <span style={{color: 'rgba(255, 255, 255, 0.92)', textShadow: '0 2px 8px rgba(255, 255, 255, 0.7)'}}>{item.gamesPlayed}</span>
                     </div>
                     <div className='leaderTotal'>
-                        <a className='totalUpper'>Level</a>
-                        <a style={{color: 'rgba(255, 255, 255, 0.92)', textShadow: '0 2px 8px rgba(255, 255, 255, 0.7)'}}>{item.lvl}</a>
+                        <span className='totalUpper'>Level</span>
+                        <span style={{color: 'rgba(255, 255, 255, 0.92)', textShadow: '0 2px 8px rgba(255, 255, 255, 0.7)'}}>{item.lvl}</span>
                     </div>
                 </li>
             ))}

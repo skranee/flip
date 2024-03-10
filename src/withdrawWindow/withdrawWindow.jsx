@@ -5,12 +5,11 @@ import coin from "../imgs/currImg.png";
 
 function WithdrawWindow() {
     const {store, globalStore} = useContext(Context);
-    const [playerItems, setPlayerItems] = useState(store.itemsList);
+    const playerItems= useState(store.itemsList);
     const [chosenIndex, setChosenIndex] = useState([]);
     const [chosenItems, setChosenItems] = useState([]);
     const [totalValue, setTotalValue] = useState(0);
-    const [approximate, setApproximate] = useState(0);
-    const [errorMes, setErrorMes] = useState('No items to bet...');
+    const errorMes = useState('No items to bet...');
     const [btnDisabled, setBtnDisabled] = useState(true);
 
     useEffect(() => {
@@ -70,7 +69,7 @@ function WithdrawWindow() {
                 <div className='addItems'>
                     <div className='createWorth'>
                         <img className='marketCoinImg' src={coin} alt='' style={{height: 15, width: 15}}/>
-                        <a>{Math.round(totalValue)}</a>
+                        <span>{Math.round(totalValue)}</span>
                     </div>
                     <div className='itemsAddContainer' style={{padding: 10}}>
                         {playerItems.length ?
@@ -86,14 +85,14 @@ function WithdrawWindow() {
                                     onClick={() => addToCart(index, item)}
                                 >
                                     <img className='marketItemImg' src={item.image} alt='' />
-                                    <a className='marketItemName'>{item.name}</a>
+                                    <span className='marketItemName'>{item.name}</span>
                                     <div className='marketItemCostContainer'>
                                         <img className='marketCoinImg' src={coin} alt='' />
-                                        <a className='marketItemCost'>{Math.round(item.price)}</a>
+                                        <span className='marketItemCost'>{Math.round(item.price)}</span>
                                     </div>
                                 </li>
                             )) :
-                            <a className='errorBet'>{errorMes}</a>
+                            <span className='errorBet'>{errorMes}</span>
                         }
                     </div>
                     {playerItems.length === 0 &&

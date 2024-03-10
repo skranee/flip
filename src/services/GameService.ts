@@ -3,7 +3,6 @@ import {IUser} from "../models/IUser";
 import {IItem} from "../models/IItem";
 import {AxiosResponse} from "axios";
 import IGame from "../models/IGame";
-import {WinnerResponse} from "../models/response/WinnerResponse";
 
 export default class GameService {
     static async createGame(player1: IUser, items: IItem[], side: string): Promise<AxiosResponse> {

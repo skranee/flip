@@ -40,7 +40,7 @@ function LeftPanel () {
             }
             check();
         }
-    }, [store.user.gamesPlayed, ]);
+    }, [store.user.gamesPlayed, store, globalStore]);
 
     const socket = useRef()
     socket.current = new WebSocket('ws://localhost:4000');
@@ -56,7 +56,7 @@ function LeftPanel () {
         } else {
             setParticipateDisabled(false);
         }
-    }, [globalStore.giveawayParticipants, ])
+    }, [globalStore.giveawayParticipants, store.user.username])
 
     useEffect(() => {
         setBonus(store.user.gotReward);
@@ -79,7 +79,7 @@ function LeftPanel () {
     }
 
     const claim = async () => {
-        const claim = await store.claim(store.user.id);
+        await store.claim(store.user.id);
         setBonus(true);
     }
 
@@ -110,7 +110,7 @@ function LeftPanel () {
                             <div className='gamesSelector'>
                                 <div className='gsLeft'>
                                     <CgGames className='gamePad' />
-                                    <a className='gameName'> Games </a>
+                                    <span className='gameName'> Games </span>
                                 </div>
                                 <div className='dropdownArrowDiv'>
                                     <div className='dropdownGames'>
@@ -124,31 +124,31 @@ function LeftPanel () {
                         <p className='titleField'>REWARDS</p>
                         <div className='menuProp' onClick={() => handleNavigate('/rewards')}>
                             <IoMdTrophy/>
-                            <a> Level Rewards </a>
+                            <span> Level Rewards </span>
                         </div>
                         <div className='menuProp' onClick={() => handleNavigate('/leaders')}>
                             <GiRibbonMedal />
-                            <a> Leaderboard </a>
+                            <span> Leaderboard </span>
                         </div>
                         <p className='titleField'>MARKETPLACE</p>
                         <div className='menuProp' onClick={() => handleNavigate('/market')}>
                             <AiFillShop />
-                            <a > Market </a>
+                            <span > Market </span>
                         </div>
                         <div className='menuProp' onClick={() => handleNavigate('/support')}>
                             <AiFillWechat />
-                            <a> Support </a>
+                            <span> Support </span>
                         </div>
                         {store.user.role === 'admin' &&
                             <div className='menuProp' onClick={() => handleNavigate('/admin')}>
                                 <FaTools />
-                                <a> Admin Panel </a>
+                                <span> Admin Panel </span>
                             </div>
                         }
                         {bonus === false &&
                             <div className='claimBonus'>
                                 <img className='imgPanel' src={claimImg} alt='' />
-                                <a className='bonusImg'>NEW<br/>BONUS!</a>
+                                <span className='bonusImg'>NEW<br/>BONUS!</span>
                                 <button className='claimBtn' onClick={() => claim()}>
                                     Claim
                                 </button>
@@ -159,15 +159,15 @@ function LeftPanel () {
                                 <div className='giveawayUpperPanel'>
                                     {!globalStore.giveawayWinner &&
                                         <>
-                                            <a>{globalStore.giveawayData.timer}</a>
-                                            <a>
+                                            <span>{globalStore.giveawayData.timer}</span>
+                                            <span>
                                                 Checked: {(globalStore.giveawayParticipants && globalStore.giveawayParticipants.length) ?
                                                 globalStore.giveawayParticipants.length : 0}
-                                            </a>
+                                            </span>
                                         </>
                                     }
                                     {globalStore.giveawayWinner &&
-                                        <a style={{fontSize: '0.9em'}}>Winner: {globalStore.giveawayWinner}</a>
+                                        <span style={{fontSize: '0.9em'}}>Winner: {globalStore.giveawayWinner}</span>
                                     }
                                 </div>
                                 <div className='giveawayListHorizontal'
@@ -188,10 +188,10 @@ function LeftPanel () {
                                         ))
                                     }
                                 </div>
-                                <a className='totalValueGiveaway'>
+                                <span className='totalValueGiveaway'>
                                     Total value: <img className='gemWorth' src={gem}
                                                       alt='gem'/> {Math.round(globalStore.giveawayData.totalValue)}
-                                </a>
+                                </span>
                                 {(!participateDisabled && store.user && store.user.id) &&
                                     <button className='btnParticipate' onClick={participate}>
                                         Participate

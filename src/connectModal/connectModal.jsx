@@ -31,7 +31,7 @@ function ConnectModal() {
             }
         }
         getBots();
-    }, [globalStore.connectModal]);
+    }, [globalStore.connectModal, store, globalStore, ]);
 
     const handleBlur = () => {
         globalStore.setConnectModal(false);
@@ -57,60 +57,60 @@ function ConnectModal() {
         <div className='backgroundModal' onClick={() => handleBlur()}>
             <div className='modalWindowAdmin' onClick={(event) => event.stopPropagation()}>
                 {globalStore.withdrawStatus &&
-                    <a className='connectModalUpperText' style={{color: decideColorStatus()}}>
+                    <span className='connectModalUpperText' style={{color: decideColorStatus()}}>
                         {globalStore.withdrawStatus}
-                    </a>
+                    </span>
                 }
-                <a className='connectModalBotsText'>BOTS:</a>
+                <span className='connectModalBotsText'>BOTS:</span>
                 <div className='botsConnectContainer'>
                     <div className='botContainer'>
                         <img className='botAvatar' src={store.user.avatar} alt=''/>
-                        <a className='botUsername'>
+                        <span className='botUsername'>
                             {botsInfo[0].name} <img
                             style={{boxShadow: botsInfo[0].status === 'online' ? '0 0 4px rgba(127, 175, 95, 1)' : '0 0 4px rgba(170, 25, 11, 1)'}}
                             className='botStatus' src={botsInfo[0].status === 'online' ? online : offline} alt=''/>
                             {
                                 globalStore.botRecommended === botsInfo[0].name ? <FaCheckCircle className='botCheckIcon' /> : ''
                             }
-                        </a>
+                        </span>
                         <button className='btnBotConnect' onClick={() => handleConnect(botsInfo[0].serverUrl)}>
                             Connect
                         </button>
                     </div>
                     <div className='botContainer'>
                         <img className='botAvatar' src={store.user.avatar} alt=''/>
-                        <a className='botUsername'>
+                        <span className='botUsername'>
                             {botsInfo[1].name} <img
                             style={{boxShadow: botsInfo[1].status === 'online' ? '0 0 4px rgba(127, 175, 95, 1)' : '0 0 4px rgba(170, 25, 11, 1)'}}
                             className='botStatus' src={botsInfo[1].status === 'online' ? online : offline} alt=''/>
                             {
                                 globalStore.botRecommended === botsInfo[1].name ? <FaCheckCircle className='botCheckIcon' /> : ''
                             }
-                        </a>
+                        </span>
                         <button className='btnBotConnect' onClick={() => handleConnect(botsInfo[1].serverUrl)}>
                             Connect
                         </button>
                     </div>
                     <div className='botContainer'>
                         <img className='botAvatar' src={store.user.avatar} alt=''/>
-                        <a className='botUsername'>
+                        <span className='botUsername'>
                             {botsInfo[2].name} <img
                             style={{boxShadow: botsInfo[2].status === 'online' ? '0 0 4px rgba(127, 175, 95, 1)' : '0 0 4px rgba(170, 25, 11, 1)'}}
                             className='botStatus' src={botsInfo[2].status === 'online' ? online : offline} alt=''/>
                             {
                                 globalStore.botRecommended === botsInfo[2].name ? <FaCheckCircle className='botCheckIcon' /> : ''
                             }
-                        </a>
+                        </span>
                         <button className='btnBotConnect' onClick={() => handleConnect(botsInfo[2].serverUrl)}>
                             Connect
                         </button>
                     </div>
                 </div>
-                <a className='connectModalLowerText'>Enable your incoming trade requests in order to be able to trade with the bot</a>
+                <span className='connectModalLowerText'>Enable your incoming trade requests in order to be able to trade with the bot</span>
                 {inQueue &&
-                    <a className='connectModalLowerText' style={{color: 'rgba(255, 255, 255, 0.7)'}}>
+                    <span className='connectModalLowerText' style={{color: 'rgba(255, 255, 255, 0.7)'}}>
                         <FaCheckCircle className='botCheckIcon'/> - your items are waiting to be withdrawn from that bot
-                    </a>
+                    </span>
                 }
             </div>
         </div>

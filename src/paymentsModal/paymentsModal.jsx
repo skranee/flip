@@ -1,7 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {observer} from "mobx-react";
 import {Context} from "../index";
-import gem from '../imgs/currImg.png'
 import PaymentsList from "./paymentsList";
 
 function PaymentsModal() {
@@ -16,7 +15,7 @@ function PaymentsModal() {
             }
         }
         getPaymentsData();
-    }, []);
+    }, [store]);
 
     const handleBlur = () => {
         globalStore.setPaymentsOpen(false);
@@ -29,7 +28,7 @@ function PaymentsModal() {
                 style={{justifyContent: "flex-start"}}
                 onClick={(event) => event.stopPropagation()}
             >
-                <a className='upperTextPayments'>YOUR PAYMENTS</a>
+                <span className='upperTextPayments'>YOUR PAYMENTS</span>
                 <div className='paymentsSpace'>
                     <PaymentsList payments={payments} />
                 </div>

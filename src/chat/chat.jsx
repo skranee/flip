@@ -19,7 +19,6 @@ function Chat() {
     const [mes, setMes] = useState('')
     const modalRef = useRef();
     const [btnDisabled, setBtnDisabled] = useState(true)
-    const [connected, setConnected] = useState(false)
     const [clickInside, setClickInside] = useState(false)
     const [usersOnline, setUsersOnline] = useState(0);
     const stream = globalStore.streamLive;
@@ -121,6 +120,8 @@ function Chat() {
                 case 'participate':
                     globalStore.setGiveawayParticipants(message.participants);
                     break;
+                default:
+                    break;
             }
         }
         socket.current.onclose = () => {
@@ -132,7 +133,7 @@ function Chat() {
         return () => {
             socket.current.close();
         }
-    }, [user.username, ]);
+    }, [user.username, store, globalStore, ]);
 
     useEffect(() => {
         console.log('rendered')
@@ -179,7 +180,7 @@ function Chat() {
                             const sender = store.user.username;
                             const receiver = params[1];
                             const amount = parseInt(params[2]);
-                            const send = await store.tip(sender, receiver, amount);
+                            await store.tip(sender, receiver, amount);
                         }
                         setMes('');
                         return null;
@@ -270,11 +271,11 @@ function Chat() {
                         <div className='chatUpperPanel'>
                             <div className='usersOnline'>
                                 <img src={online} className='onlineCircle' alt=''/>
-                                <a> {usersOnline}</a>
+                                <span> {usersOnline}</span>
                             </div>
                             <div className='chatText'>
                                 {/*<MdOutlineChat className='chatIconUpper'/>*/}
-                                <a className='chatTitle'>Chat</a>
+                                <span className='chatTitle'>Chat</span>
                             </div>
                             <BiArrowToRight style={{fontSize: '1.3em', cursor: "pointer"}} onClick={handleChat}/>
                         </div>
@@ -335,21 +336,21 @@ function Chat() {
                                     {globalStore.profileUser.lvl}
                                 </div>
                             </div>
-                            <a className='profileUsername' style={{color: color(globalStore.profileUser), textShadow: `0 0 3px ${color(globalStore.profileUser)}`}}>
+                            <span className='profileUsername' style={{color: color(globalStore.profileUser), textShadow: `0 0 3px ${color(globalStore.profileUser)}`}}>
                                 {globalStore.profileUser.role === 'admin' && <FaCrown className='iconRoleChat' style={{color: color(globalStore.profileUser)}} />}
                                 {globalStore.profileUser.role === 'developer' && <RiMacbookFill className='iconRoleChat' style={{color: color(globalStore.profileUser)}}/>}
                                 {globalStore.profileUser.username}
-                            </a>
+                            </span>
                         </div>
                         <div className='profileInfoPlayer'>
-                            <a style={{color: 'rgba(232, 232, 232, 0.8)', textShadow: '1px 1px 4px rgba(232, 232, 232, 0.5)'}}>Total games played:</a>
-                            <a style={{fontSize: '1.7em', textShadow: '1px 1px 5px rgba(255, 255, 255, 0.7)'}}>{Math.round(globalStore.profileUser.gamesPlayed)}</a>
-                            <a style={{color: 'rgba(232, 232, 232, 0.8)', textShadow: '1px 1px 4px rgba(232, 232, 232, 0.5)'}}>Total wagered:</a>
-                            <a style={{fontSize: '1.7em', textShadow: '1px 1px 5px rgba(255, 255, 255, 0.7)'}}>
+                            <span style={{color: 'rgba(232, 232, 232, 0.8)', textShadow: '1px 1px 4px rgba(232, 232, 232, 0.5)'}}>Total games played:</span>
+                            <span style={{fontSize: '1.7em', textShadow: '1px 1px 5px rgba(255, 255, 255, 0.7)'}}>{Math.round(globalStore.profileUser.gamesPlayed)}</span>
+                            <span style={{color: 'rgba(232, 232, 232, 0.8)', textShadow: '1px 1px 4px rgba(232, 232, 232, 0.5)'}}>Total wagered:</span>
+                            <span style={{fontSize: '1.7em', textShadow: '1px 1px 5px rgba(255, 255, 255, 0.7)'}}>
                                 {Math.round(globalStore.profileUser.totalWagered)} <img src={gem} className='gemBuy' alt='' />
-                            </a>
-                            <a style={{color: 'rgba(232, 232, 232, 0.8)',  textShadow: '1px 1px 4px rgba(232, 232, 232, 0.5)'}}>Registered:</a>
-                            <a style={{fontSize: '1.4em', textShadow: '1px 1px 5px rgba(255, 255, 255, 0.7)'}}>{globalStore.profileUser.regDate}</a>
+                            </span>
+                            <span style={{color: 'rgba(232, 232, 232, 0.8)',  textShadow: '1px 1px 4px rgba(232, 232, 232, 0.5)'}}>Registered:</span>
+                            <span style={{fontSize: '1.4em', textShadow: '1px 1px 5px rgba(255, 255, 255, 0.7)'}}>{globalStore.profileUser.regDate}</span>
                         </div>
                     </div>
                 </div>

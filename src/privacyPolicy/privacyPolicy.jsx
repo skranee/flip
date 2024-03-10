@@ -1,10 +1,9 @@
 import React, {useContext} from 'react';
 import {observer} from "mobx-react";
 import {Context} from "../index";
-import {useNavigate} from "react-router-dom";
 
 function PrivacyPolicy() {
-    const {store, globalStore} = useContext(Context);
+    const {globalStore} = useContext(Context);
 
     const containerWidth = () => {
         if(!globalStore.chatOpened && globalStore.panelOpen) {
@@ -47,7 +46,7 @@ function PrivacyPolicy() {
                             </p>
                             <p>
                                 When you visit our website{' '}
-                                <a className='linkElement' onClick={() => window.open('https://mm2flip.com')}>MM2Flip.com </a>
+                                <span className='linkElement' onClick={() => window.open('https://mm2flip.com')}>MM2Flip.com </span>
                                 (the &quot;Website&quot;), we appreciate that you are trusting us with your personal
                                 information. We take your privacy very seriously. In this privacy
                                 notice, we seek to explain to you in the clearest way possible what
@@ -70,49 +69,49 @@ function PrivacyPolicy() {
                             <h2>Table of Contents</h2>
                             <ol>
                                 <li>
-                                    <a>What Information Do We Collect?</a>
+                                    <span>What Information Do We Collect?</span>
                                 </li>
                                 <li>
-                                    <a>How Do We Use Your Information?</a>
+                                    <span>How Do We Use Your Information?</span>
                                 </li>
                                 <li>
-                                    <a>Will Your Information Be Shared With Anyone?</a>
+                                    <span>Will Your Information Be Shared With Anyone?</span>
                                 </li>
                                 <li>
-                                    <a>Who Will Your Information Be Shared With?</a>
+                                    <span>Who Will Your Information Be Shared With?</span>
                                 </li>
                                 <li>
-                                    <a>Do We Use Cookies And Other Tracking Technologies</a>
+                                    <span>Do We Use Cookies And Other Tracking Technologies</span>
                                 </li>
                                 <li>
-                                    <a>How Do We Handle Your Social Logins?</a>
+                                    <span>How Do We Handle Your Social Logins?</span>
                                 </li>
                                 <li>
-                                    <a>What Is Our Stance On Third-Party Websites</a>
+                                    <span>What Is Our Stance On Third-Party Websites</span>
                                 </li>
                                 <li>
-                                    <a>How Long Do We Keep Your Information?</a>
+                                    <span>How Long Do We Keep Your Information?</span>
                                 </li>
                                 <li>
-                                    <a>How Do We Keep your Information Safe?</a>
+                                    <span>How Do We Keep your Information Safe?</span>
                                 </li>
                                 <li>
-                                    <a>Do We Collect Information From Minors?</a>
+                                    <span>Do We Collect Information From Minors?</span>
                                 </li>
                                 <li>
-                                    <a>What Are Your Privacy Rights?</a>
+                                    <span>What Are Your Privacy Rights?</span>
                                 </li>
                                 <li>
-                                    <a>Controls For Do-Not-Track Features</a>
+                                    <span>Controls For Do-Not-Track Features</span>
                                 </li>
                                 <li>
-                                    <a>Do California Residents Have Specific Privacy Rights?</a>
+                                    <span>Do California Residents Have Specific Privacy Rights?</span>
                                 </li>
                                 <li>
-                                    <a>Do We Make Updates To This Notice?</a>
+                                    <span>Do We Make Updates To This Notice?</span>
                                 </li>
                                 <li>
-                                    <a>How Can You Contact Us About This Notice?</a>
+                                    <span>How Can You Contact Us About This Notice?</span>
                                 </li>
                             </ol>
 
@@ -1039,7 +1038,7 @@ function PrivacyPolicy() {
                             <h5 id="15">15. How Can you Contact Us About This Notice?</h5>
                             <p>
                                 If you have questions or comments about this notice, you may email
-                                us at <a style={{fontWeight: 700, color: 'rgba(255, 255, 255, 0.9)'}}>support@mm2flip.com</a>
+                                us at <span style={{fontWeight: 700, color: 'rgba(255, 255, 255, 0.9)'}}>support@mm2flip.com</span>
                             </p>
                         </div>
                 </div>

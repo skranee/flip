@@ -1,11 +1,11 @@
-import React, { useRef, useEffect, useContext, useState } from 'react';
+import React, { useRef, useEffect, useContext } from 'react';
 import { Context } from "../index";
 import { FaCrown } from "react-icons/fa";
 import { RiMacbookFill } from "react-icons/ri";
 import {observer} from "mobx-react";
 
 function MessageList({ messages }) {
-    const { globalStore, store } = useContext(Context);
+    const { globalStore } = useContext(Context);
     const bottomRef = useRef();
 
     useEffect(() => {
@@ -45,10 +45,10 @@ function MessageList({ messages }) {
                             <div className='user_time'>
                                 {item.user.role === 'admin' && <FaCrown className='iconRoleChat' style={{color: color(item.user)}} />}
                                 {item.user.role === 'developer' && <RiMacbookFill className='iconRoleChat' style={{color: color(item.user)}}/>}
-                                <a style={{color: color(item.user)}}>{item.user.username}</a>
-                                <a> {item.time} </a>
+                                <span style={{color: color(item.user)}}>{item.user.username}</span>
+                                <span> {item.time} </span>
                             </div>
-                            <a className='message'>{item.message}</a>
+                            <span className='message'>{item.message}</span>
                         </div>
                         <div ref={bottomRef}></div>
                     </li>

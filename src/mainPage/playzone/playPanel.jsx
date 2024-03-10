@@ -14,13 +14,13 @@ function PlayPanel () { //observable?
         if(openSortAll) {
             setOpenSortHL(false)
         }
-    }, [openSortHL]);
+    }, [openSortHL, openSortAll]);
 
     useEffect(() => {
         if(openSortHL) {
             setOpenSortAll(false)
         }
-    }, [openSortAll]);
+    }, [openSortAll, openSortHL]);
 
     useEffect(() => {
         const getGames = async () => {
@@ -36,7 +36,7 @@ function PlayPanel () { //observable?
         const intervalId = setInterval(getGames, 3000);
 
         return () => clearInterval(intervalId);
-    }, []);
+    }, [globalStore, store]);
 
     const paramsHL = ['Sort', 'High To Low', 'Low To High']
     const paramsAll = ['All', 'Ongoing', 'Joinable']
@@ -52,14 +52,14 @@ function PlayPanel () { //observable?
     return (
         <div className='playPanel'>
             <div className='gamesInfo'>
-                <a>
+                <span>
                     All Games <br />
                     {globalStore.gamesAll}
-                </a>
-                <a>
+                </span>
+                <span>
                     Joinable Games <br />
                     {globalStore.gamesJoin}
-                </a>
+                </span>
             </div>
             <div className='sortParamsSpace'>
                 <div className='sortParams' onClick={handleOpenHL}>

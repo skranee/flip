@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from "react";
+import React, {useContext} from "react";
 import logo from "./mainPage/navigation/logo.png";
 import inst from './imgs/inst.png'
 import kick from './imgs/kick.png'
@@ -48,28 +48,27 @@ function FaqBeneath () {
         }}>
             <div className='logoContainer'>
                 <img className='logoFaq' src={logo} alt=''/>
-                <a className='underLogoText'>{underLogo}</a>
-                <a className='underLogoText'>of THE SOLUTIONIST LLC</a>
-                <a className='gmailFaq'>{gmailSupport}</a>
+                <span className='underLogoText'>{underLogo}</span>
+                <span className='underLogoText'>of THE SOLUTIONIST LLC</span>
+                <span className='gmailFaq'>{gmailSupport}</span>
             </div>
             <div className='optionsFaq'>
-                <a>Rewards</a>
-                <a className='underOptions' onClick={() => handleNavigateModals('/rewards')}>Level Rewards</a>
-                <a className='underOptions' onClick={() => handleNavigateModals('/leaders')}>Leaderboard</a>
+                <span>Rewards</span>
+                <span className='underOptions' onClick={() => handleNavigateModals('/rewards')}>Level Rewards</span>
+                <span className='underOptions' onClick={() => handleNavigateModals('/leaders')}>Leaderboard</span>
             </div>
             <div className='optionsFaq'>
-                <a>Games</a>
-                <a className='underOptions' onClick={() => handleNavigateModals('/')}>Coin Flip</a>
+                <span>Games</span>
+                <span className='underOptions' onClick={() => handleNavigateModals('/')}>Coin Flip</span>
             </div>
             <div className='optionsFaq'>
-                <a>Other</a>
-                <a className='underOptions' onClick={() => handleNavigateModals('/tos')}>Terms Of<br />Service</a>
-                {/*<a className='underOptions'>Refund Policy</a>*/}
-                <a className='underOptions' onClick={() => handleNavigateModals('/provably-fair')}>Provably Fair</a>
-                <a className='underOptions' onClick={() => handleNavigateModals('/privacy-policy')}>Privacy Policy</a>
+                <span>Other</span>
+                <span className='underOptions' onClick={() => handleNavigateModals('/tos')}>Terms Of<br />Service</span>
+                <span> className='underOptions' onClick={() => handleNavigateModals('/provably-fair')}>Provably Fair</span>
+                <span className='underOptions' onClick={() => handleNavigateModals('/privacy-policy')}>Privacy Policy</span>
             </div>
             <div  className='optionsFaq'>
-                <a>Socials</a>
+                <span>Socials</span>
                 <div className='socialsFaq'>
                     <img
                         className='socialsLogo'
@@ -118,10 +117,10 @@ function FaqBeneath () {
             <div className='banContainer'>
                 <img src={ban} alt=''/>
                 <div className='banRight'>
-                    <a className='banTextFaq'>18+ Only</a>
-                    <a className='banTextFaq_2'>Game responsibly</a>
+                    <span className='banTextFaq'>18+ Only</span>
+                    <span className='banTextFaq_2'>Game responsibly</span>
                 </div>
-                <a className='copyrightFaq'>© Copyright 2023 mm2flip</a>
+                <span className='copyrightFaq'>© Copyright 2023 mm2flip</span>
             </div>
         </div>
     )

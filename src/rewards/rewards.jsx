@@ -1,7 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Context} from "../index";
 import {observer} from "mobx-react";
-import ruby from '../imgs/expImg.png'
 
 export const maxExp = 2000;
 
@@ -22,7 +21,7 @@ function Rewards() {
         }
         getReward();
         store.setLoading(false)
-    }, [store.user.lvl]);
+    }, [store, store.user.lvl]);
 
     const containerWidth = () => {
         if(!globalStore.chatOpened && globalStore.panelOpen) {
@@ -50,21 +49,21 @@ function Rewards() {
                     marginLeft: globalStore.panelOpen ? '14.5%' : '1%'
                 }}>
                     <div className='expInfo'>
-                        <a>Level: {store.user.lvl}</a>
-                        <a>Current experience: {store.user.experience}</a>
+                        <span>Level: {store.user.lvl}</span>
+                        <span>Current experience: {store.user.experience}</span>
                     </div>
                     <div className='rewardDiv'>
-                        <a className='nextRew'>NEXT REWARD</a>
+                        <span className='nextRew'>NEXT REWARD</span>
                         <img className='rewardImg' src={reward.image} alt=''/>
                         <div className='rewardName'>
-                            <a>{reward.name} (+{reward.gemsAmount})</a>
+                            <span>{reward.name} (+{reward.gemsAmount})</span>
                         </div>
                         <div className='progressBackground'>
                             <div className='progressBar' style={{width: `${progressStatus}%`}} />
                         </div>
                         <div className='progressInfo'>
-                            <a className='rewardLvl'>Reward level: {reward.lvl}</a>
-                            <a className='toNewLvl'>New Level: +{maxExp - store.user.experience}</a>
+                            <span className='rewardLvl'>Reward level: {reward.lvl}</span>
+                            <span className='toNewLvl'>New Level: +{maxExp - store.user.experience}</span>
                         </div>
                     </div>
                 </div>

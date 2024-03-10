@@ -6,12 +6,12 @@ function AnswersList({answers}) {
             {answers.map((item, index) => (
                 <li className='answerContainer'>
                     <div className='answer'>
-                        <a className='answerHeader'>Question:</a>
-                        <a className='answerText'>{item.message}</a>
+                        <span className='answerHeader'>Question:</span>
+                        <span className='answerText'>{item.message}</span>
                     </div>
                     <div className='answer' style={{borderBottom: "none"}}>
-                        <a className='answerHeader'>Answer:</a>
-                        <a className='answerText'>{item.answer}</a>
+                        <span className='answerHeader'>Answer:</span>
+                        <span className='answerText'>{item.answer}</span>
                     </div>
                 </li>
             ))}

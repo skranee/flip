@@ -10,7 +10,6 @@ import CancelModal from "./cancelModal";
 function Market() {
     const {store, globalStore} = useContext(Context);
     const [itemsValue, setItemsValue] = useState(0);
-    const [value, setValue] = useState('');
     const [items, setItems] = useState([]);
     const [filteredItems, setFilteredItems] = useState(items);
     const [itemBuying, setItemBuying] = useState({});
@@ -25,7 +24,7 @@ function Market() {
             }
         }
         getItems();
-    }, []);
+    }, [store]);
 
     useEffect(() => {
         if(items) {
@@ -57,7 +56,6 @@ function Market() {
 
     const handleChange = (event) => {
         const searchValue = event.target.value;
-        setValue(searchValue);
         
         const filtered = items.filter((item) =>
             item.name.toLowerCase().includes(searchValue.toLowerCase())
@@ -82,7 +80,7 @@ function Market() {
     }
 
     const openSell = async () => {
-        const items = await store.getUserItems(store.user.id);
+        await store.getUserItems(store.user.id);
         globalStore.setSellOpen(true);
     }
 
@@ -100,16 +98,16 @@ function Market() {
         globalStore.setCancelSale(true);
     }
 
-    const add = async () => {
-        await store.addItemBot(store.user.robloxId, {
-            name: items[0].name,
-            rarity: items[0].rarity,
-            image: items[0].image,
-            price: items[0].price
-        });
-        // const success = await store.checkOwnership(store.user.robloxId, item);
-        // console.log(success.data)
-    }
+    // const add = async () => {
+    //     await store.addItemBot(store.user.robloxId, {
+    //         name: items[0].name,
+    //         rarity: items[0].rarity,
+    //         image: items[0].image,
+    //         price: items[0].price
+    //     });
+    //     // const success = await store.checkOwnership(store.user.robloxId, item);
+    //     // console.log(success.data)
+    // }
 
     return (
         <div>
@@ -122,7 +120,7 @@ function Market() {
                         }
                         <div className='modalWindowDeposit' onClick={(event) => event.stopPropagation()} style={{justifyContent: "flex-start"}}>
                             <div className='marketItemsValue'>
-                                <a>Items Value:</a><img className='marketCoinImg' src={coin} alt=''/><a>{itemsValue}</a>
+                                <span>Items Value:</span><img className='marketCoinImg' src={coin} alt=''/><span>{itemsValue}</span>
                             </div>
                             <div className='depositInventory' style={{maxHeight: '95%'}}>
                                 {store.itemsList.length ?
@@ -133,10 +131,10 @@ function Market() {
                                             onClick={() => setItemSell(item)}
                                         >
                                             <img className='marketItemImg' src={item.image} alt='' />
-                                            <a className='marketItemName'>{item.name}</a>
+                                            <span className='marketItemName'>{item.name}</span>
                                             <div className='marketItemCostContainer'>
                                                 <img className='marketCoinImg' src={coin} alt='' />
-                                                <a className='marketItemCost'>{Math.round(item.price)}</a>
+                                                <span className='marketItemCost'>{Math.round(item.price)}</span>
                                             </div>
                                         </li>
                                     )) :
@@ -151,7 +149,7 @@ function Market() {
                                                  pointerEvents: "none",
                                                  minHeight: 250
                                              }}>
-                                        <a className='noItemsText'>No items to sell...</a>
+                                        <span className='noItemsText'>No items to sell...</span>
                                     </div>
                                 }
                             </div>
@@ -173,10 +171,10 @@ function Market() {
                                             onClick={() => setItemCancel(item)}
                                         >
                                             <img className='marketItemImg' src={item.image} alt='' />
-                                            <a className='marketItemName'>{item.name}</a>
+                                            <span className='marketItemName'>{item.name}</span>
                                             <div className='marketItemCostContainer'>
                                                 <img className='marketCoinImg' src={coin} alt='' />
-                                                <a className='marketItemCost'>{Math.round(item.price)}</a>
+                                                <span className='marketItemCost'>{Math.round(item.price)}</span>
                                             </div>
                                         </li>
                                     )) :
@@ -191,7 +189,7 @@ function Market() {
                                                  pointerEvents: "none",
                                                  minHeight: '95%'
                                              }}>
-                                        <a className='noItemsText'>{store.isAuth ? 'You have no items on sale...' : 'Not authorized...'}</a>
+                                        <span className='noItemsText'>{store.isAuth ? 'You have no items on sale...' : 'Not authorized...'}</span>
                                     </div>
                                 }
                             </div>
@@ -207,11 +205,11 @@ function Market() {
                     }
                     <div className='marketUpperPanel'>
                         <div className='marketItemsValue'>
-                            <a>Items Value:</a>
+                            <span>Items Value:</span>
                             <img className='marketCoinImg' src={coin} alt=''/>
-                            <a>{itemsValue}</a>
+                            <span>{itemsValue}</span>
                         </div>
-                        <a className='yourSellsText' onClick={() => globalStore.setItemsOnSale(true)}>ITEMS ON SALE</a>
+                        <span className='yourSellsText' onClick={() => globalStore.setItemsOnSale(true)}>ITEMS ON SALE</span>
                         <div className='rightUpperMarket'>
                             <div className='searchContainerMarket'>
                                 <input
@@ -234,10 +232,10 @@ function Market() {
                                 onClick={() => chooseItem(item)}
                             >
                                 <img className='marketItemImg' src={item.image} alt='' />
-                                <a className='marketItemName'>{item.name}</a>
+                                <span className='marketItemName'>{item.name}</span>
                                 <div className='marketItemCostContainer'>
                                     <img className='marketCoinImg' src={coin} alt='' />
-                                    <a className='marketItemCost'>{Math.round(item.price)}</a>
+                                    <span className='marketItemCost'>{Math.round(item.price)}</span>
                                 </div>
                             </li>
                         ))}

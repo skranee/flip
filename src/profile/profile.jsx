@@ -46,7 +46,7 @@ function Profile() {
         }
         getAffiliate();
         store.setLoading(false);
-    }, [store.user]);
+    }, [store, store.user]);
 
     // const containerWidth = () => {
     //     if(!globalStore.chatOpened && globalStore.panelOpen) {
@@ -137,7 +137,7 @@ function Profile() {
         if(affiliate && affiliate.data) {
             const balance = affiliate.data.affiliatedBalance;
             if(balance > 150) {
-                const getBalance = await store.getBalance(store.user.id);
+                await store.getBalance(store.user.id);
                 await store.checkAuth();
             } else {
                 setErrorBalance('The amount of gems must be more than 150');
@@ -158,49 +158,49 @@ function Profile() {
                         <div className='innerInfoContainer'>
                             <img className='avatarProfile' src={localStorage.getItem('avatarUrl')} alt='' />
                             <div className='innerData'>
-                                <a className='usernameProfile'>{store.user.username}</a>
-                                <a className='registerDate'>Registration date: {store.user.regDate}</a>
-                                <a className='userID'>Roblox ID: {store.user.robloxId}</a>
+                                <span className='usernameProfile'>{store.user.username}</span>
+                                <span className='registerDate'>Registration date: {store.user.regDate}</span>
+                                <span className='userID'>Roblox ID: {store.user.robloxId}</span>
                             </div>
                         </div>
                         <div className='outerInfoContainer'>
                             <div className='fieldContainerProfile'>
-                                <a className='outerInfo'>Games played:</a>
-                                <a className='outerInfoNum'>{store.user.gamesPlayed}</a>
+                                <span className='outerInfo'>Games played:</span>
+                                <span className='outerInfoNum'>{store.user.gamesPlayed}</span>
                             </div>
                             <div className='fieldContainerProfile'>
-                                <a className='outerInfo'>Total wagered:</a>
-                                <a className='outerInfoNum'>{Math.round(store.user.totalWagered)} <img src={gem} className='gemBuy' alt='' /></a>
+                                <span className='outerInfo'>Total wagered:</span>
+                                <span className='outerInfoNum'>{Math.round(store.user.totalWagered)} <img src={gem} className='gemBuy' alt='' /></span>
                             </div>
                             <div className='fieldContainerProfile'>
-                                <a className='outerInfo'>Total withdrawn:</a>
-                                <a className='outerInfoNum'>{Math.round(store.user.totalWithdrawn)} <img src={gem} className='gemBuy' alt='' /></a>
+                                <span className='outerInfo'>Total withdrawn:</span>
+                                <span className='outerInfoNum'>{Math.round(store.user.totalWithdrawn)} <img src={gem} className='gemBuy' alt='' /></span>
                             </div>
                             <div className='fieldContainerProfile'>
-                                <a className='outerInfo'>Total deposited:</a>
-                                <a className='outerInfoNum'>{Math.round(store.user.totalDeposited)} <img src={gem} className='gemBuy' alt='' /></a>
+                                <span className='outerInfo'>Total deposited:</span>
+                                <span className='outerInfoNum'>{Math.round(store.user.totalDeposited)} <img src={gem} className='gemBuy' alt='' /></span>
                             </div>
                             <button className='btnPayments' onClick={() => openPayments()}>Payments</button>
                         </div>
                     </div>
                     <div className='affiliateInfo'>
                         <div className='fieldContainerProfile'>
-                            <a className='affiliatedInfo'>Affiliated users</a>
-                            <a className='affiliatedInfoNum'>{afUsers}</a>
+                            <span className='affiliatedInfo'>Affiliated users</span>
+                            <span className='affiliatedInfoNum'>{afUsers}</span>
                         </div>
                         <div className='fieldContainerProfile'>
                             <div className='affiliatedBalanceInfo'>
-                                <a className='affiliatedInfo'>Affiliated balance</a>
+                                <span className='affiliatedInfo'>Affiliated balance</span>
                                 <button className='btnGetBalance' onClick={getAffiliatedBalance}>
                                     Get
                                 </button>
                             </div>
-                            <a className='affiliatedInfoNum'>{afBalance}</a>
+                            <span className='affiliatedInfoNum'>{afBalance}</span>
                             {errorBalance !== '' &&
                                 <div className='affiliatedBalanceInfo'>
-                                    <a className='errorCode'>
+                                    <span className='errorCode'>
                                         {errorBalance}
-                                    </a>
+                                    </span>
                                     <button className='btnCheckError' onClick={() => setErrorBalance('')}>
                                         <FaCheck />
                                     </button>
@@ -208,7 +208,7 @@ function Profile() {
                             }
                         </div>
                         <div className='fieldContainerProfile'>
-                            <a className='affiliatedInfo'>Affiliate code</a>
+                            <span className='affiliatedInfo'>Affiliate code</span>
                             <div>
                                 {change ?
                                     <>
@@ -224,29 +224,29 @@ function Profile() {
                                             <FaSave className='btnSave' onClick={handleSave}/>
                                             <MdOutlineCancelPresentation className='btnCancel' onClick={() => handleCancel()}/>
                                             {errorCode &&
-                                                <a className='errorCode'>{errorCode}</a>
+                                                <span className='errorCode'>{errorCode}</span>
                                             }
                                         </div>
                                     </>
                                     :
                                     <div className='codeContainer'>
-                                        <a className='affiliatedInfoNum'>{afCode}</a>
+                                        <span className='affiliatedInfoNum'>{afCode}</span>
                                         <FaPenSquare className='btnPen' onClick={() => handleCode()} />
                                     </div>
                                 }
                             </div>
                         </div>
                         <div className='fieldContainerProfile'>
-                            <a className='affiliatedInfo'>Affiliate link</a>
-                            <a
+                            <span className='affiliatedInfo'>Affiliate link</span>
+                            <span
                                 className='affiliatedInfoNum'
                                 style={{border: 'solid 2px rgba(110, 110, 110, 0.5)', borderRadius: 5, padding: 5}}
                             >
                                 {afLink}
-                            </a>
+                            </span>
                         </div>
                         <div className='fieldContainerProfile'>
-                            <a className='affiliatedInfo'>Code for payments</a>
+                            <span className='affiliatedInfo'>Code for payments</span>
                             <div>
                                 {changeCodeToUse ?
                                     <>
@@ -262,13 +262,13 @@ function Profile() {
                                             <FaSave className='btnSave' onClick={handleSaveCodeToUse}/>
                                             <MdOutlineCancelPresentation className='btnCancel' onClick={() => handleCancelCodeToUse()}/>
                                             {errorCodeToUse &&
-                                                <a className='errorCode'>{errorCodeToUse}</a>
+                                                <span className='errorCode'>{errorCodeToUse}</span>
                                             }
                                         </div>
                                     </>
                                     :
                                     <div className='codeContainer'>
-                                        <a className='affiliatedInfoNum'>{codeToUse}</a>
+                                        <span className='affiliatedInfoNum'>{codeToUse}</span>
                                         <FaPenSquare className='btnPen' onClick={() => handleCodeToUse()} />
                                     </div>
                                 }

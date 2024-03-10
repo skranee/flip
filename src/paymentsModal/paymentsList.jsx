@@ -6,20 +6,20 @@ function PaymentsList({payments}) {
         payments.map((item, index) => (
                 <li key={index} className='paymentContainer'>
                     <div className='paymentInnerInfo'>
-                        <a className='upperPaymentInnerInfo'>Address:</a>
-                        <a className='mainPaymentInnerInfo'>{item.address}</a>
+                        <span className='upperPaymentInnerInfo'>Address:</span>
+                        <span className='mainPaymentInnerInfo'>{item.address}</span>
                     </div>
                     <div className='paymentInnerInfo'>
-                        <a className='upperPaymentInnerInfo'>USD:</a>
-                        <a className='mainPaymentInnerInfo'>{item.usdAmount.toFixed(3)}</a>
+                        <span className='upperPaymentInnerInfo'>USD:</span>
+                        <span className='mainPaymentInnerInfo'>{item.usdAmount.toFixed(3)}</span>
                     </div>
                     <div className='paymentInnerInfo'>
-                        <a className='upperPaymentInnerInfo'>Currency:</a>
-                        <a className='mainPaymentInnerInfo'>{item.paymentCurrency}</a>
+                        <span className='upperPaymentInnerInfo'>Currency:</span>
+                        <span className='mainPaymentInnerInfo'>{item.paymentCurrency}</span>
                     </div>
                     <div className='paymentInnerInfo'>
-                        <a className='upperPaymentInnerInfo'>Received: </a>
-                        <a className='mainPaymentInnerInfo'>{item.receivedBalance} <img src={gem} className='gemWorth' alt='' /></a>
+                        <span className='upperPaymentInnerInfo'>Received: </span>
+                        <span className='mainPaymentInnerInfo'>{item.receivedBalance} <img src={gem} className='gemWorth' alt='' /></span>
                     </div>
                 </li>
             ))

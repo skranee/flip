@@ -11,7 +11,7 @@ import { FaGift } from "react-icons/fa6";
 import {Context} from "../index";
 
 function OptionsList() {
-    const {store, globalStore} = useContext(Context);
+    const {globalStore} = useContext(Context);
 
     const openModal = (status) => {
         globalStore.setAdminOptionStatus(status);
@@ -24,43 +24,43 @@ function OptionsList() {
         <>
             <li className='optionContainer' onClick={() => openModal('ROLE CHANGE')}>
                 <ImProfile className='iconAdmin'/>
-                <a className='adminText'>ROLE</a>
+                <span className='adminText'>ROLE</span>
             </li>
             <li className='optionContainer' onClick={() => openModal('BALANCE ADD')}>
                 <CiMoneyBill className='iconAdmin'/>
-                <a className='adminText'>+BALANCE</a>
+                <span className='adminText'>+BALANCE</span>
             </li>
             <li className='optionContainer' onClick={() => openModal('BALANCE REDUCE')}>
                 <CiMoneyBill className='iconAdmin'/>
-                <a className='adminText'>-BALANCE</a>
+                <span className='adminText'>-BALANCE</span>
             </li>
             <li className='optionContainer' onClick={() => openModal('LEVEL MANAGEMENT')}>
                 <FaArrowUp className='iconAdmin'/>
-                <a className='adminText'>LEVEL</a>
+                <span className='adminText'>LEVEL</span>
             </li>
             <li className='optionContainer' onClick={() => openModal('ONLINE MANAGEMENT')}>
                 <IoPeople className='iconAdmin'/>
-                <a className='adminText'>ONLINE</a>
+                <span className='adminText'>ONLINE</span>
             </li>
             <li className='optionContainer' onClick={() => openModal('POPUP')}>
                 <CiStreamOn className='iconAdmin'/>
-                <a className='adminText'>POPUP</a>
+                <span className='adminText'>POPUP</span>
             </li>
             <li className='optionContainer' onClick={() => openModal('PAYMENTS')}>
                 <SiBitcoinsv className='iconAdmin'/>
-                <a className='adminText'>PAYMENTS</a>
+                <span className='adminText'>PAYMENTS</span>
             </li>
             <li className='optionContainer' onClick={() => openModal('BAN / UNBAN')}>
                 <FaBan className='iconAdmin'/>
-                <a className='adminText'>BAN / UNBAN</a>
+                <span className='adminText'>BAN / UNBAN</span>
             </li>
             <li className='optionContainer' onClick={() => openModal('REWARD')}>
                 <TbMedal className='iconAdmin'/>
-                <a className='adminText'>ADD REWARD</a>
+                <span className='adminText'>ADD REWARD</span>
             </li>
             <li className='optionContainer' onClick={() => openModal('GIVEAWAY')}>
                 <FaGift className='iconAdmin' />
-                <a className='adminText'>GIVEAWAY</a>
+                <span className='adminText'>GIVEAWAY</span>
             </li>
         </>
     )

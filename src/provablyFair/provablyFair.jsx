@@ -3,7 +3,7 @@ import {observer} from "mobx-react";
 import {Context} from "../index";
 
 function ProvablyFair() {
-    const {store, globalStore} = useContext(Context);
+    const {globalStore} = useContext(Context);
 
     const containerWidth = () => {
         if(!globalStore.chatOpened && globalStore.panelOpen) {

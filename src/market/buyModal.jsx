@@ -41,7 +41,7 @@ function BuyModal({item}) {
 
     const buy = async () => {
         if(store.user.balance >= item.price) {
-            const buy = await store.buyItemMarket(item.owner, store.user.id, item.itemId);
+            await store.buyItemMarket(item.owner, store.user.id, item.itemId);
         } else {
             return Error('Not enough balance');
         }
@@ -52,18 +52,18 @@ function BuyModal({item}) {
     return (
         <div className='backgroundModal' onClick={handleBlur}>
             <div className='modalBuy' onClick={(event) => event.stopPropagation()}>
-                <a className='headerBuy'>{item.name}</a>
+                <span className='headerBuy'>{item.name}</span>
                 <img src={item.image} className='imageBuy' alt='' />
-                <a
+                <span
                     className='rarityBuy'
                     style={{color: `rgba(${chooseColor(item.rarity)}, 1)`,
                         textShadow: `0 2px 10px rgba(${chooseColor(item.rarity)}, 0.6)`}}
                 >
                     {item.rarity}
-                </a>
+                </span>
                 <div className='priceBuy'>
                     <img className='gemBuy' src={gem} alt='' />
-                    <a>{Math.round(item.price)}</a>
+                    <span>{Math.round(item.price)}</span>
                 </div>
                 <button className='btnBuy' disabled={!store.user || !store.user.id} style={{width: '70%', height: 30, fontSize: '1.3em'}} onClick={buy}>
                     Buy

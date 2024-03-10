@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react'
+import React, {useContext} from 'react'
 import logoNav from './logo.png'
 import {Context} from "../../index";
 import {observer} from "mobx-react";
@@ -29,7 +29,7 @@ function NavigationPanel () {
     }
 
     const handleLogout = async () => {
-        const logout = await store.logout();
+        await store.logout();
         handleNavigate('/');
         localStorage.removeItem('username');
         localStorage.removeItem('avatarUrl');
@@ -39,8 +39,8 @@ function NavigationPanel () {
         navigate(path)
     }
 
-    const openDeposit = () => {
-        const items = store.getUserItems(store.user.id);
+    const openDeposit = async () => {
+        await store.getUserItems(store.user.id);
         globalStore.setDepositOpen(true);
     }
 
@@ -73,13 +73,13 @@ function NavigationPanel () {
                     {(store.user && !store.user.banned) &&
                         <div className='balanceNavContainer' onClick={openDeposit}>
                             <img className='marketCoinImg' src={gem} alt='' style={{width: 14, height: 14}}/>
-                            <a className='balanceNav'>{store.user.balance}</a>
+                            <span className='balanceNav'>{store.user.balance}</span>
                         </div>
                     }
                     <img src={localStorage.getItem('avatarUrl')} className='avatarNav' alt=''
                          onClick={() => handleNavigate('/profile')}/>
-                    <a className='profileNavText'
-                       onClick={() => handleNavigate('/profile')}>{localStorage.getItem('username')}</a>
+                    <span className='profileNavText'
+                       onClick={() => handleNavigate('/profile')}>{localStorage.getItem('username')}</span>
                     <IoExitOutline className='exitIconNav' onClick={handleLogout} />
                 </div>
             :
@@ -102,15 +102,15 @@ function NavigationPanel () {
                         <div className='depositUpper'>
                             <div className='worthDeposit'>
                                 <img src={gem} className='gemWorth' alt='' />
-                                <a className='depositWorth'>
+                                <span className='depositWorth'>
                                     {
                                         store.itemsList && store.user && store.itemsList.length ?
                                         Math.round(store.itemsList.reduce((a, b) => a + b.price, 0)) :
                                             0
                                     }
-                                </a>
+                                </span>
                             </div>
-                            <a className='totalItemsDeposit'>Items amount: {store.itemsList.length}</a>
+                            <span className='totalItemsDeposit'>Items amount: {store.itemsList.length}</span>
                         </div>
                         <div className='depositInventory'>
                             {store.itemsList.length ?
@@ -120,10 +120,10 @@ function NavigationPanel () {
                                         style={{flexBasis: 'calc(45% - 15px)'}}
                                     >
                                         <img className='marketItemImg' src={item.image} alt='' />
-                                        <a className='marketItemName'>{item.name}</a>
+                                        <span className='marketItemName'>{item.name}</span>
                                         <div className='marketItemCostContainer'>
                                             <img className='marketCoinImg' src={coin} alt='' />
-                                            <a className='marketItemCost'>{Math.round(item.price)}</a>
+                                            <span className='marketItemCost'>{Math.round(item.price)}</span>
                                         </div>
                                     </li>
                                 )) :
@@ -138,7 +138,7 @@ function NavigationPanel () {
                                         pointerEvents: "none",
                                         minHeight: 250
                                     }}>
-                                    <a className='noItemsText'>No items yet...</a>
+                                    <span className='noItemsText'>No items yet...</span>
                                 </div>
                             }
                         </div>

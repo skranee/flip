@@ -6,7 +6,6 @@ import {Context} from "../../index";
 
 function History({history}) {
     const {store} = useContext(Context);
-    const a = 1;
 
     const handleResult = (ex, res) => {
         if(res === 'First player won') {
@@ -30,23 +29,23 @@ function History({history}) {
                 <li className='gameContainer' key={index}>
                     <div className='imgsVs'>
                         <img className='playerGame' src={item.player1 ? item.player1.avatar : question} alt='' />
-                        <a className='vs'> vs </a>
+                        <span className='vs'> vs </span>
                         <img className='playerGame' src={item.player2 ? item.player2.avatar : question} alt='' style={{border: 'solid 2px #FF2D2D'}}/>
                     </div>
-                    <a className='historyInfo'>
+                    <span className='historyInfo'>
                         {item.date}
-                    </a>
-                    <a
+                    </span>
+                    <span
                         className='historyInfo'
                         style={{color: handleResult(item, item.result) === 'WIN' ? 'rgba(0, 133, 13, 0.9)' : 'rgba(133, 0, 0, 0.9)', flexBasis: '6%'}}
                     >
                         {handleResult(item, item.result)}
-                    </a>
+                    </span>
                     <div className='totalWorthHistory'>
                         <img className='gemHistory' src={curr} alt='' />
-                        <a className='historyInfo'>
+                        <span className='historyInfo'>
                             {item.totalWorth}
-                        </a>
+                        </span>
                     </div>
                 </li>
             ))}

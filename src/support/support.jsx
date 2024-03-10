@@ -21,7 +21,7 @@ function Support() {
             }
             getQ();
         }
-    }, [store.user.role]);
+    }, [store, store.user.role]);
 
     const containerWidth = () => {
         if(!globalStore.chatOpened && globalStore.panelOpen) {
@@ -58,7 +58,7 @@ function Support() {
 
     const handleSend = async () => {
         if(inputMessage.trim().length) {
-            const send = await store.sendQuestion(inputMessage, store.user.id);
+            await store.sendQuestion(inputMessage, store.user.id);
             setInputMessage('');
             setDisabled(true);
         }
@@ -86,7 +86,7 @@ function Support() {
                 }}>
                     {(store.user.role === 'user' || store.user.role === 'developer') &&
                         <>
-                            <a className='supportHeader'>NEED HELP WITH MM2FLIP.COM?</a>
+                            <span className='supportHeader'>NEED HELP WITH MM2FLIP.COM?</span>
                             <textarea
                                 className='supportSpace'
                                 onChange={handleChange}
@@ -114,7 +114,7 @@ function Support() {
                                         }}
                                         onClick={(event) => event.stopPropagation()}
                                     >
-                                        <a className='yourAnswersHeader'>ANSWERS</a>
+                                        <span className='yourAnswersHeader'>ANSWERS</span>
                                         <AnswersList answers={answers} />
                                     </div>
                                 </div>
@@ -123,12 +123,12 @@ function Support() {
                     }
                     {store.user.role === 'admin' &&
                         <>
-                            <a className='supportHeader'>QUESTIONS</a>
+                            <span className='supportHeader'>QUESTIONS</span>
                             <QuestionsList questions={questions}/>
                         </>
                     }
                     {(!store.user || !store.user.id) &&
-                        <a className='notAuthorizedText'>Not authorized</a>
+                        <span className='notAuthorizedText'>Not authorized</span>
                     }
                 </div>
             </div>

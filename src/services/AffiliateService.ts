@@ -1,6 +1,5 @@
 import $api from "../http";
 import {AxiosResponse} from "axios";
-import {IUser} from "../models/IUser";
 import {IAffiliate} from "../models/IAffiliate";
 
 export default class AffiliateService {

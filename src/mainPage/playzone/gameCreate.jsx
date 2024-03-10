@@ -13,19 +13,18 @@ function GameCreate() {
     const [chosenIndex, setChosenIndex] = useState([]);
     const [chosenItems, setChosenItems] = useState([]);
     const [totalValue, setTotalValue] = useState(0);
-    const [approximate, setApproximate] = useState(0);
-    const [errorMes, setErrorMes] = useState('No items to bet...');
+    const errorMes = useState('No items to bet...');
     const [gemsBet, setGemsBet] = useState(0);
     const [oneClickGems, setOneClickGems] = useState(false);
     const [oneClickItems, setOneClickItems] = useState(false);
 
     useEffect(() => {
         const getUserItems = async () => {
-            const items = await store.getUserItems(store.user.id);
+            await store.getUserItems(store.user.id);
             setPlayerItems(store.itemsList);
         }
         getUserItems();
-    }, [store.user]);
+    }, [store, store.user]);
 
     const handleBlur = () => {
         globalStore.setCreateOpen(false);
@@ -96,10 +95,10 @@ function GameCreate() {
             {globalStore.gemCreate &&
                 <div className='backgroundModal' onClick={handleBlurGem}>
                     <div className='modalWindowAdmin' onClick={(event) => event.stopPropagation()}>
-                        <a className='infoJoinGems'>
+                        <span className='infoJoinGems'>
                             Choose amount of gems to bet
-                        </a>
-                        <a className='gemsAmount'>{gemsBet} <img className='gemWorth' src={gem} alt='' /></a>
+                        </span>
+                        <span className='gemsAmount'>{gemsBet} <img className='gemWorth' src={gem} alt='' /></span>
                         <input
                             type='range'
                             value={(gemsBet * 10000) / store.user.balance}
@@ -118,7 +117,7 @@ function GameCreate() {
                 <div className='addItems'>
                     <div className='createWorth'>
                         <img className='marketCoinImg' src={coin} alt='' style={{height: 15, width: 15}}/>
-                        <a>{Math.round(totalValue)}</a>
+                        <span>{Math.round(totalValue)}</span>
                     </div>
                     <div className='itemsAddContainer' style={{padding: 10}}>
                         {playerItems.length ?
@@ -130,15 +129,15 @@ function GameCreate() {
                                     onClick={() => addToCart(index, item)}
                                 >
                                     <img className='marketItemImg' src={item.image} alt='' />
-                                    <a className='marketItemClass'>{item.class}</a>
-                                    <a className='marketItemName'>{item.name}</a>
+                                    <span className='marketItemClass'>{item.class}</span>
+                                    <span className='marketItemName'>{item.name}</span>
                                     <div className='marketItemCostContainer'>
                                         <img className='marketCoinImg' src={coin} alt='' />
-                                        <a className='marketItemCost'>{Math.round(item.price)}</a>
+                                        <span className='marketItemCost'>{Math.round(item.price)}</span>
                                     </div>
                                 </li>
                             )) :
-                            <a className='errorBet'>{errorMes}</a>
+                            <span className='errorBet'>{errorMes}</span>
                         }
                     </div>
                     {playerItems.length === 0 &&

@@ -79,6 +79,7 @@ function GamesList () {
                         checkLink: item.checkLink
                     })
                     setGames(prev => [...prev, gameObj]);
+                    return gameObj;
                 })
             }
         }
@@ -87,7 +88,7 @@ function GamesList () {
         const intervalId = setInterval(getGames, 3000); //fix to 1s probably!!!!
 
         return () => clearInterval(intervalId);
-    }, [])
+    }, [store])
 
     useEffect(() => {
         if(globalStore.titleHL === 'High To Low') {
@@ -98,7 +99,7 @@ function GamesList () {
         else {
             setGamesCopy(gamesCopy.slice().sort())
         }
-    }, [globalStore.titleHL, games]);
+    }, [globalStore.titleHL, games, gamesCopy]);
 
     useEffect(() => {
         if(globalStore.titleAll !== 'All') {
@@ -153,7 +154,7 @@ function GamesList () {
                 }
             }
         }
-    }, [globalStore.titleAll, games])
+    }, [globalStore.titleAll, games, globalStore.titleHL, searchArr, searchItem])
 
     const handleChange = (item) => {
         setSearchItem(item);
@@ -182,6 +183,7 @@ function GamesList () {
                     setSearchArr(searchArr)
                     bool = false;
                 }
+                return null;
             })
             globalStore.setTitleAll('All')
             setGamesCopy(searchArr)
@@ -199,7 +201,7 @@ function GamesList () {
     }
 
     const cancel = async (game) => {
-        const cancelGame = await store.cancelGame(store.user, game);
+        await store.cancelGame(store.user, game);
         await store.checkAuth();
     }
 
@@ -229,7 +231,7 @@ function GamesList () {
                                         'solid 2px rgba(255, 0, 0, 1)'
                                 }}
                             />
-                            <a className='vs'> vs </a>
+                            <span className='vs'> vs </span>
                             {item.player2 ?
                                 <img
                                     className='playerGame'
@@ -262,22 +264,22 @@ function GamesList () {
                                     {item.items1.length > 3 ?
                                         <img className='itemCircle' src={item.items1[3].image} alt=''/>
                                         : <div style={{width: '3.3em', height: '3.3em'}}/>}
-                                    {item.items1.length > 4 ? <a className='divItems'> + {item.items1.length - 4}</a> : <a className='divItems'> </a>}
+                                    {item.items1.length > 4 ? <span className='divItems'> + {item.items1.length - 4}</span> : <span className='divItems'> </span>}
                                 </div>
-                                <a className='itemsAmount'>{item.items1.length} item{item.items1.length > 1 ? 's': ''}</a>
+                                <span className='itemsAmount'>{item.items1.length} item{item.items1.length > 1 ? 's': ''}</span>
                             </> :
                             <>
                                 <div className='items' style={{flexBasis: '45%'}}>
-                                    <a className='CWGtext'>Created With Gems</a>
+                                    <span className='CWGtext'>Created With Gems</span>
                                 </div>
 
                             </>
                         }
                         <div className='betParams'>
-                            <a className='betAmount'>{item.bet} <img src={gem} className='gemWorth' style={{width: 12, height: 12}} alt='' /> </a>
-                            <a className='joinableBet'>
+                            <span className='betAmount'>{item.bet} <img src={gem} className='gemWorth' style={{width: 12, height: 12}} alt='' /> </span>
+                            <span className='joinableBet'>
                                 {Math.round(item.bet * 0.9)}-{Math.round(item.bet * 1.1)}  <img src={gem} style={{width: 12, height: 12}} className='gemWorth' alt='' />
-                            </a>
+                            </span>
                         </div>
                         <div className='btnsGame'>
                             {item.status !== 'Ongoing' &&
@@ -295,7 +297,7 @@ function GamesList () {
                             </button>
                         </div>
                     </li>
-                    )) : <a className='noGames'>No games yet...</a>}
+                    )) : <span className='noGames'>No games yet...</span>}
             </ul>
         </>
     )

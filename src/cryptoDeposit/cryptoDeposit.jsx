@@ -44,7 +44,7 @@ function CryptoDeposit() {
                         onClick={() => handleCryptoSet('BTC')}
                     >
                         <SiBitcoinsv className='iconAdmin' />
-                        <a className='adminText'>BITCOIN</a>
+                        <span className='adminText'>BITCOIN</span>
                     </li>
                     <li
                         className='optionContainer'
@@ -52,7 +52,7 @@ function CryptoDeposit() {
                         onClick={() => handleCryptoSet('ETH')}
                     >
                         <SiEthereum className='iconAdmin' />
-                        <a className='adminText'>ETHEREUM</a>
+                        <span className='adminText'>ETHEREUM</span>
                     </li>
                     <li
                         className='optionContainer'
@@ -60,7 +60,7 @@ function CryptoDeposit() {
                         onClick={() => handleCryptoSet('LTC')}
                     >
                         <SiLitecoin className='iconAdmin' />
-                        <a className='adminText'>LITECOIN</a>
+                        <span className='adminText'>LITECOIN</span>
                     </li>
                     <li
                         className='optionContainer'
@@ -68,7 +68,7 @@ function CryptoDeposit() {
                         onClick={() => handleCryptoSet('USDT')}
                     >
                         <SiTether className='iconAdmin' />
-                        <a className='adminText'>USDT(ERC20)</a>
+                        <span className='adminText'>USDT(ERC20)</span>
                     </li>
                 </div>
             </div>

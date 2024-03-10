@@ -1,6 +1,5 @@
 import React, {useContext, useEffect, useState} from "react";
 import {Context} from "../../index";
-import axios from "axios";
 import {observer} from "mobx-react";
 import {useNavigate} from "react-router-dom";
 
@@ -76,7 +75,7 @@ function LoginModal () {
             if(verifyBio !== bio) {
                 store.setAuth(true);
                 globalStore.setLogOpen(false);
-                const save = await store.saveToDb(userInfo);
+                await store.saveToDb(userInfo);
             } else {
                 setVerStatus('Your description does not match');
                 localStorage.removeItem('username');
@@ -146,12 +145,12 @@ function LoginModal () {
                     <input type="checkbox" checked={checked} onChange={handleCheckboxChange} style={{display: 'none'}}/>
                 </label>
                 <p className='agreement'> I agree with
-                    <a
+                    <span
                         className='tosLabelLogin'
                         onClick={() => handleNavigate('/tos')}> terms of use
-                    </a>
+                    </span>
                 </p>
-                {verStatus && <a className='verStatus'>{verStatus}</a>}
+                {verStatus && <span className='verStatus'>{verStatus}</span>}
                 {verify ?
                     <>
                         <div className='verifyContainer'>{verifyBio}</div>

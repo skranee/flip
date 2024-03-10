@@ -1,10 +1,10 @@
 import React, {useContext} from 'react';
-import {Link, useNavigate} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import {Context} from "../index";
 import {observer} from "mobx-react";
 
 function TOS() {
-    const {globalStore, store} = useContext(Context);
+    const {globalStore} = useContext(Context);
     const navigate = useNavigate();
 
     const handleNavigate = (page) => {
@@ -50,7 +50,7 @@ function TOS() {
                             (&quot;you&quot;) and MM2Flip, doing business as MM2Flip
                             (&quot;MM2Flip&quot;, &quot;we&quot;, &quot;us&quot;, or
                             &quot;our&quot;), concerning your access to and use of the{' '}
-                            <a className='linkElement' onClick={() => window.open('https://mm2flip.com')}>MM2Flip.com </a>
+                            <span className='linkElement' onClick={() => window.open('https://mm2flip.com')}>MM2Flip.com </span>
                             website as well as any other media form, media channel, mobile
                             website, linked, or otherwise
                             connected thereto (collectively, the &quot;Site&quot;). You agree
@@ -522,8 +522,8 @@ function TOS() {
                         <span>Privacy Policy</span>
                         <p>
                             We care about data privacy and security. Please review our
-                            <a className='linkElement' onClick={() => handleNavigate('/privacy-policy')}> Privacy
-                                Policy</a>
+                            <span className='linkElement' onClick={() => handleNavigate('/privacy-policy')}> Privacy
+                                Policy</span>
                             . By using the Site, you agree to be bound by our Privacy Policy,
                             which is incorporated into these Terms of Use. Please be advised the
                             Site is hosted in the United States. If you access the Site from any

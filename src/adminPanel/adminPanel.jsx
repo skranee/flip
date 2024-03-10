@@ -1,11 +1,8 @@
 import React, {useContext, useEffect, useRef, useState} from 'react';
 import {Context} from "../index";
-import {FaMedal} from "react-icons/fa6";
-import LeadersList from "../leadersBoard/leadersList";
 import {observer} from "mobx-react";
 import OptionsList from "./optionsList";
 import PaymentsList from "../paymentsModal/paymentsList";
-import { RxCross2 } from "react-icons/rx";
 import gem from '../imgs/currImg.png'
 
 function AdminPanel() {
@@ -13,7 +10,6 @@ function AdminPanel() {
     const [username, setUsername] = useState('');
     const [value, setValue] = useState('');
     const [level, setLevel] = useState('');
-    const [isDisabled, setIsDisabled] = useState(false); //setDisabled methods
     const [roleCheck, setRoleCheck] = useState('');
     const [incDec, setIncDec] = useState('increase')
     const [payments, setPayments] = useState([]);
@@ -38,7 +34,7 @@ function AdminPanel() {
             }
         }
         getInventory();
-    }, [globalStore.adminOptionStatus === 'GIVEAWAY', ]);
+    }, [globalStore.adminOptionStatus, store, ]);
 
     const containerWidth = () => {
         if(!globalStore.chatOpened && globalStore.panelOpen) {
@@ -87,42 +83,42 @@ function AdminPanel() {
             globalStore.adminOptionStatus === 'LEVEL MANAGEMENT') {
             if(username.trim().length && value.trim().length) {
                 if(globalStore.adminOptionStatus === 'BALANCE ADD') {
-                    const change = await store.addBalance(store.user.id, username, parseInt(value));
+                    await store.addBalance(store.user.id, username, parseInt(value));
                     setValue('');
                     globalStore.setAdminModal(false);
                 } else if(globalStore.adminOptionStatus === 'BALANCE REDUCE') {
-                    const change = await store.reduceBalance(store.user.id, username, parseInt(value));
+                    await store.reduceBalance(store.user.id, username, parseInt(value));
                     setValue('');
                     globalStore.setAdminModal(false);
                 } else if(globalStore.adminOptionStatus === 'LEVEL MANAGEMENT') {
-                    const change = await store.changeLevel(store.user.id, username, parseInt(value));
+                    await store.changeLevel(store.user.id, username, parseInt(value));
                     setValue('');
                     globalStore.setAdminModal(false);
                 }
             }
         } else if(globalStore.adminOptionStatus === 'ONLINE MANAGEMENT') {
             if(incDec === 'increase') {
-                const change = await store.increaseOnline(parseInt(value));
+                await store.increaseOnline(parseInt(value));
                 setValue('');
                 globalStore.setAdminModal(false);
             } else if(incDec === 'decrease') {
-                const change = await store.decreaseOnline(parseInt(value));
+                await store.decreaseOnline(parseInt(value));
                 setValue('');
                 globalStore.setAdminModal(false);
             }
         } else if(globalStore.adminOptionStatus === 'BAN / UNBAN') {
             if(banState === 'ban') {
-                const ban = await store.banUser(store.user.id, username);
+                await store.banUser(store.user.id, username);
                 setUsername('');
                 globalStore.setAdminModal(false);
             } else if(banState === 'unban') {
-                const unban = await store.unbanUser(store.user.id, username);
+                await store.unbanUser(store.user.id, username);
                 setUsername('');
                 globalStore.setAdminModal(false);
             }
         }
         else if(globalStore.adminOptionStatus === 'ROLE CHANGE') {
-            const change = await store.changeRole(store.user.id, username, roleCheck);
+            await store.changeRole(store.user.id, username, roleCheck);
             setRoleCheck('');
             globalStore.setAdminModal(false);
         } else if(globalStore.adminOptionStatus === 'PAYMENTS') {
@@ -242,7 +238,7 @@ function AdminPanel() {
                         style={{justifyContent: "flex-start"}}
                         onClick={(event) => event.stopPropagation()}
                     >
-                        <a className='upperTextPayments'>{username.toUpperCase()}'S PAYMENTS</a>
+                        <span className='upperTextPayments'>{username.toUpperCase()}'S PAYMENTS</span>
                         <div className='paymentsSpace'>
                             <PaymentsList payments={payments}/>
                         </div>
@@ -252,15 +248,15 @@ function AdminPanel() {
             {globalStore.adminOptionStatus === 'GIVEAWAY' &&
                 <div className='backgroundModal' onClick={() => handleBlurGiveaway()}>
                     <div className='modalWindowMain' onClick={(event) => event.stopPropagation()}>
-                        <a className='optionStatus'>
+                        <span className='optionStatus'>
                             {globalStore.adminOptionStatus}
-                        </a>
-                        <a className='giveawayChosenTotalValue'>
+                        </span>
+                        <span className='giveawayChosenTotalValue'>
                             Total value: <img src={gem} className='gemWorth' alt='gem' />{giveawayValue}
-                        </a>
-                        <a className='giveawayChosenAmount'>
+                        </span>
+                        <span className='giveawayChosenAmount'>
                             Total items: {(chosenItems && chosenItems.length) ? chosenItems.length : 0}
-                        </a>
+                        </span>
                         <div className='inventoryContainer'>
                             {(giveawayInventory.length > 0) &&
                                 giveawayInventory.map((item, index) => (
@@ -275,18 +271,18 @@ function AdminPanel() {
                                             src={item.image}
                                             alt={item.name}
                                         />
-                                        <a className='nameItemContainer'>
+                                        <span className='nameItemContainer'>
                                             {item.name}
-                                        </a>
-                                        <a className='rarityItemContainer' style={{
+                                        </span>
+                                        <span className='rarityItemContainer' style={{
                                             color: `rgba(${chooseColor(item.rarity)}, 1)`,
                                             textShadow: `0 2px 10px rgba(${chooseColor(item.rarity)}, 0.6)`
                                         }}>
                                             {item.rarity}
-                                        </a>
-                                        <a className='priceItemContainer'>
+                                        </span>
+                                        <span className='priceItemContainer'>
                                             <img src={gem} className='gemWorth' alt='gem'/>{Math.round(item.price)}
-                                        </a>
+                                        </span>
                                     </li>
                                 ))
                             }
@@ -333,7 +329,7 @@ function AdminPanel() {
                 <div className='backgroundModal' onClick={handleBlur}>
                     <div className='modalWindowAdmin' onClick={(event) => event.stopPropagation()}
                          onKeyDown={(event) => handleKeyDown(event)}>
-                        <a className='optionStatus'>{globalStore.adminOptionStatus}</a>
+                        <span className='optionStatus'>{globalStore.adminOptionStatus}</span>
                         {
                             (
                                 globalStore.adminOptionStatus === 'ROLE CHANGE' ||
@@ -345,7 +341,7 @@ function AdminPanel() {
                             ) &&
 
                             <div className='inputLabelAdmin'>
-                                <a className='labelAdmin'>USERNAME</a>
+                                <span className='labelAdmin'>USERNAME</span>
                                 <input
                                     type='text'
                                     className='inputAdmin'
@@ -358,7 +354,7 @@ function AdminPanel() {
                         {
                             (globalStore.adminOptionStatus === 'REWARD') &&
                             <div className='inputLabelAdmin'>
-                                <a className='labelAdmin'>LEVEL</a>
+                                <span className='labelAdmin'>LEVEL</span>
                                 <input
                                     type='text'
                                     className='inputAdmin'
@@ -375,7 +371,7 @@ function AdminPanel() {
                                 globalStore.adminOptionStatus === 'ONLINE MANAGEMENT' ||
                                 globalStore.adminOptionStatus === 'REWARD') &&
                             <div className='inputLabelAdmin'>
-                                <a className='labelAdmin'>{globalStore.adminOptionStatus === 'REWARD' ? 'GEMS AMOUNT' : 'VALUE'}</a>
+                                <span className='labelAdmin'>{globalStore.adminOptionStatus === 'REWARD' ? 'GEMS AMOUNT' : 'VALUE'}</span>
                                 <input
                                     type='text'
                                     className='inputAdmin'
@@ -411,38 +407,38 @@ function AdminPanel() {
                         {
                             globalStore.adminOptionStatus === 'ONLINE MANAGEMENT' &&
                             <div className='roleChoose'>
-                                <a
+                                <span
                                     className={`incDecChoice ${incDec === 'increase' ? 'chosen' : ''}`}
                                     onClick={() => handleIncDec('increase')}
                                 >
                                     Increase
-                                </a>
-                                <a
+                                </span>
+                                <span
                                     className={`incDecChoice ${incDec === 'decrease' ? 'chosen' : ''}`}
                                     onClick={() => handleIncDec('decrease')}
                                 >
                                     Decrease
-                                </a>
+                                </span>
                             </div>
                         }
                         {
                             globalStore.adminOptionStatus === 'BAN / UNBAN' &&
                             <div className='roleChoose'>
-                                <a
+                                <span
                                     className={`incDecChoice ${banState === 'ban' ? 'chosen' : ''}`}
                                     onClick={() => setBanState('ban')}
                                 >
                                     Ban
-                                </a>
-                                <a
+                                </span>
+                                <span
                                     className={`incDecChoice ${banState === 'unban' ? 'chosen' : ''}`}
                                     onClick={() => setBanState('unban')}
                                 >
                                     Unban
-                                </a>
+                                </span>
                             </div>
                         }
-                        <button className='btnAdminDone' disabled={isDisabled} onClick={handleProceed}>
+                        <button className='btnAdminDone' onClick={handleProceed}>
                             DONE
                         </button>
                     </div>

@@ -5,12 +5,10 @@ import {observer} from "mobx-react";
 import GameCreate from "./gameCreate";
 import {Context} from "../../index";
 import History from "./history";
-import {useNavigate} from "react-router-dom";
 
 function Playzone () {
     const {store, globalStore} = useContext(Context);
     const [history, setHistory] = useState([]);
-    const navigate = useNavigate()
 
     useEffect(() => {
         if(store.user && store.user.id && store.isAuth) {
@@ -22,7 +20,7 @@ function Playzone () {
             }
             his();
         }
-    }, []);
+    }, [store]);
 
     const containerWidth = () => {
         if(!globalStore.chatOpened && globalStore.panelOpen) {

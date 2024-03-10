@@ -33,7 +33,7 @@ function LeadersBoard() {
                 }}>
                     <div className='leadersText'>
                         <FaMedal />
-                        <a>Leaderboard</a>
+                        <span>Leaderboard</span>
                     </div>
                     <LeadersList />
                 </div>

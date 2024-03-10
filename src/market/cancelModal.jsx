@@ -19,7 +19,7 @@ function CancelModal({item}) {
     }
 
     const cancel = async () => {
-        const cancel = await store.removeItemMarket(item.itemId);
+        await store.removeItemMarket(item.itemId);
         globalStore.setCancelSale(false);
         window.location.reload();
     }
@@ -27,18 +27,18 @@ function CancelModal({item}) {
     return (
         <div className='backgroundModal' onClick={handleBlur}>
             <div className='modalBuy' onClick={(event) => event.stopPropagation()}>
-                <a className='headerBuy'>{item.name}</a>
+                <span className='headerBuy'>{item.name}</span>
                 <img src={item.image} className='imageBuy' alt='' />
-                <a
+                <span
                     className='rarityBuy'
                     style={{color: `rgba(${chooseColor(item.rarity)}, 1)`,
                         textShadow: `0 2px 10px rgba(${chooseColor(item.rarity)}, 0.6)`}}
                 >
                     {item.rarity}
-                </a>
+                </span>
                 <div className='priceBuy'>
                     <img className='gemBuy' src={gem} alt='' />
-                    <a>{Math.round(item.price)}</a>
+                    <span>{Math.round(item.price)}</span>
                 </div>
                 <button className='btnBuy' style={{width: '70%', height: 30, fontSize: '1.3em'}} onClick={cancel}>
                     Cancel

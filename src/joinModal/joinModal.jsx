@@ -5,7 +5,6 @@ import heads from "../imgs/heads.png";
 import tails from "../imgs/tails.png";
 import {observer} from "mobx-react";
 import axios from "axios";
-import {AuthResponse} from "../models/response/AuthResponse";
 import {API_URL} from "../http";
 
 function JoinModal({game}) {
@@ -27,20 +26,20 @@ function JoinModal({game}) {
         if(store.isAuth) {
             socket.current = new WebSocket('ws://localhost:4000');
         }
-    }, []);
+    }, [store.isAuth]);
 
     useEffect(() => {
         const getUserItems = async () => {
-            const items = await store.getUserItems(store.user.id);
+            await store.getUserItems(store.user.id);
             setPlayerItems(store.itemsList);
         }
         getUserItems();
-    }, [store.user]);
+    }, [store.user, store]);
 
     useEffect(() => {
         const app = Math.round(game.bet);
         setApproximate(app);
-    }, []);
+    }, [game, game.bet]);
 
     useEffect(() => {
         if(game.side1 === 'red') {
@@ -163,9 +162,9 @@ function JoinModal({game}) {
                 <div className='backgroundModal' onClick={handleBlurGem}>
                     <div className='modalWindowAdmin' onClick={(event) => event.stopPropagation()}>
                         <p className='infoJoinGems'>
-                            Gems amount must be between <a style={{color: 'rgba(255, 255, 255, 1)', fontWeight: 700}}>{Math.round(approximate * 0.9)}<img src={gem} className='gemWorth' alt='' /></a> and <a style={{color: 'rgba(255, 255, 255, 1)', fontWeight: 700}}>{Math.round(approximate * 1.1)}<img src={gem} className='gemWorth' alt='' /></a>
+                            Gems amount must be between <span style={{color: 'rgba(255, 255, 255, 1)', fontWeight: 700}}>{Math.round(approximate * 0.9)}<img src={gem} className='gemWorth' alt='' /></span> and <span style={{color: 'rgba(255, 255, 255, 1)', fontWeight: 700}}>{Math.round(approximate * 1.1)}<img src={gem} className='gemWorth' alt='' /></span>
                         </p>
-                        <a className='gemsAmount'>{gemsBet} <img className='gemWorth' src={gem} alt='' /></a>
+                        <span className='gemsAmount'>{gemsBet} <img className='gemWorth' src={gem} alt='' /></span>
                         <input
                             type='range'
                             value={gemsBet}
@@ -184,11 +183,11 @@ function JoinModal({game}) {
                 <div className='addItems'>
                     <div className='createWorth'>
                         <img className='marketCoinImg' src={gem} alt='' style={{height: 15, width: 15}}/>
-                        <a>{Math.round(totalValue)}</a>
+                        <span>{Math.round(totalValue)}</span>
                     </div>
                     <p className='approximateJoin'>
-                        <a className='approximatePartly'><img src={gem} className='gemWorth' alt='gem' />{Math.round(approximate * 0.9)}</a> —
-                        <a className='approximatePartly'><img src={gem} className='gemWorth' alt='gem' /> {Math.round(approximate * 1.1)}</a>
+                        <span className='approximatePartly'><img src={gem} className='gemWorth' alt='gem' />{Math.round(approximate * 0.9)}</span> —
+                        <span className='approximatePartly'><img src={gem} className='gemWorth' alt='gem' /> {Math.round(approximate * 1.1)}</span>
                     </p>
                     <div className='itemsAddContainer' style={{padding: 10}}>
                         {playerItems.length ?
@@ -200,15 +199,15 @@ function JoinModal({game}) {
                                     onClick={() => addToCart(index, item)}
                                 >
                                     <img className='marketItemImg' src={item.image} alt='' />
-                                    <a className='marketItemClass'>{item.class}</a>
-                                    <a className='marketItemName'>{item.name}</a>
+                                    <span className='marketItemClass'>{item.class}</span>
+                                    <span className='marketItemName'>{item.name}</span>
                                     <div className='marketItemCostContainer'>
                                         <img className='marketCoinImg' src={gem} alt='' />
-                                        <a className='marketItemCost'>{Math.round(item.price)}</a>
+                                        <span className='marketItemCost'>{Math.round(item.price)}</span>
                                     </div>
                                 </li>
                             )) :
-                            <a className='errorBet'>{errorMes}</a>
+                            <span className='errorBet'>{errorMes}</span>
                         }
                     </div>
                     {playerItems.length === 0 &&

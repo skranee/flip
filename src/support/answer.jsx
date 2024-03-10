@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {Context} from "../index";
 import {useNavigate} from "react-router-dom";
 import {observer} from "mobx-react";
@@ -45,7 +45,7 @@ function Answer() {
 
     const handleSend = async () => {
         if(ans.trim().length) {
-            const answer = await store.answer(question._id, ans);
+            await store.answer(question._id, ans);
             localStorage.removeItem('question');
             setAns('');
             navigate('/support')
@@ -63,8 +63,8 @@ function Answer() {
                 }}>
                     {store.user.role === 'admin' && question &&
                         <>
-                            <a className='supportHeader'>{question.userId.username.toUpperCase()}'S QUESTION</a>
-                            <a className='answerMes'>{question.message}</a>
+                            <span className='supportHeader'>{question.userId.username.toUpperCase()}'S QUESTION</span>
+                            <span className='answerMes'>{question.message}</span>
                             <textarea
                                 className='supportSpace'
                                 onChange={handleChange}

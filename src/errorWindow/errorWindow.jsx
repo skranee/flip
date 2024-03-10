@@ -3,7 +3,7 @@ import {observer} from "mobx-react";
 import {Context} from "../index";
 
 function ErrorWindow() {
-    const {globalStore, store} = useContext(Context);
+    const {globalStore} = useContext(Context);
 
     const handleBlur = () => {
         globalStore.setErrorWindow(false);
@@ -12,7 +12,7 @@ function ErrorWindow() {
     return (
         <div className='backgroundModal' onClick={handleBlur}>
             <div className='errorWindow' onClick={(event) => event.stopPropagation()}>
-                <a>{globalStore.errorMessage}</a>
+                <span>{globalStore.errorMessage}</span>
             </div>
         </div>
     )

@@ -1,5 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {Context} from "../index";
+import React, {useState} from 'react';
 import videoRed from '../imgs/coinFlipRed.webm'
 import videoGrey from '../imgs/coinFlipGrey.webm'
 import {observer} from "mobx-react";
@@ -13,10 +12,9 @@ const CoinFlip = ({game}) => {
         }
     }
 
-    const {store} = useContext(Context);
     const first = game.side1;
     const second = game.side2 ? game.side2 : '';
-    const [winColor, setWinColor] = useState(defineWinColor());
+    const winColor = useState(defineWinColor());
 
     const defineVideo = () => {
         return winColor === 'red' ? videoRed : videoGrey;

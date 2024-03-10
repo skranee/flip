@@ -1,9 +1,7 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import {useNavigate} from "react-router-dom";
-import {Context} from "../index";
 
 function QuestionsList({questions}) {
-    const {globalStore} = useContext(Context)
     const navigate = useNavigate()
 
     const handleQuestion = (question) => {
@@ -16,7 +14,7 @@ function QuestionsList({questions}) {
             {questions.map((item, index) => (
                 item.answered === false &&
                 <li className='questionContainer' key={index} onClick={() => handleQuestion(item)}>
-                    <a className='messageQuestion'>{item.message}</a>
+                    <span className='messageQuestion'>{item.message}</span>
                     <div className='usernameQuestion'>{item.userId.username}</div>
                 </li>
             ))}

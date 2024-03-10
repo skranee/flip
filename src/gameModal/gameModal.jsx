@@ -5,14 +5,11 @@ import {Context} from "../index";
 import CoinFlip from "./coinFlip";
 import gem from "../imgs/currImg.png";
 import { HiDotsHorizontal } from "react-icons/hi";
-import cheerio from 'cheerio';
-import axios from "axios";
 
 function GameModal({game}) {
     const {store, globalStore} = useContext(Context)
     const [pointerEvents, setPointerEvents] = useState('none');
     const [opacityFairness, setOpacityFairness] = useState(0);
-    const [widthBtn, setWidthBtn] = useState(0);
     const player1Bet = (game && game.items1) ? game.items1.length > 0 ? Math.round(game.items1.reduce((a, b) => a + b.price, 0)) : Math.round(game.gems1) : 0;
     const player2Bet = (game && game.items2) ? game.items2.length > 0 ? Math.round(game.items2.reduce((a, b) => a + b.price, 0)) : Math.round(game.gems2) : 0;
 
@@ -26,7 +23,7 @@ function GameModal({game}) {
                 setOpacityFairness(0);
             }
         }, 1800)
-    }, [game, ]);
+    }, [game, store.user.id, ]);
 
     const handleBlur = () => {
         globalStore.setViewOpen(false)
@@ -42,38 +39,38 @@ function GameModal({game}) {
         return ((player / (player + opponent)).toFixed(4) * 100).toFixed(2);
     }
 
-    const endGame = async () => { //!!!!!!!
-        // const deleteGame = await store.endGame(game.gameId);
-        // const add = await store.addHistory(store.user.id, game);
-        // globalStore.setViewOpen(false);
-        // const response = await store.findWinner(game.gameId);
-        // console.log(response.data)
-        // const add = await store.addItemBot(store.user.robloxId, items[10])
-        // const id = await store.getAccountId();
-        // const address = await store.createPaymentAddress(id.data, 'BTC');
-        // console.log(address.data)
-        // const item = await store.createItem('testgun', 1);
-        // const response = await store.getTransactions();
-        // console.log(response);
-        // const payments = await store.getPayments(store.user.id);
-        // console.log(payments);
-
-        // const db = JSON.parse(fixedJsonString);
-        // const objects = Object.values(db);
-        // const shiny = objects.find(item => item.ItemName === 'Shiny');
-
-        // const add = await store.addItemBot("5310737222", {
-        //     image: '',
-        //     name: 'ElderwoodScythe',
-        //     price: 0,
-        //     owner: '',
-        //     id: '',
-        //     rarity: '',
-        //     itemId: ''
-        // })
-
-        // const addBot = await store.addBot(botsInfo[0].serverUrl, botsInfo[0].name, botsInfo[0].image, botsInfo[0].robloxId);
-    }
+    // const endGame = async () => { //!!!!!!!
+    //     // const deleteGame = await store.endGame(game.gameId);
+    //     // const add = await store.addHistory(store.user.id, game);
+    //     // globalStore.setViewOpen(false);
+    //     // const response = await store.findWinner(game.gameId);
+    //     // console.log(response.data)
+    //     // const add = await store.addItemBot(store.user.robloxId, items[10])
+    //     // const id = await store.getAccountId();
+    //     // const address = await store.createPaymentAddress(id.data, 'BTC');
+    //     // console.log(address.data)
+    //     // const item = await store.createItem('testgun', 1);
+    //     // const response = await store.getTransactions();
+    //     // console.log(response);
+    //     // const payments = await store.getPayments(store.user.id);
+    //     // console.log(payments);
+    //
+    //     // const db = JSON.parse(fixedJsonString);
+    //     // const objects = Object.values(db);
+    //     // const shiny = objects.find(item => item.ItemName === 'Shiny');
+    //
+    //     // const add = await store.addItemBot("5310737222", {
+    //     //     image: '',
+    //     //     name: 'ElderwoodScythe',
+    //     //     price: 0,
+    //     //     owner: '',
+    //     //     id: '',
+    //     //     rarity: '',
+    //     //     itemId: ''
+    //     // })
+    //
+    //     // const addBot = await store.addBot(botsInfo[0].serverUrl, botsInfo[0].name, botsInfo[0].image, botsInfo[0].robloxId);
+    // }
 
     const checkResult = () => {
         window.open(game.checkLink);
@@ -98,14 +95,14 @@ function GameModal({game}) {
                             />
                         </div>
                         <div className='usernameWorth'>
-                            <a className='lobbyUsername'>{game.player1.username}</a>
-                            <a className='lobbyWorthText'>Worth: </a>
-                            <a className='lobbyWorth'>{player1Bet} <img src={gem} className='gemWorth' alt='' /> </a>
+                            <span className='lobbyUsername'>{game.player1.username}</span>
+                            <span className='lobbyWorthText'>Worth: </span>
+                            <span className='lobbyWorth'>{player1Bet} <img src={gem} className='gemWorth' alt='' /> </span>
                         </div>
                     </div>
                     <div className='lobbyPlayerBet'>
-                        <a className='lobbyBet'>{player1Bet} <img src={gem} className='gemWorth' alt='' /> </a>
-                        <a className='lobbyChance'>{calcChance(player1Bet, player2Bet)}%</a>
+                        <span className='lobbyBet'>{player1Bet} <img src={gem} className='gemWorth' alt='' /> </span>
+                        <span className='lobbyChance'>{calcChance(player1Bet, player2Bet)}%</span>
                     </div>
                     <ItemsList items={game.items1} />
                 </div>
@@ -139,14 +136,14 @@ function GameModal({game}) {
                             }
                         </div>
                         <div className='usernameWorth'>
-                            <a className='lobbyUsername'>{game.player2 ? game.player2.username : '???'}</a>
-                            <a className='lobbyWorthText'>Worth: </a>
-                            <a className='lobbyWorth'>{game.player2 ? player2Bet : '?'} <img src={gem} className='gemWorth' alt='' /> </a>
+                            <span className='lobbyUsername'>{game.player2 ? game.player2.username : '???'}</span>
+                            <span className='lobbyWorthText'>Worth: </span>
+                            <span className='lobbyWorth'>{game.player2 ? player2Bet : '?'} <img src={gem} className='gemWorth' alt='' /> </span>
                         </div>
                     </div>
                     <div className='lobbyPlayerBet'>
-                        <a className='lobbyBet'>{game.player2 ? player2Bet: '?'} <img src={gem} className='gemWorth' alt='' /> </a>
-                        <a className='lobbyChance'>{calcChance(player2Bet, player1Bet)}%</a>
+                        <span className='lobbyBet'>{game.player2 ? player2Bet: '?'} <img src={gem} className='gemWorth' alt='' /> </span>
+                        <span className='lobbyChance'>{calcChance(player2Bet, player1Bet)}%</span>
                     </div>
                     {game.items2 &&
                         <ItemsList items={game.items2} />
