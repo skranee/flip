@@ -63,8 +63,8 @@ function FaqBeneath () {
             </div>
             <div className='optionsFaq'>
                 <span>Other</span>
-                <p className='underOptions' onClick={() => handleNavigateModals('/tos')}>Terms Of<br />Service</p>
-                <span> className='underOptions' onClick={() => handleNavigateModals('/provably-fair')}>Provably Fair</span>
+                <span className='underOptions' onClick={() => handleNavigateModals('/tos')}>Terms Of<br />Service</span>
+                <span className='underOptions' onClick={() => handleNavigateModals('/provably-fair')}>Provably Fair</span>
                 <span className='underOptions' onClick={() => handleNavigateModals('/privacy-policy')}>Privacy Policy</span>
             </div>
             <div  className='optionsFaq'>

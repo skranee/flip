@@ -14,7 +14,7 @@ const app = express();
 
 app.use(cors({
     credentials: true,
-    origin: process.env.CLIENT_URL //!!!!!!!!!!!!!!1
+    origin: 'https://mm2fliptest-wh9d7.ondigitalocean.app' || process.env.CLIENT_URL //!!!!!!!!!!!!!!1
 }));
 // app.options('*', cors());
 app.use(bodyParser.json());
