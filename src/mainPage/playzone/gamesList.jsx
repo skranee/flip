@@ -99,7 +99,7 @@ function GamesList () {
         else {
             setGamesCopy(gamesCopy.slice().sort())
         }
-    }, [globalStore.titleHL, games, gamesCopy]);
+    }, [globalStore.titleHL, games]);
 
     useEffect(() => {
         if(globalStore.titleAll !== 'All') {

@@ -6,7 +6,6 @@ import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 import router from './router/index.js';
 import errorMiddleware from "./middlewares/error-middleware.js";
-import path from 'path'
 
 config({path: 'server/.env'});
 const PORT = process.env.PORT || 3001;
