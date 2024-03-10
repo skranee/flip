@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon server.js",
-    "build": "npm run build",
+    "start-server": "node dist/server.js",
     "start-ngrok": "ngrok http 7000",
     "websocket": "nodemon websocket.js"
   },

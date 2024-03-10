@@ -20,7 +20,6 @@ app.use(cors({
 // app.options('*', cors());
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, '_static')));
 app.use('/api', router)
 
 app.use(errorMiddleware)
