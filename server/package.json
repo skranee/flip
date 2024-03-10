@@ -15,6 +15,7 @@
   "dependencies": {
     "@binance/connector": "^3.1.0",
     "body-parser": "^1.20.2",
+    "cheerio": "^1.0.0-rc.12",
     "coinbase": "^2.0.8",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
