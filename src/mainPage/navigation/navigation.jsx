@@ -79,7 +79,8 @@ function NavigationPanel () {
                     <img src={localStorage.getItem('avatarUrl')} className='avatarNav' alt=''
                          onClick={() => handleNavigate('/profile')}/>
                     <span className='profileNavText'
-                       onClick={() => handleNavigate('/profile')}>{localStorage.getItem('username')}</span>
+                       onClick={() => handleNavigate('/profile')}>{localStorage.getItem('username')}
+                    </span>
                     <IoExitOutline className='exitIconNav' onClick={handleLogout} />
                 </div>
             :
@@ -117,7 +118,7 @@ function NavigationPanel () {
                                 store.itemsList.map((item, index) => (
                                     <li key={index}
                                         className='marketItemContainer'
-                                        style={{flexBasis: 'calc(45% - 15px)'}}
+                                        style={{width: 'calc(40% - 15px)', height: 215}}
                                     >
                                         <img className='marketItemImg' src={item.image} alt='' />
                                         <span className='marketItemName'>{item.name}</span>

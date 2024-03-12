@@ -251,28 +251,31 @@ function GamesList () {
                                 </div>
                             }
                         </div>
-                        {item.items1.length > 0 ?
+                        {(item.items1 && item.items1.length > 0) ?
                             <>
                                 <div className='items'>
                                     <img className='itemCircle' src={item.items1[0].image} alt=''/>
                                     {item.items1.length > 1 ?
                                         <img className='itemCircle' src={item.items1[1].image} alt=''/>
-                                        : <div style={{width: '3.3em', height: '3.3em'}}/>}
+                                        : <div />}
                                     {item.items1.length > 2 ?
                                         <img className='itemCircle' src={item.items1[2].image} alt=''/>
-                                        : <div style={{width: '3.3em', height: '3.3em'}}/>}
+                                        : <div />}
                                     {item.items1.length > 3 ?
                                         <img className='itemCircle' src={item.items1[3].image} alt=''/>
-                                        : <div style={{width: '3.3em', height: '3.3em'}}/>}
-                                    {item.items1.length > 4 ? <span className='divItems'> + {item.items1.length - 4}</span> : <span className='divItems'> </span>}
+                                        : <div />}
+                                    {item.items1.length > 4 ? <span className='divItems'> + {item.items1.length - 4}</span> : <span> </span>}
                                 </div>
-                                <span className='itemsAmount'>{item.items1.length} item{item.items1.length > 1 ? 's': ''}</span>
+                                {item.items1 &&
+                                    <span
+                                        className='itemsAmount'>{item.items1.length} item{item.items1.length > 1 ? 's' : ''}
+                                    </span>
+                                }
                             </> :
                             <>
-                                <div className='items' style={{flexBasis: '45%'}}>
+                            <div className='items' style={{flexBasis: '45%'}}>
                                     <span className='CWGtext'>Created With Gems</span>
                                 </div>
-
                             </>
                         }
                         <div className='betParams'>

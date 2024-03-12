@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import videoRed from '../imgs/coinFlipRed.webm'
 import videoGrey from '../imgs/coinFlipGrey.webm'
 import {observer} from "mobx-react";
@@ -14,7 +14,7 @@ const CoinFlip = ({game}) => {
 
     const first = game.side1;
     const second = game.side2 ? game.side2 : '';
-    const winColor = useState(defineWinColor());
+    const winColor = defineWinColor();
 
     const defineVideo = () => {
         return winColor === 'red' ? videoRed : videoGrey;

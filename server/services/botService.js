@@ -52,7 +52,6 @@ class BotService {
 
 
         let itemImage = '';
-        let rarity = 'rare';
         let price = '0';
         let url = '';
 
@@ -108,27 +107,8 @@ class BotService {
 
         const itemParsed = items.filter(item => item.name.replace(/\s/g, '').toLowerCase() === itemName.replace(/\s/g, '').toLowerCase())[0];
 
-        // if(itemParsed) {
-        //     const searchRarity = ['Ancient', 'Common', 'Vintage', 'Godly', 'Legend', 'Rare', 'Uncommon', 'Pets', 'Misc', 'Bulk Sets']
-        //     for(let i = 0; i < searchRarity.length; ++i) {
-        //         const response = await axios.get(`https://mm2values.com/?p=${searchRarity[i].toLowerCase()}`);
-        //         const htmlContent = response.data;
-        //         const $ = cheerio.load(htmlContent);
-        //         const neededItem = $(`.linkTable:contains(${itemParsed.name})`).first();
-        //
-        //         if(neededItem.length && neededItem.length > 0) {
-        //             rarity = searchRarity[i];
-        //             if(rarity === 'Legend') {
-        //                 rarity = 'Legendary';
-        //             }
-        //             break;
-        //         }
-        //     }
-        // }
-
         const finalItem = {
             name: itemParsed.name,
-            rarity: rarity,
             image: itemImage,
             price: itemParsed.value
         }
@@ -150,7 +130,6 @@ class BotService {
                     {
                         name: parsedInfo.name,
                         owner: user._id,
-                        rarity: parsedInfo.rarity,
                         image: parsedInfo.image,
                         price: parsedInfo.price * process.env.CURRENCY_CONVERTER,
                         itemId: id,

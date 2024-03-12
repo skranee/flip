@@ -370,7 +370,6 @@ export default class Store {
     async createPaymentAddress(currency: string, user: string) {
         try {
             const address = await DepositService.createPaymentAddress(currency, user);
-            console.log(address);
             return address;
         } catch(e: any) {
             console.log(e.response?.data?.message);

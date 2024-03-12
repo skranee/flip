@@ -13,7 +13,7 @@ function GameCreate() {
     const [chosenIndex, setChosenIndex] = useState([]);
     const [chosenItems, setChosenItems] = useState([]);
     const [totalValue, setTotalValue] = useState(0);
-    const errorMes = useState('No items to bet...');
+    const errorMes = 'No items to bet...'
     const [gemsBet, setGemsBet] = useState(0);
     const [oneClickGems, setOneClickGems] = useState(false);
     const [oneClickItems, setOneClickItems] = useState(false);
@@ -128,11 +128,11 @@ function GameCreate() {
                                     style={{outline: chosenIndex.includes(index) ? 'solid 1px rgba(255, 255, 255, 0.9)' : 'none', cursor: "pointer"}}
                                     onClick={() => addToCart(index, item)}
                                 >
-                                    <img className='marketItemImg' src={item.image} alt='' />
+                                    <img className='marketItemImg' src={item.image} alt='mm2item' />
                                     <span className='marketItemClass'>{item.class}</span>
                                     <span className='marketItemName'>{item.name}</span>
                                     <div className='marketItemCostContainer'>
-                                        <img className='marketCoinImg' src={coin} alt='' />
+                                        <img className='marketCoinImg' src={coin} alt='gem' />
                                         <span className='marketItemCost'>{Math.round(item.price)}</span>
                                     </div>
                                 </li>

@@ -5,11 +5,11 @@ import coin from "../imgs/currImg.png";
 
 function WithdrawWindow() {
     const {store, globalStore} = useContext(Context);
-    const playerItems= useState(store.itemsList);
+    const playerItems= store.itemsList;
     const [chosenIndex, setChosenIndex] = useState([]);
     const [chosenItems, setChosenItems] = useState([]);
     const [totalValue, setTotalValue] = useState(0);
-    const errorMes = useState('No items to bet...');
+    const errorMes = 'No items to bet...';
     const [btnDisabled, setBtnDisabled] = useState(true);
 
     useEffect(() => {
@@ -80,7 +80,7 @@ function WithdrawWindow() {
                                     style={{
                                         outline: chosenIndex.includes(index) ? 'solid 1px rgba(255, 255, 255, 0.9)' : 'none',
                                         cursor: "pointer",
-                                        flexBasis: "calc(42% - 5px)"
+                                        width: '46%'
                                     }}
                                     onClick={() => addToCart(index, item)}
                                 >

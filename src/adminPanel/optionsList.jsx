@@ -4,7 +4,6 @@ import { CiMoneyBill } from "react-icons/ci";
 import { FaArrowUp } from "react-icons/fa";
 import { TbMedal } from "react-icons/tb";
 import { IoPeople } from "react-icons/io5";
-import { CiStreamOn } from "react-icons/ci";
 import { SiBitcoinsv } from "react-icons/si";
 import { FaBan } from "react-icons/fa";
 import { FaGift } from "react-icons/fa6";
@@ -41,10 +40,6 @@ function OptionsList() {
             <li className='optionContainer' onClick={() => openModal('ONLINE MANAGEMENT')}>
                 <IoPeople className='iconAdmin'/>
                 <span className='adminText'>ONLINE</span>
-            </li>
-            <li className='optionContainer' onClick={() => openModal('POPUP')}>
-                <CiStreamOn className='iconAdmin'/>
-                <span className='adminText'>POPUP</span>
             </li>
             <li className='optionContainer' onClick={() => openModal('PAYMENTS')}>
                 <SiBitcoinsv className='iconAdmin'/>

@@ -76,7 +76,7 @@ function Playzone () {
                     <GamesList />
                 }
                 {globalStore.historyOpen &&
-                    <History history={history}/>
+                    <History history={history} />
                 }
             </div>
             {globalStore.createOpen &&

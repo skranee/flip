@@ -48,22 +48,6 @@ function Profile() {
         store.setLoading(false);
     }, [store, store.user]);
 
-    // const containerWidth = () => {
-    //     if(!globalStore.chatOpened && globalStore.panelOpen) {
-    //         return '84.5%'
-    //     }
-    //     else if(!globalStore.chatOpened && !globalStore.panelOpen) {
-    //         return '97.5%'
-    //     }
-    //     else if(globalStore.chatOpened && !globalStore.panelOpen) {
-    //         return '81%'
-    //     }
-    //     else {
-    //         return '68%'
-    //     }
-    // }
-
-
     const handleCode = () => {
         setChange(true);
     }
@@ -150,10 +134,7 @@ function Profile() {
             <div className='background' />
             <div className='profilePage'>
                 {globalStore.paymentsOpen && <PaymentsModal />}
-                <div className='profileContainer' style={{
-                    // width: containerWidth(),
-                    // marginLeft: globalStore.panelOpen ? '14.5%' : '1%'
-                }}>
+                <div className='profileContainer'>
                     <div className='profileInfo'>
                         <div className='innerInfoContainer'>
                             <img className='avatarProfile' src={localStorage.getItem('avatarUrl')} alt='' />

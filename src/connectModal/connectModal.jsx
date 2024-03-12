@@ -84,7 +84,7 @@ function ConnectModal() {
                             style={{boxShadow: botsInfo[1].status === 'online' ? '0 0 4px rgba(127, 175, 95, 1)' : '0 0 4px rgba(170, 25, 11, 1)'}}
                             className='botStatus' src={botsInfo[1].status === 'online' ? online : offline} alt=''/>
                             {
-                                globalStore.botRecommended === botsInfo[1].name ? <FaCheckCircle className='botCheckIcon' /> : ''
+                                globalStore.botRecommended === botsInfo[1].name && <FaCheckCircle className='botCheckIcon' />
                             }
                         </span>
                         <button className='btnBotConnect' onClick={() => handleConnect(botsInfo[1].serverUrl)}>

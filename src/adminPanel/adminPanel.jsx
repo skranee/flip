@@ -191,36 +191,6 @@ function AdminPanel() {
         }
     }
 
-    const chooseColor = (rarity) => {
-        if(rarity === 'Legendary') {
-            return '145, 0, 181'
-        }
-        else if(rarity === 'Common') {
-            return '176, 166, 179'
-        }
-        else if(rarity === 'Uncommon') {
-            return '203, 207, 178'
-        }
-        else if(rarity === 'Rare') {
-            return '192, 204, 120'
-        }
-        else if(rarity === 'Godly') {
-            return '227, 255, 56'
-        }
-        else if(rarity === 'Unique') {
-            return '3, 0, 168'
-        }
-        else if(rarity === 'Ancient') {
-            return '255, 200, 0'
-        }
-        else if(rarity === 'Pets') {
-            return '242, 22, 55'
-        }
-        else if(rarity === 'Vintage') {
-            return '97, 71, 0'
-        }
-    }
-
     const handleBlurGiveaway = () => {
         globalStore.setAdminOptionStatus('');
         setChosenItems([]);
@@ -251,12 +221,14 @@ function AdminPanel() {
                         <span className='optionStatus'>
                             {globalStore.adminOptionStatus}
                         </span>
-                        <span className='giveawayChosenTotalValue'>
-                            Total value: <img src={gem} className='gemWorth' alt='gem' />{giveawayValue}
+                        <div className='giveawayUpperInfo'>
+                            <span className='giveawayChosenTotalValue'>
+                            Total value: <img src={gem} className='gemWorth' alt='gem'/>{giveawayValue}
                         </span>
-                        <span className='giveawayChosenAmount'>
+                            <span className='giveawayChosenAmount'>
                             Total items: {(chosenItems && chosenItems.length) ? chosenItems.length : 0}
                         </span>
+                        </div>
                         <div className='inventoryContainer'>
                             {(giveawayInventory.length > 0) &&
                                 giveawayInventory.map((item, index) => (
@@ -273,12 +245,6 @@ function AdminPanel() {
                                         />
                                         <span className='nameItemContainer'>
                                             {item.name}
-                                        </span>
-                                        <span className='rarityItemContainer' style={{
-                                            color: `rgba(${chooseColor(item.rarity)}, 1)`,
-                                            textShadow: `0 2px 10px rgba(${chooseColor(item.rarity)}, 0.6)`
-                                        }}>
-                                            {item.rarity}
                                         </span>
                                         <span className='priceItemContainer'>
                                             <img src={gem} className='gemWorth' alt='gem'/>{Math.round(item.price)}

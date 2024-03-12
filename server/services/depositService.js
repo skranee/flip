@@ -131,9 +131,9 @@ class DepositService {
             usedCode = checkForCode.linkedCode;
         }
 
-        const balanceAdd = Math.round(exchangedAmount * 300) + (usedCode === '' ? 0 : exchangedAmount * 300 * 0.01);
+        const balanceAdd = Math.round(exchangedAmount * 75) + (usedCode === '' ? 0 : exchangedAmount * 75 * 0.01);
 
-        const affiliateOwner = await affiliateService.codeUse(usedCode, exchangedAmount * 300 * 0.01);
+        const affiliateOwner = await affiliateService.codeUse(usedCode, exchangedAmount * 75 * 0.01);
 
         const addTransaction = await transactionModel.create(
             {

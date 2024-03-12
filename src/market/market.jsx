@@ -64,16 +64,6 @@ function Market() {
         setFilteredItems(filtered);
     };
 
-    // const addItem = async () => {
-    //     await store.addItemMarket(
-    //         items[9].name,
-    //         '658fe5c64e467dcdd16a740d',
-    //         'legendary',
-    //         items[9].price,
-    //         items[9].image
-    //     )
-    // }
-
     const chooseItem = (item) => {
         setItemBuying(item);
         globalStore.setBuyOpen(true);
@@ -98,17 +88,6 @@ function Market() {
         globalStore.setCancelSale(true);
     }
 
-    // const add = async () => {
-    //     await store.addItemBot(store.user.robloxId, {
-    //         name: items[0].name,
-    //         rarity: items[0].rarity,
-    //         image: items[0].image,
-    //         price: items[0].price
-    //     });
-    //     // const success = await store.checkOwnership(store.user.robloxId, item);
-    //     // console.log(success.data)
-    // }
-
     return (
         <div>
             <div className='background' />
@@ -120,7 +99,18 @@ function Market() {
                         }
                         <div className='modalWindowDeposit' onClick={(event) => event.stopPropagation()} style={{justifyContent: "flex-start"}}>
                             <div className='marketItemsValue'>
-                                <span>Items Value:</span><img className='marketCoinImg' src={coin} alt=''/><span>{itemsValue}</span>
+                                <span>
+                                    Items Value:
+                                </span>
+                                <div style={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    gap: 3
+                                }}>
+                                    <img className='marketCoinImg' src={coin} alt=''/>
+                                    <span>{itemsValue}</span>
+                                </div>
                             </div>
                             <div className='depositInventory' style={{maxHeight: '95%'}}>
                                 {store.itemsList.length ?
@@ -206,8 +196,12 @@ function Market() {
                     <div className='marketUpperPanel'>
                         <div className='marketItemsValue'>
                             <span>Items Value:</span>
-                            <img className='marketCoinImg' src={coin} alt=''/>
-                            <span>{itemsValue}</span>
+                            <span style={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                gap: 3
+                            }}><img className='marketCoinImg' src={coin} alt=''/>{itemsValue}</span>
                         </div>
                         <span className='yourSellsText' onClick={() => globalStore.setItemsOnSale(true)}>ITEMS ON SALE</span>
                         <div className='rightUpperMarket'>

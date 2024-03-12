@@ -4,7 +4,6 @@ export interface IItem {
     price: number,
     owner: string,
     id: string,
-    rarity: string,
     itemId: string,
     holder: number,
     gameName: string

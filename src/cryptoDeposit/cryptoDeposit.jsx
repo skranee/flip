@@ -18,7 +18,6 @@ function CryptoDeposit() {
         globalStore.setCryptoOpen(false);
         globalStore.setAddressWindow(true);
         const response = await store.findAddress(store.user.id, crypto);
-        console.log(response);
         if(response.data === null) {
             const ad = await store.createPaymentAddress(crypto, store.user.id);
             if(ad && ad.data) {
