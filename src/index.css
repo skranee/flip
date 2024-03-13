@@ -5106,6 +5106,24 @@ input[type="range"]::-webkit-slider-thumb {
   transition: width 0.1s ease-in, height 0.1s ease-in;
 }
 
+.modalWindowMain::-webkit-scrollbar {
+  width: 4px;
+}
+
+.modalWindowMain::-webkit-scrollbar-thumb {
+  background-color: #3b4963;
+  border-radius: 6px;
+}
+
+.modalWindowMain::-webkit-scrollbar-track {
+  background-color: #111827;
+  border-radius: 6px;
+}
+
+.modalWindowMain::-webkit-scrollbar-thumb:hover {
+  background-color: #334057;
+}
+
 @media(max-width: 1200px) {
   .modalWindowMain {
     width: 90%;
