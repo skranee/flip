@@ -1,9 +1,10 @@
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Context} from "../index";
 import {observer} from "mobx-react";
 import OptionsList from "./optionsList";
 import PaymentsList from "../paymentsModal/paymentsList";
 import gem from '../imgs/currImg.png'
+import {giveawayCreate} from "../chat/chat";
 
 function AdminPanel() {
     const {store, globalStore} = useContext(Context);
@@ -19,12 +20,6 @@ function AdminPanel() {
     const [chosenIndex, setChosenIndex] = useState([]);
     const [giveawayValue, setGiveawayValue] = useState(0);
     const [timer, setTimer] = useState(0);
-
-    const socket = useRef();
-
-    useEffect(() => {
-        socket.current = new WebSocket('ws://localhost:4000');
-    }, []);
 
     useEffect(() => {
         const getInventory = async () => {
@@ -158,7 +153,7 @@ function AdminPanel() {
                 giveaway: giveaway,
                 giveawayStatus: true
             }
-            socket.current.send(JSON.stringify(message));
+            giveawayCreate(message);
             setChosenItems([]);
             setChosenIndex([]);
             setTimer(0);

@@ -13,6 +13,12 @@ import {FaCrown} from "react-icons/fa";
 import {RiMacbookFill} from "react-icons/ri";
 import {notify} from "../App";
 
+export function participateFunction() {}
+
+export function joinGameFunction(message) {}
+
+export function giveawayCreate() {}
+
 function Chat() {
     const [messages, setMessages] = useState([]);
     const {store, globalStore} = useContext(Context);
@@ -31,6 +37,21 @@ function Chat() {
         socket.current = new WebSocket('ws://localhost:4000');
         function heartbeat() {
             socket.current.send(JSON.stringify({ type: 'pong' }));
+        }
+
+        participateFunction = () => {
+            socket.current.send(JSON.stringify({
+                method: 'participate',
+                user: store.user
+            }))
+        }
+
+        joinGameFunction = (message) => {
+            socket.current.send(JSON.stringify(message));
+        }
+
+        giveawayCreate = (message) => {
+            socket.current.send(JSON.stringify(message));
         }
 
         socket.current.onopen = () => {
@@ -92,8 +113,12 @@ function Chat() {
                     break;
                 case 'giveaway':
                     globalStore.setGiveawayGoing(message.giveawayStatus);
-                    if(message.firstAnnounce) {
-                        notify();
+                    try {
+                        if(message.firstAnnounce) {
+                            notify();
+                        }
+                    } catch(e) {
+                        console.log(e);
                     }
                     globalStore.setGiveawayData(message.giveaway);
                     globalStore.setGiveawayTimer(message.giveaway.timer);

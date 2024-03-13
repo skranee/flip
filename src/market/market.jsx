@@ -18,26 +18,35 @@ function Market() {
 
     useEffect(() => {
         const getItems = async () => {
+            if(store.user, store.user.id) {
+                await store.getUserItems(store.user.id);
+            }
+        }
+        getItems();
+    }, [store.user, ]);
+
+    useEffect(() => {
+        const getItems = async () => {
             const response = await store.getItemsMarket();
             if(response) {
                 setItems(response.data.sort((a, b) => b.price - a.price));
             }
         }
         getItems();
-    }, [store]);
+    }, [store, ]);
 
     useEffect(() => {
         if(items) {
             setFilteredItems(items);
         }
-    }, [items]);
+    }, [items, ]);
 
     useEffect(() => {
-        if (store.user && store.itemsList && store.itemsList.length) {
+        if (store.user && store.itemsList && store.itemsList.length > 0) {
             const value = store.itemsList.reduce((a, b) => a + b.price, 0);
             setItemsValue(Math.round(value));
         }
-    }, [items, store.itemsList, store.itemsList.length, store.user, store.isAuth, ]);
+    }, [store.user, store.itemsList, ]);
 
     const containerWidth = () => {
         if(!globalStore.chatOpened && globalStore.panelOpen) {

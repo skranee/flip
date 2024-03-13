@@ -1,4 +1,4 @@
-import React, {useContext, useState, useEffect, useRef} from 'react';
+import React, {useContext, useState, useEffect} from 'react';
 import {Context} from "../index";
 import gem from "../imgs/currImg.png";
 import heads from "../imgs/heads.png";
@@ -6,6 +6,7 @@ import tails from "../imgs/tails.png";
 import {observer} from "mobx-react";
 import axios from "axios";
 import {API_URL} from "../http";
+import {joinGameFunction} from "../chat/chat";
 
 function JoinModal({game}) {
     const {store, globalStore} = useContext(Context)
@@ -19,14 +20,6 @@ function JoinModal({game}) {
     const [gemsBet, setGemsBet] = useState(game.bet ? Math.round(game.bet) : 0);
     const [oneClick, setOneClick] = useState(false);
     const [oneClickItems, setOneClickItems] = useState(false);
-
-    const socket = useRef();
-
-    useEffect(() => {
-        if(store.isAuth) {
-            socket.current = new WebSocket('ws://localhost:4000');
-        }
-    }, [store.isAuth]);
 
     useEffect(() => {
         const getUserItems = async () => {
@@ -93,7 +86,7 @@ function JoinModal({game}) {
                 method: 'joinGame',
                 game: join.data.game
             }
-            socket.current.send(JSON.stringify(message));
+            joinGameFunction(message);
         } else {
             setOneClickItems(false);
             setErrorMes(`Items value must be between ${Math.round(approximate * 0.9)} and ${Math.round(approximate * 1.1)}`);
@@ -139,7 +132,7 @@ function JoinModal({game}) {
                 method: 'joinGame',
                 game: join.data.game
             }
-            socket.current.send(JSON.stringify(message));
+            joinGameFunction(message);
         } else {
             setOneClick(false);
             globalStore.setGemJoin(false);

@@ -20,10 +20,14 @@ import {observer} from "mobx-react";
 import ErrorWindow from "./errorWindow/errorWindow";
 
 export function notify() {
-    const notificationSound = document.getElementById('notificationSound');
+    try {
+        const notificationSound = document.getElementById('notificationSound');
 
-    if ('play' in notificationSound) {
-        notificationSound.play();
+        if (notificationSound && 'play' in notificationSound) {
+            notificationSound.play();
+        }
+    } catch(error) {
+        console.error('Failed to play notification sound:', error);
     }
 }
 

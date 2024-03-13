@@ -9,12 +9,20 @@ function BuyModal({item}) {
         globalStore.setBuyOpen(false);
     }
 
+    console.log(item.owner);
+
     const buy = async () => {
         if(store.user.balance >= item.price) {
             await store.buyItemMarket(item.owner, store.user.id, item.itemId);
         } else {
             return Error('Not enough balance');
         }
+        globalStore.setBuyOpen(false);
+        window.location.reload();
+    }
+
+    const cancel = async () => {
+        await store.removeItemMarket(item.itemId);
         globalStore.setBuyOpen(false);
         window.location.reload();
     }
@@ -28,8 +36,12 @@ function BuyModal({item}) {
                     <img className='gemBuy' src={gem} alt='' />
                     <span>{Math.round(item.price)}</span>
                 </div>
-                <button className='btnBuy' disabled={!store.user || !store.user.id} style={{width: '70%', height: 30, fontSize: '1.3em'}} onClick={buy}>
-                    Buy
+                <button
+                    className='btnBuy'
+                    disabled={!store.user || !store.user.id}
+                    style={{width: '70%', height: 30, fontSize: '1.3em'}}
+                    onClick={() => item.owner === store.user.id ? cancel() : buy()}>
+                    {item.owner === store.user.id ? 'Cancel' : 'Buy'}
                 </button>
             </div>
         </div>

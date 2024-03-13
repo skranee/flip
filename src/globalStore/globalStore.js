@@ -44,9 +44,14 @@ export default class GlobalStore {
     giveawayParticipants = [];
     giveawayWinner = '';
     allowedToParticipate = false;
+    seeGiveaway = false;
 
     constructor() {
         makeAutoObservable(this)
+    }
+
+    setSeeGiveaway(bool) {
+        this.seeGiveaway = bool;
     }
 
     setAllowedToParticipate(bool) {

@@ -1,9 +1,11 @@
 import {WebSocketServer} from "ws";
-import gameService from "./services/gameService.js";
 import botService from "./services/botService.js";
 
 export const handleOnline = (change) => {
     plusUsers += change;
+    if(plusUsers < 0) {
+        plusUsers = 0;
+    }
     broadcastAmount('connection');
 }
 
@@ -114,7 +116,6 @@ function broadcastParticipants(array) {
 }
 
 function updateTimer(time) {
-    const fullTime = time;
     const tick = setInterval(() => {
         if(time > 0) {
             const formatTime = (milliseconds) => {
@@ -153,7 +154,7 @@ function findWinner() {
     const winner = participants[winnerIndex];
 
     const complete = async () => {
-        const completeGiveaway = await botService.endGiveaway(giveaway.items, winner);
+        await botService.endGiveaway(giveaway.items, winner);
     }
     if(winner) {
         complete();

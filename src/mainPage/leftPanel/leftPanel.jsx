@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useRef, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import { CgGames } from "react-icons/cg";
 import { BiSolidDownArrow } from "react-icons/bi/index.esm";
 import { BiSolidUpArrow } from "react-icons/bi/index.esm";
@@ -15,6 +15,7 @@ import {Context} from "../../index";
 import {observer} from "mobx-react";
 import { FaTools } from "react-icons/fa";
 import gem from '../../imgs/currImg.png';
+import {participateFunction} from "../../chat/chat";
 
 function LeftPanel () {
     const {store, globalStore} = useContext(Context);
@@ -41,9 +42,6 @@ function LeftPanel () {
             check();
         }
     }, [store.user.gamesPlayed, store, globalStore]);
-
-    const socket = useRef()
-    socket.current = new WebSocket('ws://localhost:4000');
 
     useEffect(() => {
         if(globalStore.giveawayParticipants && globalStore.giveawayParticipants.length) {
@@ -86,19 +84,67 @@ function LeftPanel () {
     const participate = () => {
         if(globalStore.allowedToParticipate === false) {
             globalStore.setErrorMessage('Must have at least 1 coin flip in last 24 hours');
+            globalStore.setSeeGiveaway(false);
             globalStore.setErrorWindow(true);
         }
         if(globalStore.allowedToParticipate === true) {
-            socket.current.send(JSON.stringify({
-                method: 'participate',
-                user: store.user
-            }))
+            participateFunction();
         }
     }
 
     return (
         <div>
             <>
+                {globalStore.seeGiveaway &&
+                    <div className='backgroundModal' onClick={() => globalStore.setSeeGiveaway(false)}>
+                        <div className='giveawayContainer' onClick={(event) => event.stopPropagation()}>
+                            <div className='giveawayUpperPanel'>
+                                {!globalStore.giveawayWinner &&
+                                    <>
+                                        <span>{globalStore.giveawayData.timer}</span>
+                                        <span>
+                                                Checked: {(globalStore.giveawayParticipants && globalStore.giveawayParticipants.length) ?
+                                            globalStore.giveawayParticipants.length : 0}
+                                            </span>
+                                    </>
+                                }
+                                {globalStore.giveawayWinner &&
+                                    <span
+                                        style={{fontSize: '0.9em'}}>Winner: {globalStore.giveawayWinner}</span>
+                                }
+                            </div>
+                            <div className='giveawayListHorizontal'
+                                 style={{
+                                     justifyContent:
+                                         (globalStore.giveawayData.items.length === 1
+                                             || globalStore.giveawayData.items.length === 2) ?
+                                             "center" : "flex-start"
+                                 }}
+                            >
+                                {(globalStore.giveawayData && globalStore.giveawayData.items && globalStore.giveawayData.items.length) &&
+                                    globalStore.giveawayData.items.map((item, index) => (
+                                        <li key={index} className='horizontalItemContainer'>
+                                            <img
+                                                className='imgHorizontalItem'
+                                                src={item.image}
+                                                alt={item.name}
+                                            />
+                                        </li>
+                                    ))
+                                }
+                            </div>
+                            <span className='totalValueGiveaway'>
+                                    Total value: <img className='gemWorth' src={gem}
+                                                      alt='gem'/> {Math.round(globalStore.giveawayData.totalValue)}
+                                </span>
+                            {(!participateDisabled && store.user && store.user.id) &&
+                                <button className='btnParticipate' onClick={participate}>
+                                    Participate
+                                </button>
+                            }
+                        </div>
+                    </div>
+                }
                 <div className='leftPanel'
                      style={{width: globalStore.panelOpen ? '' : 0, paddingLeft: globalStore.panelOpen ? 5 : 0}}>
                     <div className='leftPContent'>
@@ -154,27 +200,39 @@ function LeftPanel () {
                                 </button>
                             </div>
                         }
-                        {(globalStore.giveawayGoing === true && globalStore.giveawayData) &&
-                            <div className='giveawayContainer'>
+                        {(globalStore.giveawayGoing === true && globalStore.giveawayData && !globalStore.seeGiveaway) &&
+                            !globalStore.giveawayWinner &&
+                            <div className='giveawayAnnounceContainer'>
+                                <span className='giveawayTextAnnouncement'>LIVE GIVEAWAY!</span>
+                                <button className='seeGiveaway' onClick={() => globalStore.setSeeGiveaway(true)}>
+                                    JOIN
+                                </button>
+                                <img alt='MM2' className='backgroundGemGiveaway' src='/logo.png'/>
+                            </div>
+                        }
+                        {(globalStore.giveawayGoing === true && globalStore.giveawayData && !globalStore.seeGiveaway) &&
+                            globalStore.giveawayWinner &&
+                            <div
+                                className='giveawayContainer'
+                                 onClick={(event) => event.stopPropagation()}
+                                style={{
+                                    width: '95%',
+                                    height: 180
+                                }}
+                            >
                                 <div className='giveawayUpperPanel'>
-                                    {!globalStore.giveawayWinner &&
-                                        <>
-                                            <span>{globalStore.giveawayData.timer}</span>
-                                            <span>
-                                                Checked: {(globalStore.giveawayParticipants && globalStore.giveawayParticipants.length) ?
-                                                globalStore.giveawayParticipants.length : 0}
-                                            </span>
-                                        </>
-                                    }
                                     {globalStore.giveawayWinner &&
-                                        <span style={{fontSize: '0.9em'}}>Winner: {globalStore.giveawayWinner}</span>
+                                        <span
+                                            style={{fontSize: '0.9em'}}>Winner: {globalStore.giveawayWinner}</span>
                                     }
                                 </div>
                                 <div className='giveawayListHorizontal'
-                                     style={{justifyContent:
+                                     style={{
+                                         justifyContent:
                                              (globalStore.giveawayData.items.length === 1
                                                  || globalStore.giveawayData.items.length === 2) ?
-                                                    "center" : "flex-start"}}
+                                                 "center" : "flex-start"
+                                }}
                                 >
                                     {(globalStore.giveawayData && globalStore.giveawayData.items && globalStore.giveawayData.items.length) &&
                                         globalStore.giveawayData.items.map((item, index) => (
@@ -189,8 +247,7 @@ function LeftPanel () {
                                     }
                                 </div>
                                 <span className='totalValueGiveaway'>
-                                    Total value: <img className='gemWorth' src={gem}
-                                                      alt='gem'/> {Math.round(globalStore.giveawayData.totalValue)}
+                                    Total value: <img className='gemWorth' src={gem} alt='gem'/> {Math.round(globalStore.giveawayData.totalValue)}
                                 </span>
                                 {(!participateDisabled && store.user && store.user.id) &&
                                     <button className='btnParticipate' onClick={participate}>

@@ -3612,6 +3612,12 @@ body::-webkit-scrollbar-thumb:hover {
   cursor: not-allowed;
 }
 
+@media(max-width: 768px) {
+  .btnAddItems {
+    font-size: 0.85em;
+  }
+}
+
 .beneathCreate {
   display: flex;
   flex-direction: row;
@@ -5295,8 +5301,8 @@ input[type="range"]::-webkit-slider-thumb {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 180px;
-  width: 90%;
+  height: 400px;
+  width: 340px;
   align-self: center;
   padding: 5px;
   gap: 8px;
@@ -5349,7 +5355,7 @@ input[type="range"]::-webkit-slider-thumb {
   max-width: 45%;
   min-height: 95%;
   border-radius: 5px;
-  border: solid 1px rgba(255, 255, 255, 0.5);
+  background-color: #1d2a42;
 }
 
 .imgHorizontalItem {
@@ -5417,6 +5423,66 @@ input[type="range"]::-webkit-slider-thumb {
   align-items: center;
   height: fit-content;
 }
+
+.giveawayAnnounceContainer {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+  width: 97%;
+  height: 85px;
+  background: linear-gradient(180deg, rgba(255, 0, 0, 0.25) 0%, rgba(14, 24, 255, 0.25) 100%);
+  box-shadow: inset 0px 0px 17.2px rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.backgroundGemGiveaway {
+  position: absolute;
+  right: -15%;
+  height: 120px;
+  width: 120px;
+  opacity: 0.1;
+}
+
+.giveawayTextAnnouncement {
+  font-family: 'Poppins', sans-serif;
+  font-weight: bold;
+  font-size: 1.1em;
+  color: rgba(255, 255, 255, 0.9);
+  margin-left: 15px;
+  margin-bottom: 15px;
+}
+
+.seeGiveaway {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 1em;
+  color: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 40px;
+  background-color: rgba(5, 2, 77, 1);
+  height: 20px;
+  width: 50px;
+  margin-left: 13px;
+  transition: width 0.15s ease-in;
+  z-index: 10;
+}
+
+.seeGiveaway:hover {
+  cursor: pointer;
+  width: 55px;
+}
+
+.seeGiveaway:active {
+  transform: translateY(0.5px);
+}
+
+
 
 
 
