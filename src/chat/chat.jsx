@@ -34,7 +34,7 @@ function Chat() {
 
     useEffect(() => {
         let pingInterval;
-        socket.current = new WebSocket('ws://localhost:4000');
+        socket.current = new WebSocket('ws://mm2fliptest-wh9d7.ondigitalocean.app');
         function heartbeat() {
             socket.current.send(JSON.stringify({ type: 'pong' }));
         }

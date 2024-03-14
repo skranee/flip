@@ -23,8 +23,6 @@ app.use('/api', router)
 
 app.use(errorMiddleware)
 
-console.log(process.env.PORT)
-
 const start = async () => {
     try {
         await mongoose.connect(process.env.DB_URL)
