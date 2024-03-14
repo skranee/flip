@@ -76,11 +76,13 @@ function JoinModal({game}) {
                     }
                 }
                 await updateUser();
-                }, 1800)
+            }, 4500)
+
             setOneClickItems(false);
             globalStore.setJoinOpen(false);
             globalStore.setCheckLink(join.data.link);
             globalStore.setGameInfo(join.data.game);
+            globalStore.setCountdown(true);
             globalStore.setViewOpen(true);
             const message = {
                 method: 'joinGame',

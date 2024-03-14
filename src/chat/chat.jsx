@@ -199,18 +199,33 @@ function Chat() {
         } else {
             if(mes.length && mes.trim().length) {
                 if(mes[0] === '/') {
-                    console.log(mes.substring(1, 4))
                     if(mes.substring(1, 4) === 'tip') {
                         const params = mes.split(' ');
                         if(params[1] && params[2]) {
                             const sender = store.user.username;
                             const receiver = params[1];
+                            if(receiver === store.user.username) {
+                                globalStore.setErrorMessage('You can not tip yourself');
+                                globalStore.setErrorWindow(true);
+                                return null;
+                            }
                             const amount = parseInt(params[2]);
-                            await store.tip(sender, receiver, amount);
+                            if(amount < 400) {
+                                globalStore.setErrorMessage('You can not send less than 400 gems');
+                                globalStore.setErrorWindow(true);
+                                return null;
+                            }
+                            const tip = await store.tip(sender, receiver, amount);
+                            if(tip && tip.data && tip.data.status && tip.data.status === 400) {
+                                globalStore.setErrorMessage('Check your balance or receiver username');
+                                globalStore.setErrorWindow(true);
+                                return null;
+                            }
                         }
                         setMes('');
                         return null;
                     }
+                    return null;
                 }
                 const message = {
                     message: mes,

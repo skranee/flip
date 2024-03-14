@@ -115,13 +115,13 @@ class UserService {
     async tip(from, to, amount) {
         const sender = await userModel.findOne({username: from});
         const receiver = await userModel.findOne({username: to});
-        if(sender.balance < amount) {
-            throw ApiError.BadRequest('Not enough balance!');
+        if(sender && sender.balance < amount) {
+            return ApiError.BadRequest('Not enough balance!');
         } else if(!receiver) {
-            throw ApiError.BadRequest('The receiver does not exist!');
+            return ApiError.BadRequest('The receiver does not exist!');
         }
-        const decrease = await userModel.findOneAndUpdate({username: from}, {$inc: {balance: -amount}});
-        const increase = await userModel.findOneAndUpdate({username: to}, {$inc: {balance: amount}});
+        const decrease = await userModel.updateOne({username: from}, {$inc: {balance: -amount}});
+        const increase = await userModel.updateOne({username: to}, {$inc: {balance: amount}});
         return increase;
     }
 

@@ -200,6 +200,20 @@ function GamesList () {
         globalStore.setJoinOpen(true);
     }
 
+    const convertToK = (number) => {
+        if(number < 1000) {
+            return `${number}`
+        }
+        else if(number >= 1000 && number < 1000000) {
+            const fixed = (number / 1000).toFixed(1);
+            return `${fixed} K`
+        }
+        else if(number > 1000000) {
+            const fixed = (number / 1000000).toFixed(2);
+            return `${fixed} KK`
+        }
+    }
+
     const cancel = async (game) => {
         await store.cancelGame(store.user, game);
         const gameUpdate = await store.getGames();
@@ -301,9 +315,9 @@ function GamesList () {
                             </>
                         }
                         <div className='betParams'>
-                            <span className='betAmount'>{item.bet} <img src={gem} className='gemWorth' style={{width: 12, height: 12}} alt='' /> </span>
+                            <span className='betAmount'>{convertToK(item.bet)} <img src={gem} className='gemWorth' style={{width: 12, height: 12}} alt='' /> </span>
                             <span className='joinableBet'>
-                                {Math.round(item.bet * 0.9)}-{Math.round(item.bet * 1.1)}  <img src={gem} style={{width: 12, height: 12}} className='gemWorth' alt='' />
+                                {convertToK(Math.round(item.bet * 0.9))}-{convertToK(Math.round(item.bet * 1.1))}  <img src={gem} style={{width: 12, height: 12}} className='gemWorth' alt='' />
                             </span>
                         </div>
                         <div className='btnsGame'>

@@ -213,6 +213,15 @@ export default class Store {
     async tip(from: string, to: string, amount: number) {
         try {
             const send = await UserService.tip(from, to, amount);
+            try {
+                const response = await axios.get<AuthResponse>(`${API_URL}/refresh`, {withCredentials: true});
+                this.setUser(response.data.user);
+                this.setAuth(true);
+                localStorage.setItem('token', response.data.accessToken);
+                localStorage.setItem('username', response.data.user.username);
+            } catch(e: any) {
+                console.log(e.response?.data?.message);
+            }
             return send;
         } catch(e: any) {
             console.log(e.response?.data?.message);

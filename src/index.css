@@ -1755,17 +1755,6 @@ body::-webkit-scrollbar-thumb:hover {
   transform: translate(0.3px);
 }
 
-.streamNotification {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: white;
-  color: black;
-  font-family: 'Poppins', sans-serif;
-  font-weight: 500;
-  font-size: 1em;
-}
-
 .sendContainer {
   position: relative;
   background-color: #111827;
@@ -3255,6 +3244,7 @@ body::-webkit-scrollbar-thumb:hover {
   border-radius: 5px;
   font-family: 'Raleway', sans-serif;
   font-size: 1.1em;
+  box-shadow: 0 0 10px #940000;
   color: #ededed;
 }
 
@@ -3269,10 +3259,14 @@ body::-webkit-scrollbar-thumb:hover {
   font-size: 0.8em;
   color: #FFFFFF;
   background-color: #192432;
+  box-shadow: 0 0 5px #192432;
+  padding: 0 7px;
+  transition: padding 0.15s ease-in;
 }
 
 .streamBtn:hover {
   cursor: pointer;
+  padding: 0 12px;
 }
 
 .streamBtn:active {
