@@ -12,6 +12,7 @@ function GameModal({game}) {
     const [opacityFairness, setOpacityFairness] = useState(0);
     const player1Bet = (game && game.items1) ? game.items1.length > 0 ? Math.round(game.items1.reduce((a, b) => a + b.price, 0)) : Math.round(game.gems1) : 0;
     const player2Bet = (game && game.items2) ? game.items2.length > 0 ? Math.round(game.items2.reduce((a, b) => a + b.price, 0)) : Math.round(game.gems2) : 0;
+    const [countShow, setCountShow] = useState(3);
 
     useEffect(() => {
         setTimeout(() => {
@@ -22,8 +23,22 @@ function GameModal({game}) {
                 setPointerEvents('none');
                 setOpacityFairness(0);
             }
-        }, 1800)
+        }, 4500)
     }, [game, store.user.id, ]);
+
+    useEffect(() => {
+        if(globalStore.countdown === true) {
+            let count = 3;
+            const startCountdown = setInterval(() => {
+                count--;
+                setCountShow(count);
+                if(count === 0) {
+                    globalStore.setCountdown(false);
+                    clearInterval(startCountdown);
+                }
+            }, 1000)
+        }
+    }, [game, globalStore, ])
 
     const handleBlur = () => {
         globalStore.setViewOpen(false)
@@ -38,39 +53,6 @@ function GameModal({game}) {
         }
         return ((player / (player + opponent)).toFixed(4) * 100).toFixed(2);
     }
-
-    // const endGame = async () => { //!!!!!!!
-    //     // const deleteGame = await store.endGame(game.gameId);
-    //     // const add = await store.addHistory(store.user.id, game);
-    //     // globalStore.setViewOpen(false);
-    //     // const response = await store.findWinner(game.gameId);
-    //     // console.log(response.data)
-    //     // const add = await store.addItemBot(store.user.robloxId, items[10])
-    //     // const id = await store.getAccountId();
-    //     // const address = await store.createPaymentAddress(id.data, 'BTC');
-    //     // console.log(address.data)
-    //     // const item = await store.createItem('testgun', 1);
-    //     // const response = await store.getTransactions();
-    //     // console.log(response);
-    //     // const payments = await store.getPayments(store.user.id);
-    //     // console.log(payments);
-    //
-    //     // const db = JSON.parse(fixedJsonString);
-    //     // const objects = Object.values(db);
-    //     // const shiny = objects.find(item => item.ItemName === 'Shiny');
-    //
-    //     // const add = await store.addItemBot("5310737222", {
-    //     //     image: '',
-    //     //     name: 'ElderwoodScythe',
-    //     //     price: 0,
-    //     //     owner: '',
-    //     //     id: '',
-    //     //     rarity: '',
-    //     //     itemId: ''
-    //     // })
-    //
-    //     // const addBot = await store.addBot(botsInfo[0].serverUrl, botsInfo[0].name, botsInfo[0].image, botsInfo[0].robloxId);
-    // }
 
     const checkResult = () => {
         window.open(game.checkLink);
@@ -106,10 +88,12 @@ function GameModal({game}) {
                     </div>
                     <ItemsList items={game.items1} />
                 </div>
-                {/*<button onClick={endGame}>*/}
-                {/*    end*/}
-                {/*</button>*/}
-                <CoinFlip game={game} />
+                {globalStore.countdown && (store.user.id === game.player1._id || store.user.id === game.player2._id) &&
+                    <div className='countdownContainer'>
+                        <span className='countdownText'>{countShow}</span>
+                    </div>
+                }
+                {!globalStore.countdown && <CoinFlip game={game} />}
                 <div className='lobbyPlayerContainer'>
                     <div className='lobbyUpperInfo'>
                         <div className='avatarContainerLobby'>

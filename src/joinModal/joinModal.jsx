@@ -120,12 +120,13 @@ function JoinModal({game}) {
                     }
                 }
                 await updateUser();
-            }, 1800)
+            }, 4500)
 
             globalStore.setCheckLink(join.data.link);
             globalStore.setGemJoin(false);
             globalStore.setJoinOpen(false);
             globalStore.setGameInfo(join.data.game);
+            globalStore.setCountdown(true);
             globalStore.setViewOpen(true);
             setOneClick(false);
             const message = {

@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect, useRef, useState} from "react";
 import {Context} from "../../index";
 import {observer} from "mobx-react";
 import {useNavigate} from "react-router-dom";
@@ -14,6 +14,8 @@ function LoginModal () {
     const [verifyBio, setVerifyBio] = useState('cool mate cat party walk far away')
     const [verStatus, setVerStatus] = useState('')
     const navigate = useNavigate();
+    const [clickInside, setClickInside] = useState(false);
+    const modalRef = useRef();
 
     const {store} = useContext(Context)
 
@@ -93,10 +95,6 @@ function LoginModal () {
         localStorage.setItem('username', userInfo.name);
     }
 
-    const handleBlur = () => {
-        globalStore.setLogOpen(false)
-    }
-
     const handleCheckboxChange = () => {
         setChecked(!checked);
         ifDisabled()
@@ -127,9 +125,28 @@ function LoginModal () {
         }
     }
 
+    const handleMouseDown = (event) => {
+        if (modalRef.current && modalRef.current.contains(event.target)) {
+            setClickInside(true)
+        }
+        else {
+            setClickInside(false);
+        }
+    };
+
+    const handleMouseUp = () => {
+        if(clickInside) {
+            globalStore.setLogOpen(true);
+        }
+        else {
+            globalStore.setLogOpen(false)
+            setClickInside(false)
+        }
+    };
+
     return (
-        <div className='backgroundModal' onClick={() => handleBlur()}>
-            <div className='modalWindow' onClick={(event) => event.stopPropagation()}>
+        <div className='backgroundModal' onMouseDown={handleMouseDown} onMouseUp={handleMouseUp}>
+            <div className='modalWindow' ref={modalRef}>
                 <p className='logTitle'>Login with username</p>
                 <input
                     type='text'

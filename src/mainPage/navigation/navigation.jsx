@@ -1,4 +1,4 @@
-import React, {useContext} from 'react'
+import React, {useContext, useRef, useState} from 'react'
 import logoNav from './logo.png'
 import {Context} from "../../index";
 import {observer} from "mobx-react";
@@ -15,6 +15,8 @@ import ConnectModal from "../../connectModal/connectModal";
 function NavigationPanel () {
     const {globalStore, store} = useContext(Context)
     const navigate = useNavigate()
+    const modalRef = useRef();
+    const [clickInside, setClickInside] = useState(false);
 
     const handleLogin = () => {
         globalStore.setLogOpen(true);
@@ -44,10 +46,6 @@ function NavigationPanel () {
         globalStore.setDepositOpen(true);
     }
 
-    const handleBlur = () => {
-        globalStore.setDepositOpen(false);
-    }
-
     const handleCrypto = () => {
         globalStore.setDepositOpen(false);
         globalStore.setCryptoOpen(true);
@@ -62,6 +60,25 @@ function NavigationPanel () {
         globalStore.setDepositOpen(false);
         globalStore.setConnectModal(true);
     }
+
+    const handleMouseDown = (event) => {
+        if (modalRef.current && modalRef.current.contains(event.target)) {
+            setClickInside(true)
+        }
+        else {
+            setClickInside(false);
+        }
+    };
+
+    const handleMouseUp = () => {
+        if(clickInside) {
+            globalStore.setDepositOpen(true);
+        }
+        else {
+            globalStore.setDepositOpen(false)
+            setClickInside(false)
+        }
+    };
 
     return (
         <div className='navigation'>
@@ -98,8 +115,8 @@ function NavigationPanel () {
                 globalStore.addressWindow && <AddressWindow />
             }
             {globalStore.depositOpen &&
-                <div className='backgroundModal' onClick={handleBlur}>
-                    <div className='modalWindowDeposit' onClick={(event) => event.stopPropagation()}>
+                <div className='backgroundModal' onMouseDown={handleMouseDown} onMouseUp={handleMouseUp}>
+                    <div className='modalWindowDeposit' ref={modalRef}>
                         <div className='depositUpper'>
                             <div className='worthDeposit'>
                                 <img src={gem} className='gemWorth' alt='' />

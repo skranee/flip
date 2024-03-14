@@ -162,6 +162,14 @@ function Support() {
                                             we are looking forward to improve the user experience by releasing new updates for the
                                             service.
                                         </p>
+                                        <h2>Can I get bonuses from inviting people ?</h2>
+                                        <p>
+                                            Yes, you are able to receive bonus balance by inviting your friends. Every time
+                                            a user deposits crypto on the website using your affiliate code (you can set in your
+                                            profile), you receive 1% of his deposit in gems. Also your friend, which is using your
+                                            affiliate code receives additional 1% for deposit with crypto. When your affiliated balance
+                                            is 150 gems or more, you are able to get it for free.
+                                        </p>
                                     </div>
                                 </div>
                             }

@@ -85,7 +85,7 @@ function GamesList () {
         }
         getGames();
 
-        const intervalId = setInterval(getGames, 3000); //fix to 1s probably!!!!
+        const intervalId = setInterval(getGames, 3000);
 
         return () => clearInterval(intervalId);
     }, [store])
@@ -202,6 +202,28 @@ function GamesList () {
 
     const cancel = async (game) => {
         await store.cancelGame(store.user, game);
+        const gameUpdate = await store.getGames();
+        if(gameUpdate && gameUpdate.data) {
+            setGames([])
+            gameUpdate.data.map(item => {
+                const gameObj = new Game({
+                    player1: item.player1,
+                    player2: item.player2,
+                    items1: item.items1,
+                    items2: item.items2,
+                    status: item.status,
+                    gameId: item.gameId,
+                    side1: item.side1,
+                    side2: item.side2,
+                    gems1: item.gems1,
+                    gems2: item.gems2,
+                    result: item.result,
+                    checkLink: item.checkLink
+                })
+                setGames(prev => [...prev, gameObj]);
+                return gameObj;
+            })
+        }
         await store.checkAuth();
     }
 

@@ -8,7 +8,7 @@ import PaymentsModal from "../paymentsModal/paymentsModal";
 import gem from '../imgs/currImg.png'
 import { FaCheck } from "react-icons/fa6";
 
-const clientUrl = 'http://localhost:3000'
+// const clientUrl = 'http://localhost:3000'
 
 function Profile() {
     const {store, globalStore} = useContext(Context);
@@ -16,7 +16,7 @@ function Profile() {
     const [afBalance, setAfBalance] = useState(0);
     const [afCode, setAfCode] = useState('-');
     const [codeToUse, setCodeToUse] = useState('-');
-    const afLink = `${clientUrl}/a/${afCode}`
+    // const afLink = `${clientUrl}/a/${afCode}`
     const [change, setChange] = useState(false);
     const [changeCodeToUse, setChangeCodeToUse] = useState(false);
     const [value, setValue] = useState(afCode);
@@ -135,127 +135,150 @@ function Profile() {
             <div className='profilePage'>
                 {globalStore.paymentsOpen && <PaymentsModal />}
                 <div className='profileContainer'>
-                    <div className='profileInfo'>
-                        <div className='innerInfoContainer'>
-                            <img className='avatarProfile' src={localStorage.getItem('avatarUrl')} alt='' />
-                            <div className='innerData'>
-                                <span className='usernameProfile'>{store.user.username}</span>
-                                <span className='registerDate'>Registration date: {store.user.regDate}</span>
-                                <span className='userID'>Roblox ID: {store.user.robloxId}</span>
+                    {store.isAuth &&
+                        <>
+                            <div className='profileInfo'>
+                                <div className='innerInfoContainer'>
+                                    <img className='avatarProfile' src={localStorage.getItem('avatarUrl')} alt=''/>
+                                    <div className='innerData'>
+                                        <span className='usernameProfile'>{store.user.username}</span>
+                                        <span className='registerDate'>Registration date: {store.user.regDate}</span>
+                                        <span className='userID'>Roblox ID: {store.user.robloxId}</span>
+                                    </div>
+                                </div>
+                                <div className='outerInfoContainer'>
+                                    <div className='fieldContainerProfile'>
+                                        <span className='outerInfo'>Games played:</span>
+                                        <span className='outerInfoNum'>{store.user.gamesPlayed}</span>
+                                    </div>
+                                    <div className='fieldContainerProfile'>
+                                        <span className='outerInfo'>Total wagered:</span>
+                                        <span className='outerInfoNum'>{Math.round(store.user.totalWagered)} <img
+                                            src={gem} className='gemBuy' alt=''/></span>
+                                    </div>
+                                    <div className='fieldContainerProfile'>
+                                        <span className='outerInfo'>Total withdrawn:</span>
+                                        <span className='outerInfoNum'>{Math.round(store.user.totalWithdrawn)} <img
+                                            src={gem} className='gemBuy' alt=''/></span>
+                                    </div>
+                                    <div className='fieldContainerProfile'>
+                                        <span className='outerInfo'>Total deposited:</span>
+                                        <span className='outerInfoNum'>{Math.round(store.user.totalDeposited)} <img
+                                            src={gem} className='gemBuy' alt=''/></span>
+                                    </div>
+                                    <button className='btnPayments' onClick={() => openPayments()}>Payments</button>
+                                </div>
                             </div>
-                        </div>
-                        <div className='outerInfoContainer'>
-                            <div className='fieldContainerProfile'>
-                                <span className='outerInfo'>Games played:</span>
-                                <span className='outerInfoNum'>{store.user.gamesPlayed}</span>
-                            </div>
-                            <div className='fieldContainerProfile'>
-                                <span className='outerInfo'>Total wagered:</span>
-                                <span className='outerInfoNum'>{Math.round(store.user.totalWagered)} <img src={gem} className='gemBuy' alt='' /></span>
-                            </div>
-                            <div className='fieldContainerProfile'>
-                                <span className='outerInfo'>Total withdrawn:</span>
-                                <span className='outerInfoNum'>{Math.round(store.user.totalWithdrawn)} <img src={gem} className='gemBuy' alt='' /></span>
-                            </div>
-                            <div className='fieldContainerProfile'>
-                                <span className='outerInfo'>Total deposited:</span>
-                                <span className='outerInfoNum'>{Math.round(store.user.totalDeposited)} <img src={gem} className='gemBuy' alt='' /></span>
-                            </div>
-                            <button className='btnPayments' onClick={() => openPayments()}>Payments</button>
-                        </div>
-                    </div>
-                    <div className='affiliateInfo'>
-                        <div className='fieldContainerProfile'>
-                            <span className='affiliatedInfo'>Affiliated users</span>
-                            <span className='affiliatedInfoNum'>{afUsers}</span>
-                        </div>
-                        <div className='fieldContainerProfile'>
-                            <div className='affiliatedBalanceInfo'>
-                                <span className='affiliatedInfo'>Affiliated balance</span>
-                                <button className='btnGetBalance' onClick={getAffiliatedBalance}>
-                                    Get
-                                </button>
-                            </div>
-                            <span className='affiliatedInfoNum'>{afBalance}</span>
-                            {errorBalance !== '' &&
-                                <div className='affiliatedBalanceInfo'>
+                            <div className='affiliateInfo'>
+                                <div className='fieldContainerProfile'>
+                                    <span className='affiliatedInfo'>Affiliated users</span>
+                                    <span className='affiliatedInfoNum'>{afUsers}</span>
+                                </div>
+                                <div className='fieldContainerProfile'>
+                                    <div className='affiliatedBalanceInfo'>
+                                        <span className='affiliatedInfo'>Affiliated balance</span>
+                                        <button className='btnGetBalance' onClick={getAffiliatedBalance}>
+                                            Get
+                                        </button>
+                                    </div>
+                                    <span className='affiliatedInfoNum'>{afBalance}</span>
+                                    {errorBalance !== '' &&
+                                        <div className='affiliatedBalanceInfo'>
                                     <span className='errorCode'>
                                         {errorBalance}
                                     </span>
-                                    <button className='btnCheckError' onClick={() => setErrorBalance('')}>
-                                        <FaCheck />
-                                    </button>
+                                            <button className='btnCheckError' onClick={() => setErrorBalance('')}>
+                                                <FaCheck/>
+                                            </button>
+                                        </div>
+                                    }
                                 </div>
-                            }
-                        </div>
-                        <div className='fieldContainerProfile'>
-                            <span className='affiliatedInfo'>Affiliate code</span>
-                            <div>
-                                {change ?
-                                    <>
-                                        <div className='codeContainer'>
-                                            <input
-                                                className='afCode'
-                                                type='text'
-                                                value={value}
-                                                onChange={(event) => handleChange(event)}
-                                                maxLength='15'
-                                                minLength='3'
-                                            />
-                                            <FaSave className='btnSave' onClick={handleSave}/>
-                                            <MdOutlineCancelPresentation className='btnCancel' onClick={() => handleCancel()}/>
-                                            {errorCode &&
-                                                <span className='errorCode'>{errorCode}</span>
-                                            }
-                                        </div>
-                                    </>
-                                    :
-                                    <div className='codeContainer'>
-                                        <span className='affiliatedInfoNum'>{afCode}</span>
-                                        <FaPenSquare className='btnPen' onClick={() => handleCode()} />
+                                <div className='fieldContainerProfile'>
+                                    <span className='affiliatedInfo'>Affiliate code</span>
+                                    <div>
+                                        {change ?
+                                            <>
+                                                <div className='codeContainer'>
+                                                    <input
+                                                        className='afCode'
+                                                        type='text'
+                                                        value={value}
+                                                        onChange={(event) => handleChange(event)}
+                                                        maxLength='15'
+                                                        minLength='3'
+                                                    />
+                                                    <FaSave className='btnSave' onClick={handleSave}/>
+                                                    <MdOutlineCancelPresentation className='btnCancel'
+                                                                                 onClick={() => handleCancel()}/>
+                                                    {errorCode &&
+                                                        <span className='errorCode'>{errorCode}</span>
+                                                    }
+                                                </div>
+                                            </>
+                                            :
+                                            <div className='codeContainer'>
+                                                <span className='affiliatedInfoNum'>{afCode}</span>
+                                                <FaPenSquare className='btnPen' onClick={() => handleCode()}/>
+                                            </div>
+                                        }
                                     </div>
-                                }
-                            </div>
-                        </div>
-                        <div className='fieldContainerProfile'>
-                            <span className='affiliatedInfo'>Affiliate link</span>
-                            <span
-                                className='affiliatedInfoNum'
-                                style={{border: 'solid 2px rgba(110, 110, 110, 0.5)', borderRadius: 5, padding: 5}}
-                            >
-                                {afLink}
-                            </span>
-                        </div>
-                        <div className='fieldContainerProfile'>
-                            <span className='affiliatedInfo'>Code for payments</span>
-                            <div>
-                                {changeCodeToUse ?
-                                    <>
-                                        <div className='codeContainer'>
-                                            <input
-                                                className='afCode'
-                                                type='text'
-                                                value={valueCodeToUse}
-                                                onChange={(event) => handleChangeCodeToUse(event)}
-                                                maxLength='15'
-                                                minLength='3'
-                                            />
-                                            <FaSave className='btnSave' onClick={handleSaveCodeToUse}/>
-                                            <MdOutlineCancelPresentation className='btnCancel' onClick={() => handleCancelCodeToUse()}/>
-                                            {errorCodeToUse &&
-                                                <span className='errorCode'>{errorCodeToUse}</span>
-                                            }
-                                        </div>
-                                    </>
-                                    :
-                                    <div className='codeContainer'>
-                                        <span className='affiliatedInfoNum'>{codeToUse}</span>
-                                        <FaPenSquare className='btnPen' onClick={() => handleCodeToUse()} />
+                                </div>
+                                {/*<div className='fieldContainerProfile'>*/}
+                                {/*    <span className='affiliatedInfo'>Affiliate link</span>*/}
+                                {/*    <span*/}
+                                {/*        className='affiliatedInfoNum'*/}
+                                {/*        style={{*/}
+                                {/*            border: 'solid 2px rgba(110, 110, 110, 0.5)',*/}
+                                {/*            borderRadius: 5,*/}
+                                {/*            padding: 5*/}
+                                {/*        }}*/}
+                                {/*    >*/}
+                                {/*        {afLink}*/}
+                                {/*    </span>*/}
+                                {/*</div>*/}
+                                <div className='fieldContainerProfile'>
+                                    <span className='affiliatedInfo'>Code for payments</span>
+                                    <div>
+                                        {changeCodeToUse ?
+                                            <>
+                                                <div className='codeContainer'>
+                                                    <input
+                                                        className='afCode'
+                                                        type='text'
+                                                        value={valueCodeToUse}
+                                                        onChange={(event) => handleChangeCodeToUse(event)}
+                                                        maxLength='15'
+                                                        minLength='3'
+                                                    />
+                                                    <FaSave className='btnSave' onClick={handleSaveCodeToUse}/>
+                                                    <MdOutlineCancelPresentation className='btnCancel'
+                                                                                 onClick={() => handleCancelCodeToUse()}/>
+                                                    {errorCodeToUse &&
+                                                        <span className='errorCode'>{errorCodeToUse}</span>
+                                                    }
+                                                </div>
+                                            </>
+                                            :
+                                            <div className='codeContainer'>
+                                                <span className='affiliatedInfoNum'>{codeToUse}</span>
+                                                <FaPenSquare className='btnPen' onClick={() => handleCodeToUse()}/>
+                                            </div>
+                                        }
                                     </div>
-                                }
+                                </div>
                             </div>
-                        </div>
-                    </div>
+                        </>
+                    }
+                    {!store.isAuth &&
+                        <span style={{
+                            fontFamily: 'Poppins, sans-serif',
+                            fontSize: '1.2em',
+                            color: 'rgba(255, 255, 255, 0.9)',
+                            textShadow: '0 0 4px rgba(255, 255, 255, 0.45)'
+                        }}>
+                            Authorize first...
+                        </span>
+                    }
                 </div>
             </div>
         </div>

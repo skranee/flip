@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {Context} from "../index";
 import {observer} from "mobx-react";
 import OptionsList from "./optionsList";
@@ -20,6 +20,12 @@ function AdminPanel() {
     const [chosenIndex, setChosenIndex] = useState([]);
     const [giveawayValue, setGiveawayValue] = useState(0);
     const [timer, setTimer] = useState(0);
+    const modalRef1 = useRef();
+    const modalRef2 = useRef();
+    const modalRef3 = useRef();
+    const [clickInside1, setClickInside1] = useState(false);
+    const [clickInside2, setClickInside2] = useState(false);
+    const [clickInside3, setClickInside3] = useState(false);
 
     useEffect(() => {
         const getInventory = async () => {
@@ -44,13 +50,6 @@ function AdminPanel() {
         else {
             return '68%'
         }
-    }
-
-    const handleBlur = () => {
-        setUsername('');
-        setValue('');
-        setLevel('');
-        globalStore.setAdminModal(false);
     }
 
     const handleUsername = (event) => {
@@ -170,10 +169,6 @@ function AdminPanel() {
         setIncDec(incDec)
     }
 
-    const handleBlurPayments = () => {
-        globalStore.setPaymentsOpen(false);
-    }
-
     const addToGiveaway = (index, item) => {
         if(chosenIndex.includes(index)) {
             setChosenIndex(chosenIndex.filter(item => item !== index));
@@ -186,22 +181,78 @@ function AdminPanel() {
         }
     }
 
-    const handleBlurGiveaway = () => {
-        globalStore.setAdminOptionStatus('');
-        setChosenItems([]);
-        setChosenIndex([]);
-        setTimer(0);
-        setGiveawayValue(0);
-    }
+    const handleMouseDown1 = (event) => {
+        if (modalRef1.current && modalRef1.current.contains(event.target)) {
+            setClickInside1(true)
+        }
+        else {
+            setClickInside1(false);
+        }
+    };
+
+    const handleMouseUp1 = () => {
+        if(clickInside1) {
+            globalStore.setPaymentsOpen(true);
+        }
+        else {
+            globalStore.setPaymentsOpen(false)
+            setClickInside1(false)
+        }
+    };
+
+    const handleMouseDown2 = (event) => {
+        if (modalRef2.current && modalRef2.current.contains(event.target)) {
+            setClickInside2(true)
+        }
+        else {
+            setClickInside2(false);
+        }
+    };
+
+    const handleMouseUp2 = () => {
+        if(clickInside2) {
+            globalStore.setAdminModal(true);
+        }
+        else {
+            setUsername('');
+            setValue('');
+            setLevel('');
+            globalStore.setAdminModal(false);
+            setClickInside2(false)
+        }
+    };
+
+    const handleMouseDown3 = (event) => {
+        if (modalRef3.current && modalRef3.current.contains(event.target)) {
+            setClickInside3(true)
+        }
+        else {
+            setClickInside3(false);
+        }
+    };
+
+    const handleMouseUp3 = () => {
+        if(clickInside3) {
+            globalStore.setAdminOptionStatus('GIVEAWAY')
+        }
+        else {
+            globalStore.setAdminOptionStatus('');
+            setChosenItems([]);
+            setChosenIndex([]);
+            setTimer(0);
+            setGiveawayValue(0);
+            setClickInside3(false)
+        }
+    };
 
     return (
         <>
             {globalStore.paymentsOpen &&
-                <div className='backgroundModal' onClick={handleBlurPayments}>
+                <div className='backgroundModal' onMouseDown={handleMouseDown1} onMouseUp={handleMouseUp1}>
                     <div
                         className='modalWindowDeposit'
                         style={{justifyContent: "flex-start"}}
-                        onClick={(event) => event.stopPropagation()}
+                        ref={modalRef1}
                     >
                         <span className='upperTextPayments'>{username.toUpperCase()}'S PAYMENTS</span>
                         <div className='paymentsSpace'>
@@ -211,8 +262,8 @@ function AdminPanel() {
                 </div>
             }
             {globalStore.adminOptionStatus === 'GIVEAWAY' &&
-                <div className='backgroundModal' onClick={() => handleBlurGiveaway()}>
-                    <div className='modalWindowMain' onClick={(event) => event.stopPropagation()}>
+                <div className='backgroundModal' onMouseDown={handleMouseDown3} onMouseUp={handleMouseUp3}>
+                    <div className='modalWindowMain' ref={modalRef3}>
                         <span className='optionStatus'>
                             {globalStore.adminOptionStatus}
                         </span>
@@ -287,8 +338,8 @@ function AdminPanel() {
                 </div>
             }
             {globalStore.adminModal &&
-                <div className='backgroundModal' onClick={handleBlur}>
-                    <div className='modalWindowAdmin' onClick={(event) => event.stopPropagation()}
+                <div className='backgroundModal' onMouseDown={handleMouseDown2} onMouseUp={handleMouseUp2}>
+                    <div className='modalWindowAdmin' ref={modalRef2}
                          onKeyDown={(event) => handleKeyDown(event)}>
                         <span className='optionStatus'>{globalStore.adminOptionStatus}</span>
                         {

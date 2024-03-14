@@ -104,8 +104,9 @@ function Chat() {
                                     }
                                 }
                                 await updateUser();
-                            }, 1800)
+                            }, 4500)
                             setTimeout(() => {
+                                globalStore.setCountdown(true);
                                 globalStore.setViewOpen(true);
                             }, 500)
                         }
@@ -225,7 +226,6 @@ function Chat() {
                 }
                 setMes('');
                 socket.current.send(JSON.stringify(message));
-                // await store.sendMessage(message.user.id, message.message, message.time, (message.id).toString(), message.avatar); // ?????
                 if(messages.length > 49) {
                     messages.splice(0, 1);
                 }

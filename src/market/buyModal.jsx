@@ -1,15 +1,11 @@
-import React, {useContext} from 'react';
+import React, {useContext, useRef, useState} from 'react';
 import {Context} from "../index";
 import gem from '../imgs/currImg.png'
 
 function BuyModal({item}) {
     const {store, globalStore} = useContext(Context);
-
-    const handleBlur = () => {
-        globalStore.setBuyOpen(false);
-    }
-
-    console.log(item.owner);
+    const modalRef = useRef();
+    const [clickInside, setClickInside] = useState(false);
 
     const buy = async () => {
         if(store.user.balance >= item.price) {
@@ -27,9 +23,28 @@ function BuyModal({item}) {
         window.location.reload();
     }
 
+    const handleMouseDown = (event) => {
+        if (modalRef.current && modalRef.current.contains(event.target)) {
+            setClickInside(true)
+        }
+        else {
+            setClickInside(false);
+        }
+    };
+
+    const handleMouseUp = () => {
+        if(clickInside) {
+            globalStore.setBuyOpen(true);
+        }
+        else {
+            globalStore.setBuyOpen(false)
+            setClickInside(false)
+        }
+    };
+
     return (
-        <div className='backgroundModal' onClick={handleBlur}>
-            <div className='modalBuy' onClick={(event) => event.stopPropagation()}>
+        <div className='backgroundModal' onMouseDown={handleMouseDown} onMouseUp={handleMouseUp}>
+            <div className='modalBuy' ref={modalRef}>
                 <span className='headerBuy'>{item.name}</span>
                 <img src={item.image} className='imageBuy' alt='' />
                 <div className='priceBuy'>

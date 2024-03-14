@@ -14,6 +14,11 @@ class GameService {
         if(!items || items.length === 0) {
             return ApiError.BadRequest('Can not create game with nothing');
         }
+        for(const item of items) {
+            if(item.owner === '000000000000000000000000') {
+                return ApiError.BadRequest('Can not bet these items');
+            }
+        }
         for (const item of items) {
             await botModel.updateOne({itemId: item.itemId}, {owner: new ObjectId('000000000000000000000000')})
         }
@@ -205,7 +210,7 @@ class GameService {
 
             setTimeout(async () => {
                 const deleteGame = await this.deleteGame(gameId);
-            }, 60000);
+            }, 15000);
 
             return {
                 game: gameToPass,
@@ -225,7 +230,7 @@ class GameService {
             }
             if(game.gems1) {
                 const gems = game.gems1;
-                const returnGems = await userModel.updateOne({id: game.player1.id}, {$inc: {balance: gems}});
+                const returnGems = await userModel.updateOne({_id: game.player1._id}, {$inc: {balance: gems}});
             }
             const removeGame = await gameModel.deleteOne({gameId: game.gameId});
         } else {

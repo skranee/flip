@@ -46,9 +46,14 @@ export default class GlobalStore {
     allowedToParticipate = false;
     seeGiveaway = false;
     askedQuestions = false;
+    countdown = false;
 
     constructor() {
         makeAutoObservable(this)
+    }
+
+    setCountdown(bool) {
+        this.countdown = bool;
     }
 
     setAskedQuestions(bool) {

@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {Context} from "../index";
 import coin from '../imgs/currImg.png'
 import { SlMagnifier } from "react-icons/sl";
@@ -18,12 +18,12 @@ function Market() {
 
     useEffect(() => {
         const getItems = async () => {
-            if(store.user, store.user.id) {
+            if(store.user && store.user.id) {
                 await store.getUserItems(store.user.id);
             }
         }
         getItems();
-    }, [store.user, ]);
+    }, [store.user, store, ]);
 
     useEffect(() => {
         const getItems = async () => {
@@ -87,6 +87,10 @@ function Market() {
         globalStore.setSellOpen(false);
     }
 
+    const handleBlurOnSale = () => {
+        globalStore.setItemsOnSale(false);
+    }
+
     const setItemSell = (item) => {
         setItemSelling(item);
         globalStore.setSellItemOpen(true);
@@ -102,7 +106,7 @@ function Market() {
             <div className='background' />
             <div className='marketPage'>
                 {globalStore.sellOpen &&
-                    <div className='backgroundModal' onClick={handleBlur}>
+                    <div className='backgroundModal' onClick={() => handleBlur()}>
                         {globalStore.sellItemOpen &&
                             <SellModal item={itemSelling} />
                         }
@@ -156,7 +160,7 @@ function Market() {
                     </div>
                 }
                 {globalStore.itemsOnSale &&
-                    <div className='backgroundModal' onClick={() => globalStore.setItemsOnSale(false)}>
+                    <div className='backgroundModal' onClick={handleBlurOnSale}>
                         {globalStore.cancelSale &&
                             <CancelModal item={itemCancelling} />
                         }

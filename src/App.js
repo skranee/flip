@@ -5,7 +5,7 @@ import FaqBeneath from "./faqBeneath";
 import Chat from "./chat/chat";
 import {Context} from "./index";
 import NavigationPanel from "./mainPage/navigation/navigation";
-import {Route, Routes} from "react-router-dom";
+import {redirect, Route, Routes, useNavigate} from "react-router-dom";
 import Profile from "./profile/profile";
 import Market from "./market/market";
 import Rewards from "./rewards/rewards";
@@ -33,6 +33,26 @@ export function notify() {
 
 function App() {
     const {globalStore, store} = useContext(Context);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if(
+            window.location.pathname !== '/' &&
+            window.location.pathname !== '/profile' &&
+            window.location.pathname !== '/market' &&
+            window.location.pathname !== '/rewards' &&
+            window.location.pathname !== '/leaders' &&
+            window.location.pathname !== '/support' &&
+            window.location.pathname !== '/answer' &&
+            window.location.pathname !== '/admin' &&
+            window.location.pathname !== '/tos' &&
+            window.location.pathname !== '/privacy-policy' &&
+            window.location.pathname !== '/provably-fair'
+        )
+        {
+            navigate('/');
+        }
+    }, [])
 
     useEffect(() => {
         if(localStorage.getItem('token')) {
@@ -52,8 +72,6 @@ function App() {
     }, [store]);
 
     return (
-        //<Redirect /> !!!
-        //handle 404 (don't show elements like chat, faq etc when the page is .../rekfdosf) => 404 page
     <div className='main'>
         <NavigationPanel />
         <div className='background' />
