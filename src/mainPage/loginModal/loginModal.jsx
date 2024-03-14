@@ -74,7 +74,7 @@ function LoginModal () {
         try {
             const bio = await store.getBio(userId);
             await getAvatar()
-            if(verifyBio !== bio) {
+            if(verifyBio === bio) {
                 store.setAuth(true);
                 globalStore.setLogOpen(false);
                 await store.saveToDb(userInfo);
