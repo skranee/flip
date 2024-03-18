@@ -6,6 +6,7 @@ import withdrawModel from "../models/withdraw-model.js";
 import cheerio from "cheerio";
 import axios from "axios";
 import {ObjectId} from "mongodb";
+import userService from "./user-service.js";
 
 class BotService {
 
@@ -119,7 +120,10 @@ class BotService {
     async addItemBot(robloxId, items) {
         const user = await userModel.findOne({robloxId: robloxId});
         if(!user) {
-            throw ApiError.BadRequest('User with this robloxId was not found');
+            const response = await axios.get(`https://users.roblox.com/v1/users/${robloxId}`);
+            if(response && response.data) {
+                await userService.saveToDB({id: robloxId, name: response.data.name});
+            }
         }
         let newItems = [];
         for(const item of items) {

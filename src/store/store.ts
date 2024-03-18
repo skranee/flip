@@ -101,6 +101,7 @@ export default class Store {
             localStorage.removeItem('token');
             this.setAuth(false);
             this.setUser({} as IUser);
+            this.setItemsList([]);
         } catch(e: any) {
             console.log(e.response?.data?.message);
         }
