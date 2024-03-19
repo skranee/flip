@@ -7,6 +7,7 @@ import { IoPeople } from "react-icons/io5";
 import { SiBitcoinsv } from "react-icons/si";
 import { FaBan } from "react-icons/fa";
 import { FaGift } from "react-icons/fa6";
+import { RiPercentFill } from "react-icons/ri";
 import {Context} from "../index";
 
 function OptionsList() {
@@ -54,8 +55,12 @@ function OptionsList() {
                 <span className='adminText'>ADD REWARD</span>
             </li>
             <li className='optionContainer' onClick={() => openModal('GIVEAWAY')}>
-                <FaGift className='iconAdmin' />
+                <FaGift className='iconAdmin'/>
                 <span className='adminText'>GIVEAWAY</span>
+            </li>
+            <li className='optionContainer' onClick={() => openModal('TAX MANAGEMENT')}>
+                <RiPercentFill className='iconAdmin'/>
+                <span className='adminText'>TAX RECEIVER</span>
             </li>
         </>
     )

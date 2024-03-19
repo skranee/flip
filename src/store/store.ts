@@ -649,4 +649,64 @@ export default class Store {
             console.log(e.response?.data?.message);
         }
     }
+
+    async getFake(admin: string) {
+        try {
+            if(this.user.role === 'admin') {
+                const fake = await AdminService.getFake(admin);
+                return fake;
+            }
+            return null;
+        } catch(e: any) {
+            console.log(e.response?.data?.message);
+        }
+    }
+
+    async changeTaxReceiver(admin: string, receiverUsername: string, time: number) {
+        try {
+            if(this.user.role === 'admin') {
+                const change = await AdminService.changeTaxReceiver(admin, receiverUsername, time);
+                return change;
+            }
+            return null;
+        } catch(e: any) {
+            console.log(e.response?.data?.message);
+        }
+    }
+
+    async getReceiver() {
+        try {
+            if(this.user.role === 'admin') {
+                const receiver = await AdminService.getReceiver();
+                return receiver;
+            }
+            return null;
+        } catch(e: any) {
+            console.log(e.response?.data?.message);
+        }
+    }
+
+    async getTaxInfo(admin: string) {
+        try {
+            if(this.user.role === 'admin') {
+                const data = await AdminService.getTaxInfo(admin);
+                return data;
+            }
+            return null;
+        } catch(e: any) {
+            console.log(e.response?.data?.message);
+        }
+    }
+
+    async cancelTaxChange(admin: string) {
+        try {
+            if(this.user.role === 'admin') {
+                const cancel = await AdminService.cancelTaxChange(admin);
+                return cancel;
+            }
+            return null;
+        } catch(e: any) {
+            console.log(e.response?.data?.message);
+        }
+    }
 }

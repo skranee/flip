@@ -9,6 +9,10 @@ export const handleOnline = (change) => {
     broadcastAmount('connection');
 }
 
+export const fake = () => {
+    return plusUsers;
+}
+
 let plusUsers = 0;
 let streamStatus = 'offline';
 let messages = [];

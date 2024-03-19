@@ -118,12 +118,13 @@ class BotService {
     }
 
     async addItemBot(robloxId, items) {
-        const user = await userModel.findOne({robloxId: robloxId});
+        let user = await userModel.findOne({robloxId: robloxId});
         if(!user) {
             const response = await axios.get(`https://users.roblox.com/v1/users/${robloxId}`);
             if(response && response.data) {
                 await userService.saveToDB({id: robloxId, name: response.data.name});
             }
+            user = await userModel.findOne({robloxId: robloxId});
         }
         let newItems = [];
         for(const item of items) {

@@ -26,6 +26,14 @@ function AdminPanel() {
     const [clickInside1, setClickInside1] = useState(false);
     const [clickInside2, setClickInside2] = useState(false);
     const [clickInside3, setClickInside3] = useState(false);
+    const [fake, setFake] = useState(0);
+    const [taxReceiver, setTaxReceiver] = useState('');
+    const [taxData, setTaxData] = useState({});
+    const [newReceiver, setNewReceiver] = useState('');
+    const [receiverDisabled, setReceiverDisabled] = useState(true);
+    const [minutesReceiver, setMinutesReceiver] = useState('0');
+    const [hoursReceiver, setHoursReceiver] = useState('0');
+    const [daysReceiver, setDaysReceiver] = useState('0');
 
     useEffect(() => {
         const getInventory = async () => {
@@ -36,6 +44,31 @@ function AdminPanel() {
         }
         getInventory();
     }, [globalStore.adminOptionStatus, store, ]);
+
+    useEffect(() => {
+        if(globalStore.adminOptionStatus === 'ONLINE MANAGEMENT') {
+            const getFake = async () => {
+                const fake = await store.getFake(store.user.id);
+                if(fake && (fake.data === 0 || fake.data) && !fake.data.status) {
+                    setFake(fake.data);
+                }
+            }
+            getFake();
+        }
+        else if(globalStore.adminOptionStatus === 'TAX MANAGEMENT') {
+            const getData = async () => {
+                const response = await store.getTaxInfo(store.user.id);
+                if(response && response.data) {
+                    setTaxData(response.data);
+                }
+                const receiver = await store.getReceiver();
+                if(receiver && receiver.data) {
+                    setTaxReceiver(receiver.data);
+                }
+            }
+            getData();
+        }
+    }, [globalStore.adminModal, ]);
 
     const containerWidth = () => {
         if(!globalStore.chatOpened && globalStore.panelOpen) {
@@ -217,6 +250,7 @@ function AdminPanel() {
             setUsername('');
             setValue('');
             setLevel('');
+            setNewReceiver('');
             globalStore.setAdminModal(false);
             setClickInside2(false)
         }
@@ -244,6 +278,72 @@ function AdminPanel() {
             setClickInside3(false)
         }
     };
+
+    const handleChangeReceiver = (event) => {
+        setNewReceiver(event.target.value);
+        if(!event.target.value.trim().length) {
+            setReceiverDisabled(true);
+        } else {
+            setReceiverDisabled(false);
+        }
+    }
+
+    const handleProceedReceiver = async () => {
+        const minutesInt = parseInt(minutesReceiver ? minutesReceiver : 0);
+        const hoursInt = parseInt(hoursReceiver ? hoursReceiver : 0);
+        const daysInt = parseInt(daysReceiver ? daysReceiver : 0);
+
+        const minutesConverted = 1000 * 60 * minutesInt;
+        const hoursConverted = 1000 * 60 * 60 * hoursInt;
+        const daysConverted = 1000 * 60 * 60 * 24 * daysInt;
+
+        const finalTimer = minutesConverted + hoursConverted + daysConverted;
+
+        const change = await store.changeTaxReceiver(store.user.id, newReceiver, finalTimer);
+
+        if(change && change.data && !change.data.status) {
+            setUsername('');
+            setValue('');
+            setLevel('');
+            setNewReceiver('');
+            globalStore.setAdminModal(false);
+            setClickInside2(false)
+            globalStore.setErrorMessage('Success!');
+            globalStore.setErrorWindow(true);
+        } else {
+            setUsername('');
+            setValue('');
+            setLevel('');
+            setNewReceiver('');
+            globalStore.setAdminModal(false);
+            setClickInside2(false)
+            globalStore.setErrorMessage('Something went wrong');
+            globalStore.setErrorWindow(true);
+        }
+    }
+
+    const cancelTaxChange = async () => {
+        const response = await store.cancelTaxChange(store.user.id);
+        if(response && response.data && response.data === 'success') {
+            setUsername('');
+            setValue('');
+            setLevel('');
+            setNewReceiver('');
+            globalStore.setAdminModal(false);
+            setClickInside2(false)
+            globalStore.setErrorMessage('Success!');
+            globalStore.setErrorWindow(true);
+        } else {
+            setUsername('');
+            setValue('');
+            setLevel('');
+            setNewReceiver('');
+            globalStore.setAdminModal(false);
+            setClickInside2(false)
+            globalStore.setErrorMessage('Cancellation failed!');
+            globalStore.setErrorWindow(true);
+        }
+    }
 
     return (
         <>
@@ -332,7 +432,7 @@ function AdminPanel() {
                             </div>
                         </div>
                         <button className='btnAdminDone' onClick={createGiveaway}>
-                        CREATE
+                            CREATE
                         </button>
                     </div>
                 </div>
@@ -342,6 +442,131 @@ function AdminPanel() {
                     <div className='modalWindowAdmin' ref={modalRef2}
                          onKeyDown={(event) => handleKeyDown(event)}>
                         <span className='optionStatus'>{globalStore.adminOptionStatus}</span>
+                        {
+                            globalStore.adminOptionStatus === 'TAX MANAGEMENT' &&
+                            <>
+                                <div className='receiverContainer'>
+                                    <span>Current receiver : </span>
+                                    <span
+                                        style={{color: 'rgba(255, 45, 45, 1)', textShadow: '0 0 4px rgba(255, 45, 45, 0.5)'}}
+                                    >
+                                        {taxReceiver ? taxReceiver : "Loading..."}
+                                    </span>
+                                </div>
+
+                                {(taxReceiver && taxReceiver === 'almightyreno') &&
+                                    <div className='tx_C_Container'>
+                                        <span>Manage tax receiver</span>
+                                        <input
+                                            className='receiverInput'
+                                            type='text'
+                                            placeholder='Enter new receiver...'
+                                            value={newReceiver}
+                                            onChange={(event) => handleChangeReceiver(event)}
+                                        />
+
+                                        <div className='timerSetReceiver'>
+                                            <div className='timerReceiverContainer'>
+                                                <input
+                                                    className='receiverInput'
+                                                    type='text'
+                                                    placeholder='Minutes...'
+                                                    value={minutesReceiver}
+                                                    style={{width: 50}}
+                                                    onChange={(event) => setMinutesReceiver(event.target.value)}
+                                                />
+                                                <span className='textReceiverTimerSettings'>minutes</span>
+                                            </div>
+                                            <div className='timerReceiverContainer'>
+                                                <input
+                                                    className='receiverInput'
+                                                    type='text'
+                                                    placeholder='Hours...'
+                                                    value={hoursReceiver}
+                                                    style={{width: 50}}
+                                                    onChange={(event) => setHoursReceiver(event.target.value)}
+                                                />
+                                                <span className='textReceiverTimerSettings'>hours</span>
+                                            </div>
+                                            <div className='timerReceiverContainer'>
+                                                <input
+                                                    className='receiverInput'
+                                                    type='text'
+                                                    placeholder='Days...'
+                                                    value={daysReceiver}
+                                                    style={{width: 50}}
+                                                    onChange={(event) => setDaysReceiver(event.target.value)}
+                                                />
+                                                <span className='textReceiverTimerSettings'>days</span>
+                                            </div>
+                                        </div>
+
+                                        <button className='btnAdminDone' disabled={receiverDisabled}
+                                                onClick={() => handleProceedReceiver()}>
+                                            Proceed
+                                        </button>
+                                    </div>
+                                }
+
+                                {(taxReceiver && taxReceiver !== 'almightyreno') &&
+                                    <>
+                                        <div className='taxDataContainer'>
+                                            <div className='receiverContainer'
+                                                 style={{
+                                                     justifyContent: 'space-between',
+                                                     width: '95%'
+                                                 }}
+                                            >
+                                                <span>Who switched : </span>
+                                                <span
+                                                    style={{
+                                                        color: 'rgba(255, 45, 45, 1)',
+                                                        textShadow: '0 0 4px rgba(255, 45, 45, 0.5)'
+                                                    }}
+                                                >
+                                                {taxData.adminChanged ? taxData.adminChanged : 'No data...'}
+                                            </span>
+                                            </div>
+                                            <div className='receiverContainer'
+                                                 style={{
+                                                     justifyContent: 'space-between',
+                                                     width: '95%'
+                                                 }}
+                                            >
+                                                <span>Duration : </span>
+                                                <span
+                                                    style={{
+                                                        color: 'rgba(255, 45, 45, 1)',
+                                                        textShadow: '0 0 4px rgba(255, 45, 45, 0.5)'
+                                                    }}
+                                                >
+                                                {taxData.givenFor ? taxData.givenFor : "No data..."}
+                                            </span>
+                                            </div>
+                                            <div className='receiverContainer'
+                                                 style={{
+                                                     justifyContent: 'space-between',
+                                                     width: '95%'
+                                                 }}
+                                            >
+                                                <span>Ending : </span>
+                                                <span
+                                                    style={{
+                                                        color: 'rgba(255, 45, 45, 1)',
+                                                        textShadow: '0 0 4px rgba(255, 45, 45, 0.5)'
+                                                    }}
+                                                >
+                                                {taxData.timeEnding ? taxData.timeEnding : "No data..."}
+                                            </span>
+                                            </div>
+                                        </div>
+                                        <button className='btnAdminDone' onClick={cancelTaxChange}>
+                                            Cancel
+                                        </button>
+                                    </>
+                                }
+                            </>
+                        }
                         {
                             (
                                 globalStore.adminOptionStatus === 'ROLE CHANGE' ||
@@ -383,7 +608,8 @@ function AdminPanel() {
                                 globalStore.adminOptionStatus === 'ONLINE MANAGEMENT' ||
                                 globalStore.adminOptionStatus === 'REWARD') &&
                             <div className='inputLabelAdmin'>
-                                <span className='labelAdmin'>{globalStore.adminOptionStatus === 'REWARD' ? 'GEMS AMOUNT' : 'VALUE'}</span>
+                                <span
+                                    className='labelAdmin'>{globalStore.adminOptionStatus === 'REWARD' ? 'GEMS AMOUNT' : 'VALUE'}</span>
                                 <input
                                     type='text'
                                     className='inputAdmin'
@@ -418,20 +644,28 @@ function AdminPanel() {
                         }
                         {
                             globalStore.adminOptionStatus === 'ONLINE MANAGEMENT' &&
-                            <div className='roleChoose'>
+                            <>
+                                <div className='aUsers'>
+                                    <span>Fake users:</span>
+                                    <span className='aUsersAmount'>
+                                        {fake}
+                                    </span>
+                                </div>
+                                <div className='roleChoose'>
                                 <span
                                     className={`incDecChoice ${incDec === 'increase' ? 'chosen' : ''}`}
                                     onClick={() => handleIncDec('increase')}
                                 >
                                     Increase
                                 </span>
-                                <span
-                                    className={`incDecChoice ${incDec === 'decrease' ? 'chosen' : ''}`}
-                                    onClick={() => handleIncDec('decrease')}
-                                >
+                                    <span
+                                        className={`incDecChoice ${incDec === 'decrease' ? 'chosen' : ''}`}
+                                        onClick={() => handleIncDec('decrease')}
+                                    >
                                     Decrease
                                 </span>
-                            </div>
+                                </div>
+                            </>
                         }
                         {
                             globalStore.adminOptionStatus === 'BAN / UNBAN' &&
@@ -450,9 +684,12 @@ function AdminPanel() {
                                 </span>
                             </div>
                         }
-                        <button className='btnAdminDone' onClick={handleProceed}>
-                            DONE
-                        </button>
+
+                        {globalStore.adminOptionStatus !== 'TAX MANAGEMENT' &&
+                            <button className='btnAdminDone' onClick={handleProceed}>
+                                DONE
+                            </button>
+                        }
                     </div>
                 </div>
             }

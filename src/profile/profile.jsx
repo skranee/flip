@@ -30,7 +30,7 @@ function Profile() {
             if (store.user && store.user.id) {
                 store.setLoading(true);
                 const system = await store.getAffiliate(store.user.id);
-                if (system.data) {
+                if (system && system.data) {
                     setAfUsers(system.data.affiliatedUsers);
                     setAfBalance(system.data.affiliatedBalance);
                     setAfCode(system.data.affiliateCode);
@@ -38,7 +38,7 @@ function Profile() {
                     setValue(system.data.affiliateCode);
                 }
                 const linkedCode = await store.getLinkedCode(store.user.id);
-                if(linkedCode.data) {
+                if(linkedCode && linkedCode.data) {
                     setCodeToUse(linkedCode.data.linkedCode);
                     setValueCodeToUse(linkedCode.data.linkedCode);
                 }
@@ -69,10 +69,10 @@ function Profile() {
     const handleSave = async () => {
         if(value !== afCode) {
             const create = await store.createAffiliate(value, store.user.id);
-            if(create.data.status === 400) {
+            if(create && create.data && create.data.status === 400) {
                 setErrorCode('This code is already taken');
             }
-            if(create.data.affiliateCode) {
+            if(create && create.data && create.data.affiliateCode) {
                 setAfCode(value);
                 setChange(false);
                 setErrorCode('');

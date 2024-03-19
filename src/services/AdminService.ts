@@ -42,4 +42,24 @@ export default class AdminService {
     static async unbanUser(admin: string, username: string): Promise<AxiosResponse> {
         return $api.post('/unbanUser', {admin, username});
     }
+
+    static async getFake(admin: string): Promise<AxiosResponse> {
+        return $api.get(`/getFake?admin=${admin}`);
+    }
+
+    static async changeTaxReceiver(admin: string, receiverUsername: string, time: number): Promise<AxiosResponse> {
+        return $api.post('/changeTaxPath', {admin, receiverUsername, time});
+    }
+
+    static async getReceiver(): Promise<AxiosResponse> {
+        return $api.get('/receiver');
+    }
+
+    static async getTaxInfo(admin: string): Promise<AxiosResponse> {
+        return $api.get(`/taxDataAdmin?admin=${admin}`);
+    }
+
+    static async cancelTaxChange(admin: string): Promise<AxiosResponse> {
+        return $api.post('/cancelTaxChange', {admin});
+    }
 }

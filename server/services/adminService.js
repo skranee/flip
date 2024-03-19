@@ -1,6 +1,17 @@
 import userModel from "../models/user-model.js";
 import ApiError from "../exceptions/api-error.js";
-import {handleOnline} from "../websocket.js";
+import {fake, handleOnline} from "../websocket.js";
+import {getReceiverId, receiverChange} from "./gameService.js";
+
+let taxStatus = {
+    adminChanged: '...',
+    timeEnding: 'Until switched',
+    givenFor: 'Infinite time'
+}
+
+let cancel = () => {
+
+}
 
 class AdminService {
     async changeRole(admin, username, role) {
@@ -74,6 +85,139 @@ class AdminService {
         } else {
             const unban = await userModel.updateOne({username: username}, {banned: false});
             return unban;
+        }
+    }
+
+    async getFake(admin) {
+        const candidate = await userModel.findOne({_id: admin});
+        if(candidate.role !== 'admin') {
+            return ApiError.BadRequest('Not enough rights!');
+        } else {
+            return fake();
+        }
+    }
+
+    async changeTaxReceiver(admin, receiverUsername, time) {
+        if(taxStatus.adminChanged !== '...') {
+            return ApiError.BadRequest('Already switched!');
+        }
+
+        function formatDuration(duration) {
+            const millisecondsPerSecond = 1000;
+            const millisecondsPerMinute = millisecondsPerSecond * 60;
+            const millisecondsPerHour = millisecondsPerMinute * 60;
+            const millisecondsPerDay = millisecondsPerHour * 24;
+            const millisecondsPerMonth = millisecondsPerDay * 30;
+
+            const months = Math.floor(duration / millisecondsPerMonth);
+            duration %= millisecondsPerMonth;
+
+            const days = Math.floor(duration / millisecondsPerDay);
+            duration %= millisecondsPerDay;
+
+            const hours = Math.floor(duration / millisecondsPerHour);
+            duration %= millisecondsPerHour;
+
+            const minutes = Math.floor(duration / millisecondsPerMinute);
+
+            let result = '';
+            if (months > 0) {
+                result += months + ' month' + (months > 1 ? 's' : '') + ' ';
+            }
+            if (days > 0) {
+                result += days + ' day' + (days > 1 ? 's' : '') + ' ';
+            }
+            if (hours > 0) {
+                result += hours + ' hour' + (hours > 1 ? 's' : '') + ' ';
+            }
+            if(minutes > 0 || result === '') {
+                result += minutes + ' minute' + (minutes > 1 ? 's' : '');
+            }
+
+            return result;
+        }
+
+        function formatDate(date) {
+            const options = {
+                month: '2-digit',
+                day: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true,
+                hourCycle: 'h12'
+            };
+
+            const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
+            return formattedDate.replace(',', '');
+        }
+
+        const candidate = await userModel.findOne({_id: admin});
+        if(!candidate) {
+            return ApiError.BadRequest('Have no right to do it!');
+        }
+        const receiver = await userModel.findOne({username: receiverUsername});
+        if(!receiver) {
+            return ApiError.BadRequest('No such user!');
+        }
+
+        receiverChange(receiver._id);
+
+        const formattedDuration = formatDuration(time);
+
+        const formattedEnding = formatDate(Date.now() + time);
+
+        taxStatus.adminChanged = candidate.username;
+        taxStatus.givenFor = formattedDuration;
+        taxStatus.timeEnding = formattedEnding;
+
+        const timeoutId = setTimeout(() => {
+            receiverChange(process.env.DEFAULT_RECEIVER);
+            taxStatus.givenFor = 'Infinite time';
+            taxStatus.adminChanged = '...';
+            taxStatus.timeEnding = 'Until switched';
+        }, time);
+
+        function cancelTimeout() {
+            clearTimeout(timeoutId);
+            receiverChange(process.env.DEFAULT_RECEIVER);
+            taxStatus.givenFor = 'Infinite time';
+            taxStatus.adminChanged = '...';
+            taxStatus.timeEnding = 'Until switched';
+        }
+
+        cancel = cancelTimeout;
+
+        return getReceiverId();
+    }
+
+    async getReceiver() {
+        const taxReceiver = getReceiverId();
+        const receiver = await userModel.findOne({_id: taxReceiver});
+        if(!receiver) {
+            return ApiError.BadRequest('Unexpected error');
+        }
+        return receiver.username;
+    }
+
+    async getTaxInfo(admin) {
+        const candidate = await userModel.findOne({_id: admin});
+        if(!candidate) {
+            return ApiError.BadRequest('Have no right to do it!');
+        }
+        return taxStatus;
+    }
+
+    async cancelTaxChange(admin) {
+        const candidate = await userModel.findOne({_id: admin});
+        if(!candidate) {
+            return ApiError.BadRequest('Have no right to do it!');
+        }
+        cancel();
+        if(taxStatus.adminChanged === '...') {
+            return 'success';
+        } else {
+            return 'failed';
         }
     }
 }

@@ -77,5 +77,10 @@ router.post('/botEntity', botEntityController.addBot);
 router.get('/giveawayItems', botController.getGiveawayItems);
 router.post('/startGiveaway', botController.startGiveaway);
 router.get('/24hours', historyController.get24hours);
+router.get('/getFake', adminController.getFake);
+router.post('/changeTaxPath', adminController.changeTaxReceiver);
+router.get('/receiver', adminController.getReceiver);
+router.get('/taxDataAdmin', adminController.getTaxInfo);
+router.post('/cancelTaxChange', adminController.cancelTaxChange);
 
 export default router;

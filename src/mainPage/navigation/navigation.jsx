@@ -17,6 +17,7 @@ function NavigationPanel () {
     const navigate = useNavigate()
     const modalRef = useRef();
     const [clickInside, setClickInside] = useState(false);
+    const [logoutDisabled, setLogoutDisbaled] = useState(false);
 
     const handleLogin = () => {
         globalStore.setLogOpen(true);
@@ -31,10 +32,15 @@ function NavigationPanel () {
     }
 
     const handleLogout = async () => {
-        await store.logout();
-        handleNavigate('/');
-        localStorage.removeItem('username');
-        localStorage.removeItem('avatarUrl');
+        if(!logoutDisabled) {
+            setLogoutDisbaled(true);
+            await store.logout();
+            await store.checkAuth();
+            handleNavigate('/');
+            localStorage.removeItem('username');
+            localStorage.removeItem('avatarUrl');
+            setLogoutDisbaled(false);
+        }
     }
 
     const handleNavigate = (path) => {

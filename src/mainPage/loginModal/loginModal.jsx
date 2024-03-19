@@ -26,7 +26,7 @@ function LoginModal () {
         else {
             setIsDisabled(false)
         }
-    }, [checked, username]);
+    }, [checked, username, ]);
 
     const handleNavigate = (page) => {
         navigate(page);
@@ -40,7 +40,10 @@ function LoginModal () {
                 const user = userData.data.user;
 
                 if (!user || !user.id) {
-                    console.error('Error: User not found');
+                    globalStore.setLogOpen(false);
+                    setUsername('');
+                    globalStore.setErrorMessage('Error: User not found');
+                    globalStore.setErrorWindow(true);
                     return;
                 }
 
@@ -65,7 +68,10 @@ function LoginModal () {
                 setUserInfo(user);
                 setVerify(true);
             } catch (error) {
-                console.error('Error fetching user information', error);
+                globalStore.setLogOpen(false);
+                setUsername('');
+                globalStore.setErrorMessage('Error: User not found');
+                globalStore.setErrorWindow(true);
             }
         }
     };
@@ -80,6 +86,8 @@ function LoginModal () {
                 await store.saveToDb(userInfo);
             } else {
                 setVerStatus('Your description does not match');
+                setUsername('');
+                setVerify(false);
                 localStorage.removeItem('username');
                 localStorage.removeItem('avatarUrl');
             }

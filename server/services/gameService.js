@@ -8,6 +8,16 @@ import axios from "axios";
 import historyService from "./historyService.js";
 import userService from "./user-service.js";
 
+let taxReceiver = '65eb934f623b869cf8035057';
+
+export const receiverChange = (id) => {
+    taxReceiver = id;
+}
+
+export const getReceiverId = () => {
+    return taxReceiver;
+}
+
 class GameService {
     async createGame(player1, items, side) {
         const gameId = uuidv4();
@@ -79,7 +89,7 @@ class GameService {
                 }
 
                 for(const item of itemsCut) {
-                    await botModel.updateOne({itemId: item.itemId}, {owner: '65eb934f623b869cf8035057'});
+                    await botModel.updateOne({itemId: item.itemId}, {owner: taxReceiver});
                 }
 
                 for(const item of itemsToProceed) {
@@ -108,7 +118,7 @@ class GameService {
                 }
 
                 for(const item of itemsCut) {
-                    await botModel.updateOne({itemId: item.itemId}, {owner: '65eb934f623b869cf8035057'});
+                    await botModel.updateOne({itemId: item.itemId}, {owner: taxReceiver});
                 }
 
                 for(const item of itemsToProceed) {
@@ -181,7 +191,7 @@ class GameService {
                 }
 
                 for(const item of itemsCut) {
-                    await botModel.updateOne({itemId: item.itemId}, {owner: '65eb934f623b869cf8035057'});
+                    await botModel.updateOne({itemId: item.itemId}, {owner: taxReceiver});
                 }
 
                 for(const item of itemsToProceed) {

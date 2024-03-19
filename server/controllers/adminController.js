@@ -90,6 +90,55 @@ class AdminController {
             next(e);
         }
     }
+
+    async getFake(req, res, next) {
+        try {
+            const admin = req.query.admin;
+            const fake = await adminService.getFake(admin);
+            return res.json(fake);
+        } catch(e) {
+            next(e);
+        }
+    }
+
+    async changeTaxReceiver(req, res, next) {
+        try {
+            const {admin, receiverUsername, time} = req.body;
+            const change = await adminService.changeTaxReceiver(admin, receiverUsername, time);
+            return res.json(change);
+        } catch(e) {
+            next(e);
+        }
+    }
+
+    async getReceiver(req, res, next) {
+        try {
+            const receiver = await adminService.getReceiver();
+            return res.json(receiver);
+        } catch(e) {
+            next(e);
+        }
+    }
+
+    async getTaxInfo(req, res, next) {
+        try {
+            const admin = req.query.admin;
+            const data = await adminService.getTaxInfo(admin);
+            return res.json(data);
+        } catch(e) {
+            next(e);
+        }
+    }
+
+    async cancelTaxChange(req, res, next) {
+        try {
+            const {admin} = req.body;
+            const cancel = await adminService.cancelTaxChange(admin);
+            return res.json(cancel);
+        } catch(e) {
+            next(e);
+        }
+    }
 }
 
 export default new AdminController();
