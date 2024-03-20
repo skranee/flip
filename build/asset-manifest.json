@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/static/css/main.372d2a1a.css",
+    "main.js": "/static/js/main.a064d7f4.js",
+    "static/media/coinFlipRed.webm": "/static/media/coinFlipRed.2f983cd3e20f4ddbc9a7.webm",
+    "static/media/coinFlipGrey.webm": "/static/media/coinFlipGrey.b4f10ba1da699ebbd0f4.webm",
+    "static/media/botOnline.png": "/static/media/botOnline.e0db4a378abac88adfed.png",
+    "static/media/heads.png": "/static/media/heads.e889918b8e42d5f39624.png",
+    "static/media/tails.png": "/static/media/tails.fd71131bd9f7e8b0d814.png",
+    "static/media/discord.png": "/static/media/discord.c4a3db7ef16f6fb32b13.png",
+    "static/media/inst.png": "/static/media/inst.1d6d0317700c4f0c95b7.png",
+    "static/media/claimImg.png": "/static/media/claimImg.47cf2e3f6d076fa137c8.png",
+    "static/media/currImg.png": "/static/media/currImg.96dea1da379150cfdae5.png",
+    "static/media/x.png": "/static/media/x.4db0651578578655bb17.png",
+    "static/media/botOffline.png": "/static/media/botOffline.f3aeff4616503691b019.png",
+    "static/media/online.png": "/static/media/online.8d124727b4ef03f794e2.png",
+    "static/media/tiktok.png": "/static/media/tiktok.eb3d45dae5fd8df29809.png",
+    "static/media/youtube.png": "/static/media/youtube.6f9e32ba8209c71da075.png",
+    "index.html": "/index.html"
+  },
+  "entrypoints": [
+    "static/css/main.372d2a1a.css",
+    "static/js/main.a064d7f4.js"
+  ]
+}
