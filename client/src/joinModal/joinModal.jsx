@@ -62,6 +62,11 @@ function JoinModal({game}) {
         if(totalValue >= approximate * 0.9 && totalValue <= approximate * 1.1 && totalValue > 0) {
             setOneClickItems(true);
             const join = await store.joinGame(store.user, chosenItems, chosenSide, game.gameId);
+            if(join && join.data && join.data.status === 400) {
+                globalStore.setErrorMessage('Something went wrong');
+                globalStore.setErrorWindow(true);
+                return null;
+            }
             setTimeout(async () => {
                 const updateUser = async () => {
                     try {
@@ -108,6 +113,11 @@ function JoinModal({game}) {
         if(gemsBet >= approximate * 0.9 && gemsBet <= approximate * 1.1 && store.user.balance >= gemsBet && gemsBet > 0) {
             setOneClick(true);
             const join = await store.joinWithGems(store.user, chosenSide, game.gameId, gemsBet);
+            if(join && join.data && join.data.status === 400) {
+                globalStore.setErrorMessage('Something went wrong');
+                globalStore.setErrorWindow(true);
+                return null;
+            }
             setTimeout(async () => {
                 const updateUser = async () => {
                     try {

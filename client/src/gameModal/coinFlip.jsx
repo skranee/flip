@@ -1,6 +1,6 @@
 import React from 'react';
-import videoRed from '../../public/coinFlipRed.webm'
-import videoGrey from '../../public/coinFlipGrey.webm'
+import videoRed from '../imgs/coinFlipRed.webm'
+import videoGrey from '../imgs/coinFlipGrey.webm'
 import {observer} from "mobx-react";
 
 const CoinFlip = ({game}) => {
