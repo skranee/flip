@@ -15,6 +15,6 @@ EXPOSE 3000
 FROM nginx:latest
 
 COPY --from=build /app/build /usr/share/nginx/html
-COPY app/nginx/nginx.conf /etc/nginx/sites-enabled/default
+COPY ./nginx/nginx.conf /etc/nginx/sites-enabled/default
 
 CMD ["nginx", "-g", "daemon off;"]
