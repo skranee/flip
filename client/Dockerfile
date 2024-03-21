@@ -15,7 +15,6 @@ EXPOSE 3000
 FROM nginx:latest
 
 COPY --from=build /app/build /usr/share/nginx/html
-COPY /etc/letsencrypt/options-ssl-nginx.conf /etc/letsencrypt/
-COPY /nginx/nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/nginx/nginx.conf /etc/nginx/sites-enabled/default
 
 CMD ["nginx", "-g", "daemon off;"]
