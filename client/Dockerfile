@@ -10,11 +10,10 @@ COPY . .
 
 RUN npm run build
 
-EXPOSE 3000
+RUN install -g serve
 
-FROM nginx:latest
+EXPOSE 80
 
-COPY --from=build /app/build /usr/share/nginx/html
-COPY ./nginx/nginx.conf /etc/nginx/sites-enabled/default
+EXPOSE 443
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["server", "-s", "build", "-l", "80"]
