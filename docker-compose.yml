@@ -16,7 +16,6 @@ services:
       dockerfile: Dockerfile
     image: nginx:mainline-alpine
     ports:
-      - "80:80"
       - "443:443"
     restart: always
     depends_on:
