@@ -37,7 +37,7 @@ class UserService {
 
     async saveToDB(userInfo) {
         const username = userInfo.name;
-        const candidate = await userModel.findOne({username});
+        const candidate = await userModel.findOne({username: username});
         if(candidate) {
             const user = candidate;
             const userDto = new UserDto(user);
