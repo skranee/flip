@@ -6,7 +6,8 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
     ports:
-      - "85:85"
+      - "80:80"
+      - "443:443"
     depends_on:
       - server
 
@@ -16,7 +17,7 @@ services:
       dockerfile: Dockerfile
     image: nginx:mainline-alpine
     ports:
-      - "443:443"
+      - "3000:3000"
     restart: always
     depends_on:
       - server
