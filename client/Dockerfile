@@ -16,4 +16,4 @@ EXPOSE 80
 
 EXPOSE 443
 
-CMD ["server", "-s", "build", "-l", "80"]
+CMD ["serve", "-s", "build", "-l", "80"]
