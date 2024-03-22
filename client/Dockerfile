@@ -10,10 +10,12 @@ COPY . .
 
 RUN npm run build
 
-RUN npm install -g serve
+#RUN npm install -g serve
 
-EXPOSE 80
+FROM nginx
 
-EXPOSE 443
+EXPOSE 3000
 
-CMD ["serve", "-s", "build", "-l", "443"]
+COPY --from=build /app/build /usr/share/nginx/html
+
+#CMD ["serve", "-s", "build", "-l", "3000"]

@@ -1,14 +1,29 @@
 version: "3"
 services:
-  client:
+  nginx:
+    image: nginx:latest
     build:
-      context: ./client
+      context: ./nginx
       dockerfile: Dockerfile
-    image: nginx:mainline-alpine
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+      - ./public:/usr/share/nginx/html
     ports:
       - "80:80"
       - "443:443"
+    depends_on:
+      - server
+
+  client:
+    image: node
+    build:
+      context: ./client
+      dockerfile: Dockerfile
     restart: always
+    ports:
+      - "3000:3000"
     depends_on:
       - server
 
