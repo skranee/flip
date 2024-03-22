@@ -10,12 +10,14 @@ COPY . .
 
 RUN npm run build
 
-#RUN npm install -g serve
-
-FROM nginx
-
 EXPOSE 3000
 
-COPY --from=build /app/build /usr/share/nginx/html
+RUN npm install -g serve
 
-#CMD ["serve", "-s", "build", "-l", "3000"]
+#FROM nginx
+#
+#EXPOSE 3000
+#
+#COPY --from=build /app/build /usr/share/nginx/html
+
+CMD ["serve", "-s", "build", "-l", "3000"]
