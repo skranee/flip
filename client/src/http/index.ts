@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {AuthResponse} from "../models/response/AuthResponse";
 
-export const API_URL = 'https://188.166.104.236:7000/api'
+export const API_URL = 'https://mm2fliptest.ru:7000/api'
 
 const $api = axios.create({
     withCredentials: true,
