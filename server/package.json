@@ -2,7 +2,6 @@
   "name": "server",
   "type": "module",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "start": "nodemon server.js",
@@ -31,5 +30,6 @@
   },
   "devDependencies": {
     "ngrok": "^5.0.0-beta.2"
-  }
+  },
+  "description": ""
 }
