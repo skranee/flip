@@ -33,7 +33,7 @@ const CoinFlip = ({ game }) => {
         <>
             <div id="coin-container">
                 <video ref={videoRef} className='side-a'>
-                    <source src={outcome} type="video/mp4" />
+                    <source src={outcome} type="video/webm" />
                 </video>
             </div>
         </>
