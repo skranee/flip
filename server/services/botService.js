@@ -92,9 +92,6 @@ class BotService {
             assetIdItem = match3[1];
         }
 
-        console.log(url)
-        console.log(assetIdItem);
-
         // const headers = {
         //     "x-api-key": process.env.ROBLOX_API_KEY
         // }
@@ -151,6 +148,7 @@ class BotService {
                 try {
                     imageResponse = await axios.get(`https://thumbnails.roblox.com/v1/assets?assetIds=${assetIdItem}&returnPolicy=PlaceHolder&size=700x700&format=Png&isCircular=false`);
                 } catch(e) {
+                    console.log('error')
                     imageResponse = {};
                 }
                 let itemImage = '';
