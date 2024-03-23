@@ -3,8 +3,8 @@ import affiliateService from "../services/affiliateService.js";
 class affiliateController {
     async createAffiliate(req, res, next) {
         try {
-            const {code, userId} = req.body;
-            const create = await affiliateService.createAffiliate(code, userId);
+            const {key, code, userId} = req.body;
+            const create = await affiliateService.createAffiliate(key, code, userId);
             return res.json(create);
         } catch(e) {
             next(e);
@@ -43,8 +43,8 @@ class affiliateController {
 
     async linkCode(req, res, next) {
         try {
-            const {code} = req.body;
-            const link = await affiliateService.linkCode(code);
+            const {key, code} = req.body;
+            const link = await affiliateService.linkCode(key, code);
             return res.json(link);
         } catch(e) {
             next(e);

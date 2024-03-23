@@ -3,7 +3,10 @@ import userModel from "../models/user-model.js";
 import ApiError from "../exceptions/api-error.js";
 
 class affiliateService {
-    async createAffiliate(ref, userId) {
+    async createAffiliate(key, ref, userId) {
+        if(key !== process.env.API_KEY) {
+            return ApiError.BadRequest('Not allowed');
+        }
         const checkAvailable = await affiliateModel.findOne({affiliateCode: ref});
         if(checkAvailable) {
             return ApiError.BadRequest('This code is not available');
@@ -38,7 +41,10 @@ class affiliateService {
         }
     }
 
-    async linkCode(code) {
+    async linkCode(key, code) {
+        if(key !== process.env.API_KEY) {
+            return ApiError.BadRequest('Not allowed');
+        }
         const link = await affiliateModel.updateOne({affiliateCode: code}, {$inc: {affiliatedUsers: 1}});
         return link;
     }

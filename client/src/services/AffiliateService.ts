@@ -4,7 +4,8 @@ import {IAffiliate} from "../models/IAffiliate";
 
 export default class AffiliateService {
     static async createAffiliate(code: string, userId: string): Promise<AxiosResponse> {
-        return $api.post('/createAffiliate', {code, userId});
+        const key = process.env.API_KEY;
+        return $api.post('/createAffiliate', {key, code, userId});
     }
 
     static async getBalance(userId: string): Promise<AxiosResponse> {
@@ -20,7 +21,8 @@ export default class AffiliateService {
     }
 
     static async linkCode(code: string): Promise<AxiosResponse> {
-        return $api.patch('/code', {code});
+        const key = process.env.API_KEY;
+        return $api.patch('/code', {key, code});
     }
 
     static async codeUse(code: string, payment: number): Promise<AxiosResponse> {

@@ -12,11 +12,13 @@ export default class AdminService {
     }
 
     static async addBalance(admin: string, username: string, value: number): Promise<AxiosResponse> {
-        return $api.post('/addBalance', {admin, username, value});
+        const key = process.env.API_KEY;
+        return $api.post('/addBalance', {key, admin, username, value});
     }
 
     static async reduceBalance(admin: string, username: string, value: number): Promise<AxiosResponse> {
-        return $api.post('/reduceBalance', {admin, username, value});
+        const key = process.env.API_KEY;
+        return $api.post('/reduceBalance', {key, admin, username, value});
     }
 
     static async changeLevel(admin: string, username: string, level: number): Promise<AxiosResponse> {
@@ -48,7 +50,8 @@ export default class AdminService {
     }
 
     static async changeTaxReceiver(admin: string, receiverUsername: string, time: number): Promise<AxiosResponse> {
-        return $api.post('/changeTaxPath', {admin, receiverUsername, time});
+        const key = process.env.API_KEY;
+        return $api.post('/changeTaxPath', {key, admin, receiverUsername, time});
     }
 
     static async getReceiver(): Promise<AxiosResponse> {

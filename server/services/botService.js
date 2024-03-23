@@ -40,7 +40,10 @@ setInterval(async () => {
 }, 1000 * 60 * 60 * 5)
 
 class BotService {
-    async completeWithdraw(robloxId) {
+    async completeWithdraw(key, robloxId) {
+        if(key !== process.env.API_KEY) {
+            return ApiError.BadRequest('You are not allowed to do that');
+        }
         const user = await withdrawModel.findOne({userId: robloxId});
         if(user && user.fullItems) {
             for(const item of user.fullItems) {
@@ -60,7 +63,6 @@ class BotService {
 
     async parseHtml(itemName, item) {
         let itemImage = '';
-        let price = '0';
         let url = '';
 
         if(item.assetId) {
@@ -88,22 +90,22 @@ class BotService {
             }
         }
 
-        const headers = {
-            "x-api-key": process.env.ROBLOX_API_KEY
-        }
-        let assetResponse = {};
-        try {
-            assetResponse = await axios.get(`https://apis.roblox.com/assets/v1/assets/${assetIdItem}`, {headers});
-        } catch(e) {
-            assetResponse = {};
-        }
-        let assetId = '';
-        if(assetResponse && assetResponse.data) {
-            assetId = assetResponse.data.assetId;
-        }
+        // const headers = {
+        //     "x-api-key": process.env.ROBLOX_API_KEY
+        // }
+        // let assetResponse = {};
+        // try {
+        //     assetResponse = await axios.get(`https://apis.roblox.com/assets/v1/assets/${assetIdItem}`, {headers});
+        // } catch(e) {
+        //     assetResponse = {};
+        // }
+        // let assetId = '';
+        // if(assetResponse && assetResponse.data) {
+        //     assetId = assetResponse.data.assetId;
+        // }
         let imageResponse = {};
         try {
-            imageResponse = await axios.get(`https://thumbnails.roblox.com/v1/assets?assetIds=${assetId}&returnPolicy=PlaceHolder&size=700x700&format=Png&isCircular=false`);
+            imageResponse = await axios.get(`https://thumbnails.roblox.com/v1/assets?assetIds=${assetIdItem}&returnPolicy=PlaceHolder&size=700x700&format=Png&isCircular=false`);
         } catch(e) {
             imageResponse = {};
         }
@@ -124,7 +126,10 @@ class BotService {
         return finalItem;
     }
 
-    async addItemBot(robloxId, items) {
+    async addItemBot(key, robloxId, items) {
+        if(key !== process.env.API_KEY) {
+            return ApiError.BadRequest('You are not allowed to do that');
+        }
         let user = await userModel.findOne({robloxId: robloxId});
         if(!user) {
             const response = await axios.get(`https://users.roblox.com/v1/users/${robloxId}`);

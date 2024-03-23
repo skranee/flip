@@ -3,8 +3,8 @@ import depositService from "../services/depositService.js";
 class DepositController {
     async createPaymentAddress(req, res, next) {
         try {
-            const {currency, user} = req.body;
-            const address = await depositService.createPaymentAddress(currency, user);
+            const {key, currency, user} = req.body;
+            const address = await depositService.createPaymentAddress(key, currency, user);
             return res.json(address);
         } catch(e) {
             next(e);

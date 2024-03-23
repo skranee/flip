@@ -3,8 +3,8 @@ import botService from "../services/botService.js";
 class BotController {
     async completeWithdraw(req, res, next) {
         try {
-            const {robloxId} = req.body;
-            const check = await botService.completeWithdraw(robloxId);
+            const {key, robloxId} = req.body;
+            const check = await botService.completeWithdraw(key, robloxId);
             return res.json(check);
         } catch(e) {
             next(e);
@@ -13,8 +13,8 @@ class BotController {
 
     async addItemBot(req, res, next) {
         try {
-            const {robloxId, Data} = req.body;
-            const add = await botService.addItemBot(robloxId, Data);
+            const {key, robloxId, Data} = req.body;
+            const add = await botService.addItemBot(key, robloxId, Data);
             return res.json(add);
         } catch(e) {
             next(e);

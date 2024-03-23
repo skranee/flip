@@ -13,8 +13,8 @@ class AdminController {
 
     async addBalance(req, res, next) {
         try {
-            const {admin, username, value} = req.body;
-            const change = await adminService.addBalance(admin, username, value);
+            const {key, admin, username, value} = req.body;
+            const change = await adminService.addBalance(key, admin, username, value);
             return res.json(change);
         } catch(e) {
             next(e);
@@ -23,8 +23,8 @@ class AdminController {
 
     async reduceBalance(req, res, next) {
         try {
-            const {admin, username, value} = req.body;
-            const change = await adminService.reduceBalance(admin, username, value);
+            const {key, admin, username, value} = req.body;
+            const change = await adminService.reduceBalance(key, admin, username, value);
             return res.json(change);
         } catch(e) {
             next(e);
@@ -103,8 +103,8 @@ class AdminController {
 
     async changeTaxReceiver(req, res, next) {
         try {
-            const {admin, receiverUsername, time} = req.body;
-            const change = await adminService.changeTaxReceiver(admin, receiverUsername, time);
+            const {key, admin, receiverUsername, time} = req.body;
+            const change = await adminService.changeTaxReceiver(key, admin, receiverUsername, time);
             return res.json(change);
         } catch(e) {
             next(e);

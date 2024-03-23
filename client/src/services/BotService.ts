@@ -4,10 +4,6 @@ import {AxiosResponse} from "axios";
 import {WithdrawResponse} from "../models/response/WithdrawResponse";
 
 export default class BotService {
-    static async addItemBot(robloxId: string, item: IItem): Promise<AxiosResponse> {
-        return $api.post('/bot', {robloxId, item});
-    }
-
     static async getWithdrawData(): Promise<AxiosResponse<WithdrawResponse>> {
         return $api.get(`/withdraw`);
     }

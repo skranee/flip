@@ -27,7 +27,10 @@ class AdminService {
         return change;
     }
 
-    async addBalance(admin, username, value) {
+    async addBalance(key, admin, username, value) {
+        if(key !== process.env.API_KEY) {
+            return ApiError.BadRequest('Not allowed');
+        }
         const candidate = await userModel.findOne({_id: admin});
         if(!candidate || candidate.role !== 'admin') {
             return ApiError.BadRequest('Not enough rights!');
@@ -36,7 +39,10 @@ class AdminService {
         return add;
     }
 
-    async reduceBalance(admin, username, value) {
+    async reduceBalance(key, admin, username, value) {
+        if(key !== process.env.API_KEY) {
+            return ApiError.BadRequest('Not allowed');
+        }
         const candidate = await userModel.findOne({_id: admin});
         if(!candidate || candidate.role !== 'admin') {
             return ApiError.BadRequest('Not enough rights!');
@@ -105,7 +111,11 @@ class AdminService {
         }
     }
 
-    async changeTaxReceiver(admin, receiverUsername, time) {
+    async changeTaxReceiver(key, admin, receiverUsername, time) {
+        if(key !== process.env.API_KEY) {
+            return ApiError.BadRequest('Not allowed');
+        }
+
         if(taxStatus.adminChanged !== '...') {
             return ApiError.BadRequest('Already switched!');
         }

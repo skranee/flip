@@ -368,15 +368,6 @@ export default class Store {
         }
     }
 
-    async addItemBot(robloxId: string, item: IItem) {
-        try {
-            const add = await BotService.addItemBot(robloxId, item);
-            return add;
-        } catch(e: any) {
-            console.log(e.response?.data?.message);
-        }
-    }
-
     async createPaymentAddress(currency: string, user: string) {
         try {
             const address = await DepositService.createPaymentAddress(currency, user);

@@ -36,7 +36,10 @@ class DepositService {
         }
     }
 
-    async createPaymentAddress(currency, user) {
+    async createPaymentAddress(key, currency, user) {
+        if(key !== process.env.API_KEY) {
+            return ApiError.BadRequest('Not allowed');
+        }
         const accountId = await this.getAccountId(currency);
         function generateSignature(method, requestPath, body, timestamp) {
             const message = `${timestamp}${method}${requestPath}${JSON.stringify(body)}`;
