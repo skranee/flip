@@ -67,8 +67,6 @@ function GameModal({game}) {
                             <img
                                 className='lobbyAvatar'
                                 style={{
-                                    boxShadow: game.side1 === 'grey' ? '0 0 20px 5px rgba(200, 200, 200, 1)' :
-                                        '0 0 25px 5px rgba(255, 0, 0, 1)',
                                     border: game.side1 === 'grey' ? 'solid 3px rgba(200, 200, 200, 1)' :
                                         'solid 3px rgba(255, 0, 0, 1)'
                                 }}
@@ -100,8 +98,6 @@ function GameModal({game}) {
                             {game.player2 ?
                                 <img className='lobbyAvatar2'
                                      style={{
-                                         boxShadow: game.side1 === 'red' ? '0 0 20px 5px rgba(200, 200, 200, 1)' :
-                                             '0 0 25px 5px rgba(239, 0, 0, 1)',
                                          border: game.side1 === 'red' ? 'solid 3px rgba(200, 200, 200, 1)' :
                                              'solid 3px rgba(239, 0, 0, 1)'
                                      }}
@@ -110,8 +106,6 @@ function GameModal({game}) {
                                 :
                                 <div className='lobbyAvatar2'
                                      style={{
-                                         boxShadow: game.side1 === 'red' ? '0 0 20px 5px rgba(200, 200, 200, 1)' :
-                                             '0 0 20px 5px rgba(239, 0, 0, 1)',
                                          border: game.side1 === 'red' ? 'solid 3px rgba(200, 200, 200, 1)' :
                                              'solid 3px rgba(239, 0, 0, 1)'
                                      }}>
