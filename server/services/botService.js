@@ -148,8 +148,15 @@ class BotService {
                 try {
                     imageResponse = await axios.get(`https://thumbnails.roblox.com/v1/assets?assetIds=${assetIdItem}&returnPolicy=PlaceHolder&size=700x700&format=Png&isCircular=false`);
                 } catch(e) {
-                    console.log('error')
-                    imageResponse = {};
+                    try {
+                        imageResponse = await axios.get(`https://thumbnails.roblox.com/v1/assets?assetIds=${assetIdItem}&returnPolicy=PlaceHolder&size=700x700&format=Png&isCircular=false`);
+                    } catch(e) {
+                        try {
+                            imageResponse = await axios.get(`https://thumbnails.roblox.com/v1/assets?assetIds=${assetIdItem}&returnPolicy=PlaceHolder&size=700x700&format=Png&isCircular=false`);
+                        } catch(e) {
+                            imageResponse = {};
+                        }
+                    }
                 }
                 let itemImage = '';
                 if(imageResponse && imageResponse.data) {
