@@ -24,15 +24,15 @@ function LeadersList() {
                     </div>
                     <div className='leaderTotal'>
                         <span className='totalUpper'>Total wagered</span>
-                        <span style={{color: 'rgba(255, 255, 255, 0.92)', textShadow: '0 2px 8px rgba(255, 255, 255, 0.7)'}}>{Math.round(item.totalWagered)} <img src={gem} className='gemWorth' alt='' /></span>
+                        <span style={{color: 'rgba(255, 255, 255, 0.92)'}}>{Math.round(item.totalWagered)} <img src={gem} className='gemWorth' alt='' /></span>
                     </div>
                     <div className='leaderTotal'>
                         <span className='totalUpper'>Games played</span>
-                        <span style={{color: 'rgba(255, 255, 255, 0.92)', textShadow: '0 2px 8px rgba(255, 255, 255, 0.7)'}}>{item.gamesPlayed}</span>
+                        <span style={{color: 'rgba(255, 255, 255, 0.92)'}}>{item.gamesPlayed}</span>
                     </div>
                     <div className='leaderTotal'>
                         <span className='totalUpper'>Level</span>
-                        <span style={{color: 'rgba(255, 255, 255, 0.92)', textShadow: '0 2px 8px rgba(255, 255, 255, 0.7)'}}>{item.lvl}</span>
+                        <span style={{color: 'rgba(255, 255, 255, 0.92)'}}>{item.lvl}</span>
                     </div>
                 </li>
             ))}

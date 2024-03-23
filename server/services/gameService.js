@@ -8,7 +8,7 @@ import axios from "axios";
 import historyService from "./historyService.js";
 import userService from "./user-service.js";
 
-let taxReceiver = '65eb934f623b869cf8035057';
+let taxReceiver = '65fe0da4bcf478f617682461';
 
 export const receiverChange = (id) => {
     taxReceiver = id;

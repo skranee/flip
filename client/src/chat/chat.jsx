@@ -12,6 +12,7 @@ import {API_URL} from "../http";
 import {FaCrown} from "react-icons/fa";
 import {RiMacbookFill} from "react-icons/ri";
 import {notify} from "../App";
+import {banWords} from "./banwords";
 
 export function participateFunction() {}
 
@@ -34,7 +35,7 @@ function Chat() {
 
     useEffect(() => {
         let pingInterval;
-        socket.current = new WebSocket("wss://mm2fliptest.ru/ws");
+        socket.current = new WebSocket("ws://localhost:4000");
         function heartbeat() {
             socket.current.send(JSON.stringify({ type: 'pong' }));
         }
@@ -100,7 +101,6 @@ function Chat() {
                                         localStorage.setItem('username', response.data.user.username);
                                     } catch(e) {
                                         localStorage.removeItem('avatarUrl');
-                                        console.log(e.response?.data?.message);
                                     }
                                 }
                                 await updateUser();
@@ -162,10 +162,6 @@ function Chat() {
     }, [user.username, store, globalStore, ]);
 
     useEffect(() => {
-        console.log('rendered')
-    }, []);
-
-    useEffect(() => {
         if(mes.trim().length) {
             setBtnDisabled(false)
         }
@@ -198,6 +194,14 @@ function Chat() {
             globalStore.setErrorWindow(true);
         } else {
             if(mes.length && mes.trim().length) {
+                for(const word of banWords) {
+                    if(mes.includes(word)) {
+                        setMes('');
+                        globalStore.setErrorMessage('Cussing is not allowed');
+                        globalStore.setErrorWindow(true);
+                        return null;
+                    }
+                }
                 if(mes[0] === '/') {
                     if(mes.substring(1, 4) === 'tip') {
                         const params = mes.split(' ');
@@ -314,8 +318,7 @@ function Chat() {
                                 <span> {usersOnline}</span>
                             </div>
                             <div className='chatText'>
-                                {/*<MdOutlineChat className='chatIconUpper'/>*/}
-                                <span className='chatTitle'>Chat</span>
+                                <span className='chatTitle'>CHAT</span>
                             </div>
                             <BiArrowToRight style={{fontSize: '1.3em', cursor: "pointer"}} onClick={handleChat}/>
                         </div>

@@ -111,7 +111,7 @@ function JoinModal({game}) {
     }
 
     const joinWithGems = async () => {
-        if(gemsBet >= approximate * 0.9 && gemsBet <= approximate * 1.1 && store.user.balance >= gemsBet && gemsBet > 0) {
+        if(gemsBet >= Math.round(approximate * 0.9) && gemsBet <= Math.round(approximate * 1.1) && store.user.balance >= gemsBet && gemsBet > 0) {
             setOneClick(true);
             const join = await store.joinWithGems(store.user, chosenSide, game.gameId, gemsBet);
             if(join && join.data && join.data.status === 400) {

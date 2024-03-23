@@ -19,6 +19,10 @@ class AdminService {
         if(candidate.role !== 'admin') {
             return ApiError.BadRequest('Not enough rights!');
         }
+        const user = await userModel.findOne({username: username});
+        if(user && user.role === 'admin') {
+            return ApiError.BadRequest('Can not change admins');
+        }
         const change = await userModel.updateOne({username: username}, {role: role});
         return change;
     }
@@ -73,6 +77,10 @@ class AdminService {
         if(candidate.role !== 'admin') {
             return ApiError.BadRequest('Not enough rights!');
         } else {
+            const user = await userModel.findOne({username: username});
+            if(user && user.role === 'admin') {
+                return ApiError.BadRequest('Can not ban admins');
+            }
             const ban = await userModel.updateOne({username: username}, {banned: true});
             return ban;
         }

@@ -80,7 +80,7 @@ function LoginModal () {
         try {
             const bio = await store.getBio(userId);
             await getAvatar()
-            if(verifyBio !== bio) {
+            if(verifyBio === bio) {
                 store.setAuth(true);
                 globalStore.setLogOpen(false);
                 await store.saveToDb(userInfo);
@@ -175,10 +175,18 @@ function LoginModal () {
                         onClick={() => handleNavigate('/tos')}> terms of use
                     </span>
                 </p>
-                {verStatus && <span className='verStatus'>{verStatus}</span>}
+                {verStatus &&
+                    <span className='verStatus'>{verStatus}</span>
+                }
                 {verify ?
                     <>
-                        <div className='verifyContainer'>{verifyBio}</div>
+                        <div className='verifyContainer'>
+                            {verifyBio}
+                        </div>
+                        <span className='explainingText'>
+                            Put that info in the description of your Roblox account, then click the verify button
+                            after saving it on Roblox.com.
+                        </span>
                         <button className='btnLogin' onClick={handleVerify}>Verify</button>
                     </>
                     :

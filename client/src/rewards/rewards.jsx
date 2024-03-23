@@ -1,5 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Context} from "../index";
+import gem from '../imgs/currImg.png'
 import {observer} from "mobx-react";
 
 export const maxExp = 2000;
@@ -54,7 +55,7 @@ function Rewards() {
                     </div>
                     <div className='rewardDiv'>
                         <span className='nextRew'>NEXT REWARD</span>
-                        <img className='rewardImg' src={reward.image} alt=''/>
+                        <img className='rewardImg' src={gem} alt=''/>
                         <div className='rewardName'>
                             <span>{reward.name} (+{reward.gemsAmount})</span>
                         </div>
