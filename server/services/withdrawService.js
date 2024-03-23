@@ -15,13 +15,13 @@ class WithdrawService {
         const botItems = await botModel.find();
         const botItems0 = botItems.filter(item => item.holder === bots[0].name);
         const botItems1 = botItems.filter(item => item.holder === bots[1].name);
-        const botItems2 = botItems.filter(item => item.holder === bots[2].name);
+        // const botItems2 = botItems.filter(item => item.holder === bots[2].name);
         let count0 = 0;
-        let count1 = 0;
+        // let count1 = 0;
         let count2 = 0;
         let itemsWithdraw0 = [];
         let itemsWithdraw1 = [];
-        let itemsWithdraw2 = [];
+        // let itemsWithdraw2 = [];
         let itemsWithdraw = [];
         for(let i = 0; i < items.length; ++i) {
             for(let j = 0; j < botItems0.length; ++j) {
@@ -43,17 +43,17 @@ class WithdrawService {
                 }
             }
         }
-        for(let i = 0; i < items.length; ++i) {
-            for(let j = 0; j < botItems2.length; ++j) {
-                if(items[i].itemId === botItems2[j].itemId) {
-                    botItems2[j] = {};
-                    itemsWithdraw2.push(items[i]);
-                    count2++;
-                    break
-                }
-            }
-        }
-        const max = Math.max(count0, count1, count2);
+        // for(let i = 0; i < items.length; ++i) {
+        //     for(let j = 0; j < botItems2.length; ++j) {
+        //         if(items[i].itemId === botItems2[j].itemId) {
+        //             botItems2[j] = {};
+        //             itemsWithdraw2.push(items[i]);
+        //             count2++;
+        //             break
+        //         }
+        //     }
+        // }
+        const max = Math.max(count0, count1);
         if(count0 === max) {
             itemsWithdraw = itemsWithdraw0;
             botName = bots[0].name;
@@ -62,10 +62,10 @@ class WithdrawService {
             itemsWithdraw = itemsWithdraw1;
             botName = bots[1].name;
         }
-        else if(count2 === max) {
-            itemsWithdraw = itemsWithdraw2;
-            botName = bots[2].name;
-        }
+        // else if(count2 === max) {
+        //     itemsWithdraw = itemsWithdraw2;
+        //     botName = bots[2].name;
+        // }
         const itemsNames = itemsWithdraw.map(item => item.gameName);
         let uniqueItems = itemsNames.filter((item, index) => itemsNames.indexOf(item) === index);
         if(uniqueItems.length > 4) {

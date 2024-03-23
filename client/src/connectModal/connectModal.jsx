@@ -91,20 +91,20 @@ function ConnectModal() {
                             Connect
                         </button>
                     </div>
-                    <div className='botContainer'>
-                        <img className='botAvatar' src={store.user.avatar} alt=''/>
-                        <span className='botUsername'>
-                            {botsInfo[2].name} <img
-                            style={{boxShadow: botsInfo[2].status === 'online' ? '0 0 4px rgba(127, 175, 95, 1)' : '0 0 4px rgba(170, 25, 11, 1)'}}
-                            className='botStatus' src={botsInfo[2].status === 'online' ? online : offline} alt=''/>
-                            {
-                                globalStore.botRecommended === botsInfo[2].name ? <FaCheckCircle className='botCheckIcon' /> : ''
-                            }
-                        </span>
-                        <button className='btnBotConnect' onClick={() => handleConnect(botsInfo[2].serverUrl)}>
-                            Connect
-                        </button>
-                    </div>
+                    {/*<div className='botContainer'>*/}
+                    {/*    <img className='botAvatar' src={store.user.avatar} alt=''/>*/}
+                    {/*    <span className='botUsername'>*/}
+                    {/*        {botsInfo[2].name} <img*/}
+                    {/*        style={{boxShadow: botsInfo[2].status === 'online' ? '0 0 4px rgba(127, 175, 95, 1)' : '0 0 4px rgba(170, 25, 11, 1)'}}*/}
+                    {/*        className='botStatus' src={botsInfo[2].status === 'online' ? online : offline} alt=''/>*/}
+                    {/*        {*/}
+                    {/*            globalStore.botRecommended === botsInfo[2].name ? <FaCheckCircle className='botCheckIcon' /> : ''*/}
+                    {/*        }*/}
+                    {/*    </span>*/}
+                    {/*    <button className='btnBotConnect' onClick={() => handleConnect(botsInfo[2].serverUrl)}>*/}
+                    {/*        Connect*/}
+                    {/*    </button>*/}
+                    {/*</div>*/}
                 </div>
                 <span className='connectModalLowerText'>Enable your incoming trade requests in order to be able to trade with the bot</span>
                 {inQueue &&
