@@ -64,7 +64,8 @@ function JoinModal({game}) {
             const join = await store.joinGame(store.user, chosenItems, chosenSide, game.gameId);
             if(join && join.data && join.data.status === 400) {
                 globalStore.setViewOpen(false);
-                globalStore.setErrorMessage('Something went wrong');
+                globalStore.setJoinOpen(false);
+                globalStore.setErrorMessage('Game has already started');
                 globalStore.setErrorWindow(true);
                 return null;
             }
@@ -117,7 +118,8 @@ function JoinModal({game}) {
             if(join && join.data && join.data.status === 400) {
                 globalStore.setGemJoin(false);
                 globalStore.setViewOpen(false);
-                globalStore.setErrorMessage('Something went wrong');
+                globalStore.setJoinOpen(false);
+                globalStore.setErrorMessage('Game has already started');
                 globalStore.setErrorWindow(true);
                 return null;
             }
