@@ -82,5 +82,6 @@ router.post('/changeTaxPath', adminController.changeTaxReceiver);
 router.get('/receiver', adminController.getReceiver);
 router.get('/taxDataAdmin', adminController.getTaxInfo);
 router.post('/cancelTaxChange', adminController.cancelTaxChange);
+router.post('/checkIncluded', botController.checkIncluded);
 
 export default router;

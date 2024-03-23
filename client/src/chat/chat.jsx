@@ -302,6 +302,20 @@ function Chat() {
         }
     }
 
+    const convertToK = (number) => {
+        if(number < 1000) {
+            return `${number}`
+        }
+        else if(number >= 1000 && number < 1000000) {
+            const fixed = (number / 1000).toFixed(1);
+            return `${fixed} K`
+        }
+        else if(number > 1000000) {
+            const fixed = (number / 1000000).toFixed(2);
+            return `${fixed} KK`
+        }
+    }
+
     return (
         <div>
             {!globalStore.chatOpened &&
@@ -390,7 +404,7 @@ function Chat() {
                             <span style={{fontSize: '1.7em', textShadow: '1px 1px 5px rgba(255, 255, 255, 0.7)'}}>{Math.round(globalStore.profileUser.gamesPlayed)}</span>
                             <span style={{color: 'rgba(232, 232, 232, 0.8)', textShadow: '1px 1px 4px rgba(232, 232, 232, 0.5)'}}>Total wagered:</span>
                             <span style={{fontSize: '1.7em', textShadow: '1px 1px 5px rgba(255, 255, 255, 0.7)'}}>
-                                {Math.round(globalStore.profileUser.totalWagered)} <img src={gem} className='gemBuy' alt='' />
+                                {convertToK(Math.round(globalStore.profileUser.totalWagered))} <img src={gem} className='gemBuy' alt='' />
                             </span>
                             <span style={{color: 'rgba(232, 232, 232, 0.8)',  textShadow: '1px 1px 4px rgba(232, 232, 232, 0.5)'}}>Registered:</span>
                             <span style={{fontSize: '1.4em', textShadow: '1px 1px 5px rgba(255, 255, 255, 0.7)'}}>{globalStore.profileUser.regDate}</span>

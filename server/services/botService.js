@@ -154,6 +154,20 @@ class BotService {
         return newItems;
     }
 
+    async checkIncluded (itemsForCheck) {
+        let excluded = [];
+        for(let i = 0; i < itemsForCheck.length; ++i) {
+            const check = items.filter(check => check.name.replace(/\s/g, '').toLowerCase() === itemsForCheck[i].replace(/\s/g, '').toLowerCase())[0];
+            if(!check) {
+                excluded.push(itemsForCheck[i]);
+            }
+        }
+        if(excluded.length > 0) {
+            return excluded;
+        }
+        return true;
+    }
+
     async getWithdrawData() {
         const data = await withdrawModel.find();
         return data;

@@ -66,6 +66,20 @@ function Profile() {
         setErrorCodeToUse('');
     }
 
+    const convertToK = (number) => {
+        if(number < 1000) {
+            return `${number}`
+        }
+        else if(number >= 1000 && number < 1000000) {
+            const fixed = (number / 1000).toFixed(1);
+            return `${fixed} K`
+        }
+        else if(number > 1000000) {
+            const fixed = (number / 1000000).toFixed(2);
+            return `${fixed} KK`
+        }
+    }
+
     const handleSave = async () => {
         if(value !== afCode) {
             const create = await store.createAffiliate(value, store.user.id);
@@ -153,17 +167,17 @@ function Profile() {
                                     </div>
                                     <div className='fieldContainerProfile'>
                                         <span className='outerInfo'>Total wagered:</span>
-                                        <span className='outerInfoNum'>{Math.round(store.user.totalWagered)} <img
+                                        <span className='outerInfoNum'>{convertToK(Math.round(store.user.totalWagered))} <img
                                             src={gem} className='gemBuy' alt=''/></span>
                                     </div>
                                     <div className='fieldContainerProfile'>
                                         <span className='outerInfo'>Total withdrawn:</span>
-                                        <span className='outerInfoNum'>{Math.round(store.user.totalWithdrawn)} <img
+                                        <span className='outerInfoNum'>{convertToK(Math.round(store.user.totalWithdrawn))} <img
                                             src={gem} className='gemBuy' alt=''/></span>
                                     </div>
                                     <div className='fieldContainerProfile'>
                                         <span className='outerInfo'>Total deposited:</span>
-                                        <span className='outerInfoNum'>{Math.round(store.user.totalDeposited)} <img
+                                        <span className='outerInfoNum'>{convertToK(Math.round(store.user.totalDeposited))} <img
                                             src={gem} className='gemBuy' alt=''/></span>
                                     </div>
                                     <button className='btnPayments' onClick={() => openPayments()}>Payments</button>

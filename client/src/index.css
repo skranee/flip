@@ -4982,7 +4982,7 @@ input[type="range"]::-webkit-slider-thumb {
   font-size: 1.1em;
   font-weight: 500;
   color: rgba(255, 255, 255, 0.75);
-  text-shadow: -1px 1px 3px rgba(255, 255, 255, 0.5);
+  text-shadow: 0 0 3px rgba(255, 255, 255, 0.5);
   display: flex;
   align-items: center;
   gap: 7px;
@@ -5033,6 +5033,7 @@ input[type="range"]::-webkit-slider-thumb {
 .connectModalLowerText {
   font-family: 'Poppins', sans-serif;
   font-weight: 500;
+  width: 98%;
   font-size: 0.8em;
   color: rgba(255, 255, 255, 0.5);
   display: flex;

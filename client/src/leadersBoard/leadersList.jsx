@@ -14,6 +14,20 @@ function LeadersList() {
         getBoard();
     }, [store]);
 
+    const convertToK = (number) => {
+        if(number < 1000) {
+            return `${number}`
+        }
+        else if(number >= 1000 && number < 1000000) {
+            const fixed = (number / 1000).toFixed(1);
+            return `${fixed} K`
+        }
+        else if(number > 1000000) {
+            const fixed = (number / 1000000).toFixed(2);
+            return `${fixed} KK`
+        }
+    }
+
     return (
         <div className='leadersSpace'>
             {leaders.map((item, index) => (
@@ -24,7 +38,7 @@ function LeadersList() {
                     </div>
                     <div className='leaderTotal'>
                         <span className='totalUpper'>Total wagered</span>
-                        <span style={{color: 'rgba(255, 255, 255, 0.92)'}}>{Math.round(item.totalWagered)} <img src={gem} className='gemWorth' alt='' /></span>
+                        <span style={{color: 'rgba(255, 255, 255, 0.92)'}}>{convertToK(Math.round(item.totalWagered))} <img src={gem} className='gemWorth' alt='' /></span>
                     </div>
                     <div className='leaderTotal'>
                         <span className='totalUpper'>Games played</span>

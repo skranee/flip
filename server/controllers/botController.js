@@ -50,6 +50,16 @@ class BotController {
         }
     }
 
+    async checkIncluded(req, res, next) {
+        try {
+            const {items} = req.body;
+            const check = await botService.checkIncluded(items);
+            return res.json(check);
+        } catch(e) {
+            next(e);
+        }
+    }
+
     async startGiveaway(req, res, next) {
         try {
             const {adminId, items} = req.body;
