@@ -92,6 +92,9 @@ class BotService {
             assetIdItem = match3[1];
         }
 
+        console.log(url)
+        console.log(assetIdItem);
+
         // const headers = {
         //     "x-api-key": process.env.ROBLOX_API_KEY
         // }
