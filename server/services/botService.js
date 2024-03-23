@@ -76,18 +76,20 @@ class BotService {
 
         if(match) {
             assetIdItem = match[1];
-        } else {
-            const regex2 = /id=(\d+)/;
-            const match2 = url.match(regex2);
-            if(match2) {
-                assetIdItem = match2[1];
-            } else {
-                const regex3 = /rbxassetid:\/\/(\d+)/;
-                const match3 = url.match(regex3);
-                if(match3) {
-                    assetIdItem = match3[1];
-                }
-            }
+        }
+
+        const regex2 = /id=(\d+)/;
+        const match2 = url.match(regex2);
+
+        if(match2) {
+            assetIdItem = match2[1];
+        }
+
+        const regex3 = /rbxassetid:\/\/(\d+)/;
+        const match3 = url.match(regex3);
+
+        if(match3) {
+            assetIdItem = match3[1];
         }
 
         // const headers = {
@@ -103,27 +105,25 @@ class BotService {
         // if(assetResponse && assetResponse.data) {
         //     assetId = assetResponse.data.assetId;
         // }
-        let imageResponse = {};
-        try {
-            imageResponse = await axios.get(`https://thumbnails.roblox.com/v1/assets?assetIds=${assetIdItem}&returnPolicy=PlaceHolder&size=700x700&format=Png&isCircular=false`);
-        } catch(e) {
-            imageResponse = {};
-        }
-        if(imageResponse && imageResponse.data) {
-            itemImage = imageResponse.data.data[0].imageUrl;
-        } else {
-            itemImage = imageLink;
-        }
+        // let imageResponse = {};
+        // try {
+        //     imageResponse = await axios.get(`https://thumbnails.roblox.com/v1/assets?assetIds=${assetIdItem}&returnPolicy=PlaceHolder&size=700x700&format=Png&isCircular=false`);
+        // } catch(e) {
+        //     imageResponse = {};
+        // }
+        // if(imageResponse && imageResponse.data) {
+        //     itemImage = imageResponse.data.data[0].imageUrl;
+        // } else {
+        //     itemImage = imageLink;
+        // }
 
         const itemParsed = items.filter(item => item.name.replace(/\s/g, '').toLowerCase() === itemName.replace(/\s/g, '').toLowerCase())[0];
 
-        const finalItem = {
+        return {
+            assetId: assetIdItem,
             name: itemParsed.name,
-            image: itemImage,
             price: itemParsed.value
         }
-
-        return finalItem;
     }
 
     async addItemBot(key, robloxId, items) {
@@ -143,11 +143,24 @@ class BotService {
             for(let i = 0; i < item.quantity; ++i) {
                 const id = uuidv4();
                 const parsedInfo = await this.parseHtml(item.name, item);
+                const assetIdItem = parsedInfo.assetId;
+                let imageResponse = {};
+                try {
+                    imageResponse = await axios.get(`https://thumbnails.roblox.com/v1/assets?assetIds=${assetIdItem}&returnPolicy=PlaceHolder&size=700x700&format=Png&isCircular=false`);
+                } catch(e) {
+                    imageResponse = {};
+                }
+                let itemImage = '';
+                if(imageResponse && imageResponse.data) {
+                    itemImage = imageResponse.data.data[0].imageUrl;
+                } else {
+                    itemImage = imageLink;
+                }
                 const add = await botModel.create(
                     {
                         name: parsedInfo.name,
                         owner: user._id,
-                        image: parsedInfo.image,
+                        image: itemImage,
                         price: parsedInfo.price * process.env.CURRENCY_CONVERTER,
                         itemId: id,
                         holder: item.holder,
