@@ -146,7 +146,7 @@ class BotService {
                         price: parsedInfo.price * process.env.CURRENCY_CONVERTER,
                         itemId: id,
                         holder: item.holder,
-                        gameName: item.name
+                        gameName: item.gameName
                     });
                 newItems.push(add);
             }
