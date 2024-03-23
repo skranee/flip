@@ -17,8 +17,8 @@ class WithdrawService {
         const botItems1 = botItems.filter(item => item.holder === bots[1].name);
         // const botItems2 = botItems.filter(item => item.holder === bots[2].name);
         let count0 = 0;
-        // let count1 = 0;
-        let count2 = 0;
+        let count1 = 0;
+        // let count2 = 0;
         let itemsWithdraw0 = [];
         let itemsWithdraw1 = [];
         // let itemsWithdraw2 = [];
