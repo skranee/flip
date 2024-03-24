@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
-import videoRed from '../imgs/coinFlipGrey.webm';
-import videoGrey from '../imgs/coinFlipRed.webm';
+import videoRed from '../imgs/coinFlipRed.webm';
+import videoGrey from '../imgs/coinFlipGrey.webm';
 import { observer } from "mobx-react";
 
 const CoinFlip = ({ game }) => {
