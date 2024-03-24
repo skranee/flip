@@ -1,5 +1,8 @@
 import $api from "../http";
 import {AxiosResponse} from "axios";
+import {config} from "dotenv";
+
+config({path: 'client/.env'})
 
 export default class DepositService {
     static async createPaymentAddress(currency: string, user: string): Promise<AxiosResponse<string>> {

@@ -154,7 +154,7 @@ function Chat() {
             clearInterval(pingInterval);
         }
         socket.current.onerror = (error) => {
-            console.log('WS error: ', error);
+            console.log('WS error');
         }
         return () => {
             socket.current.close();

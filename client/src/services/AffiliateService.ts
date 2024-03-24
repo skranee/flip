@@ -1,6 +1,9 @@
 import $api from "../http";
 import {AxiosResponse} from "axios";
 import {IAffiliate} from "../models/IAffiliate";
+import {config} from 'dotenv';
+
+config({path: 'client/.env'})
 
 export default class AffiliateService {
     static async createAffiliate(code: string, userId: string): Promise<AxiosResponse> {
