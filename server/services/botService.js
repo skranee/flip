@@ -7,13 +7,10 @@ import cheerio from "cheerio";
 import axios from "axios";
 import {ObjectId} from "mongodb";
 import userService from "./user-service.js";
-import httpProxy from 'http-proxy'
 
-const imageLink = 'https://ibb.co/J7DD8Qf';
+const imageLink = 'https://pngimg.com/d/ruby_PNG29.png';
 
 let items = [];
-
-const proxy = httpProxy.createProxyServer({});
 
 const updateItems = async () => {
     const html = await axios.get('https://www.mm2values.com/index.php?p=searchresults&i1=&i2=&i3=');
@@ -67,9 +64,16 @@ class BotService {
     async lookDB(itemName) {
         const itemParsed = items.filter(item => item.name.replace(/\s/g, '').toLowerCase() === itemName.replace(/\s/g, '').toLowerCase())[0];
 
-        return {
-            name: itemParsed.name,
-            price: itemParsed.value
+        if(itemParsed) {
+            return {
+                name: itemParsed.name,
+                price: itemParsed.value
+            }
+        } else {
+            return {
+                name: itemName,
+                price: 10
+            }
         }
     }
 
@@ -128,6 +132,7 @@ class BotService {
                 requestIds += allAssetId[i].toString() + ',';
             }
         }
+
         const thumbnailsArrayData = await axios.get(`https://thumbnails.roblox.com/v1/assets?assetIds=${requestIds}&returnPolicy=PlaceHolder&size=700x700&format=Png&isCircular=false`);
 
         const thumbnailsArray = thumbnailsArrayData.data.data;
