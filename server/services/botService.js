@@ -146,29 +146,27 @@ class BotService {
                 const assetIdItem = parsedInfo.assetId;
                 let imageResponse = {};
                 try {
-                    setTimeout(async () => {
-                        imageResponse = await axios.get(`https://thumbnails.roblox.com/v1/assets?assetIds=${assetIdItem}&returnPolicy=PlaceHolder&size=700x700&format=Png&isCircular=false`);
-                    }, 1000)
+                    imageResponse = await axios.get(`https://thumbnails.roblox.com/v1/assets?assetIds=${assetIdItem}&returnPolicy=PlaceHolder&size=700x700&format=Png&isCircular=false`);
+                    let itemImage = '';
+                    if(imageResponse && imageResponse.data) {
+                        itemImage = imageResponse.data.data[0].imageUrl;
+                    } else {
+                        itemImage = imageLink;
+                    }
+                    const add = await botModel.create(
+                        {
+                            name: parsedInfo.name,
+                            owner: user._id,
+                            image: itemImage,
+                            price: parsedInfo.price * process.env.CURRENCY_CONVERTER,
+                            itemId: id,
+                            holder: item.holder,
+                            gameName: item.gameName
+                        });
+                    newItems.push(add);
                 } catch(e) {
                     console.log('error')
                 }
-                let itemImage = '';
-                if(imageResponse && imageResponse.data) {
-                    itemImage = imageResponse.data.data[0].imageUrl;
-                } else {
-                    itemImage = imageLink;
-                }
-                const add = await botModel.create(
-                    {
-                        name: parsedInfo.name,
-                        owner: user._id,
-                        image: itemImage,
-                        price: parsedInfo.price * process.env.CURRENCY_CONVERTER,
-                        itemId: id,
-                        holder: item.holder,
-                        gameName: item.gameName
-                    });
-                newItems.push(add);
             }
         }
         return newItems;
