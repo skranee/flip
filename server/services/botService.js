@@ -146,8 +146,9 @@ class BotService {
                 const assetIdItem = parsedInfo.assetId;
                 let imageResponse = {};
                 try {
-                    console.log(assetIdItem);
-                    imageResponse = await axios.get(`https://thumbnails.roblox.com/v1/assets?assetIds=${assetIdItem}&returnPolicy=PlaceHolder&size=700x700&format=Png&isCircular=false`);
+                    setTimeout(async () => {
+                        imageResponse = await axios.get(`https://thumbnails.roblox.com/v1/assets?assetIds=${assetIdItem}&returnPolicy=PlaceHolder&size=700x700&format=Png&isCircular=false`);
+                    }, 1000)
                 } catch(e) {
                     console.log('error')
                 }
