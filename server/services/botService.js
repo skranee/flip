@@ -12,6 +12,10 @@ const imageLink = 'https://ibb.co/J7DD8Qf';
 
 let items = [];
 
+const getImage = async (assetId) => {
+    return await axios.get(`https://thumbnails.roblox.com/v1/assets?assetIds=${assetId}&returnPolicy=PlaceHolder&size=700x700&format=Png&isCircular=false`);
+}
+
 const updateItems = async () => {
     const html = await axios.get('https://www.mm2values.com/index.php?p=searchresults&i1=&i2=&i3=');
     const $ = cheerio.load(html.data);
@@ -144,20 +148,7 @@ class BotService {
                 const id = uuidv4();
                 const parsedInfo = await this.parseHtml(item.name, item);
                 const assetIdItem = parsedInfo.assetId;
-                let imageResponse = {};
-                try {
-                    imageResponse = await axios.get(`https://thumbnails.roblox.com/v1/assets?assetIds=${assetIdItem}&returnPolicy=PlaceHolder&size=700x700&format=Png&isCircular=false`);
-                } catch(e) {
-                    try {
-                        imageResponse = await axios.get(`https://thumbnails.roblox.com/v1/assets?assetIds=${assetIdItem}&returnPolicy=PlaceHolder&size=700x700&format=Png&isCircular=false`);
-                    } catch(e) {
-                        try {
-                            imageResponse = await axios.get(`https://thumbnails.roblox.com/v1/assets?assetIds=${assetIdItem}&returnPolicy=PlaceHolder&size=700x700&format=Png&isCircular=false`);
-                        } catch(e) {
-                            imageResponse = {};
-                        }
-                    }
-                }
+                const imageResponse = await getImage(assetIdItem);
                 let itemImage = '';
                 if(imageResponse && imageResponse.data) {
                     itemImage = imageResponse.data.data[0].imageUrl;
