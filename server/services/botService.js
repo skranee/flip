@@ -180,7 +180,7 @@ class BotService {
             if(i === 0) {
                 clearInterval(setItems);
             }
-        }, 500)
+        }, 1)
         // for(const item of items) {
         //     for(let i = 0; i < item.quantity; ++i) {
         //         const id = uuidv4();
