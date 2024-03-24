@@ -145,7 +145,7 @@ class BotService {
                 const id = uuidv4();
                 const parsedInfo = await this.parseHtml(item.name, item);
                 const assetIdItem = parsedInfo.assetId;
-                await delay();
+                await delay(1000);
                 let imageResponse = {};
                 try {
                     imageResponse = await axios.get(`https://thumbnails.roblox.com/v1/assets?assetIds=${assetIdItem}&returnPolicy=PlaceHolder&size=700x700&format=Png&isCircular=false`);
