@@ -144,9 +144,8 @@ class BotService {
                 const id = uuidv4();
                 const parsedInfo = await this.parseHtml(item.name, item);
                 const assetIdItem = parsedInfo.assetId;
-                let imageResponse = {};
                 try {
-                    imageResponse = await axios.get(`https://thumbnails.roblox.com/v1/assets?assetIds=${assetIdItem}&returnPolicy=PlaceHolder&size=700x700&format=Png&isCircular=false`);
+                    const imageResponse = await axios.get(`https://thumbnails.roblox.com/v1/assets?assetIds=${assetIdItem}&returnPolicy=PlaceHolder&size=700x700&format=Png&isCircular=false`);
                     let itemImage = '';
                     if(imageResponse && imageResponse.data) {
                         itemImage = imageResponse.data.data[0].imageUrl;
@@ -165,7 +164,7 @@ class BotService {
                         });
                     newItems.push(add);
                 } catch(e) {
-                    console.log('error')
+                    console.log(e)
                 }
             }
         }
