@@ -1,9 +1,6 @@
 import $api from "../http";
 import {AxiosResponse} from "axios";
 import {IUser} from "../models/IUser";
-import {config} from 'dotenv';
-
-config()
 
 export default class AdminService {
     static async addReward(name: string, lvl: number, gemsAmount: number): Promise<AxiosResponse> {
