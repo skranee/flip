@@ -7,7 +7,7 @@ import cookieParser from 'cookie-parser';
 import router from './router/index.js';
 import errorMiddleware from "./middlewares/error-middleware.js";
 
-config({path: 'server/.env'});
+config();
 const PORT = process.env.PORT || 3001;
 
 const app = express();
