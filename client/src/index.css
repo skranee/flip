@@ -2405,6 +2405,7 @@ body::-webkit-scrollbar-thumb:hover {
 
 .side-a {
   background-size: cover;
+  background-color: transparent;
   height: 100%;
   width: 100%;
 }
