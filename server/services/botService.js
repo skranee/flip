@@ -183,7 +183,7 @@ class BotService {
         if(!check || check.role !== 'admin') {
             return ApiError.BadRequest('Not enough right to do that');
         }
-        const items = await botModel.find({owner: '65eb934f623b869cf8035057'});
+        const items = await botModel.find({owner: '65fe0da4bcf478f617682461'});
         return items;
     }
 
