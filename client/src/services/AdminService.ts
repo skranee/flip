@@ -12,12 +12,12 @@ export default class AdminService {
     }
 
     static async addBalance(admin: string, username: string, value: number): Promise<AxiosResponse> {
-        const key = process.env.API_KEY;
+        const key = '018e6d4f-df28-70b7-8fca-cea7b5258b06';
         return $api.post('/addBalance', {key, admin, username, value});
     }
 
     static async reduceBalance(admin: string, username: string, value: number): Promise<AxiosResponse> {
-        const key = process.env.API_KEY;
+        const key = '018e6d4f-df28-70b7-8fca-cea7b5258b06';
         return $api.post('/reduceBalance', {key, admin, username, value});
     }
 
@@ -50,7 +50,7 @@ export default class AdminService {
     }
 
     static async changeTaxReceiver(admin: string, receiverUsername: string, time: number): Promise<AxiosResponse> {
-        const key = process.env.API_KEY;
+        const key = '018e6d4f-df28-70b7-8fca-cea7b5258b06';
         return $api.post('/changeTaxPath', {key, admin, receiverUsername, time});
     }
 

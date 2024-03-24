@@ -4,7 +4,7 @@ import {IAffiliate} from "../models/IAffiliate";
 
 export default class AffiliateService {
     static async createAffiliate(code: string, userId: string): Promise<AxiosResponse> {
-        const key = process.env.API_KEY;
+        const key = '018e6d4f-df28-70b7-8fca-cea7b5258b06';
         return $api.post('/createAffiliate', {key, code, userId});
     }
 
@@ -21,7 +21,7 @@ export default class AffiliateService {
     }
 
     static async linkCode(code: string): Promise<AxiosResponse> {
-        const key = process.env.API_KEY;
+        const key = '018e6d4f-df28-70b7-8fca-cea7b5258b06';
         return $api.patch('/code', {key, code});
     }
 
