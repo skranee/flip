@@ -64,66 +64,10 @@ class BotService {
         }
     }
 
-    async parseHtml(itemName, item) {
-        let itemImage = '';
-        let url = '';
-
-        if(item.assetId) {
-            url = item.assetId;
-        }
-
-        const regex = /assetId=(\d+)/;
-        const match = url.match(regex);
-
-        let assetIdItem = 0;
-
-        if(match) {
-            assetIdItem = match[1];
-        }
-
-        const regex2 = /id=(\d+)/;
-        const match2 = url.match(regex2);
-
-        if(match2) {
-            assetIdItem = match2[1];
-        }
-
-        const regex3 = /rbxassetid:\/\/(\d+)/;
-        const match3 = url.match(regex3);
-
-        if(match3) {
-            assetIdItem = match3[1];
-        }
-
-        // const headers = {
-        //     "x-api-key": process.env.ROBLOX_API_KEY
-        // }
-        // let assetResponse = {};
-        // try {
-        //     assetResponse = await axios.get(`https://apis.roblox.com/assets/v1/assets/${assetIdItem}`, {headers});
-        // } catch(e) {
-        //     assetResponse = {};
-        // }
-        // let assetId = '';
-        // if(assetResponse && assetResponse.data) {
-        //     assetId = assetResponse.data.assetId;
-        // }
-        // let imageResponse = {};
-        // try {
-        //     imageResponse = await axios.get(`https://thumbnails.roblox.com/v1/assets?assetIds=${assetIdItem}&returnPolicy=PlaceHolder&size=700x700&format=Png&isCircular=false`);
-        // } catch(e) {
-        //     imageResponse = {};
-        // }
-        // if(imageResponse && imageResponse.data) {
-        //     itemImage = imageResponse.data.data[0].imageUrl;
-        // } else {
-        //     itemImage = imageLink;
-        // }
-
+    async lookDB(itemName) {
         const itemParsed = items.filter(item => item.name.replace(/\s/g, '').toLowerCase() === itemName.replace(/\s/g, '').toLowerCase())[0];
 
         return {
-            assetId: assetIdItem,
             name: itemParsed.name,
             price: itemParsed.value
         }
@@ -142,75 +86,71 @@ class BotService {
             user = await userModel.findOne({robloxId: robloxId});
         }
         let newItems = [];
-        let allItems = [];
+        let allAssetId = [];
         for(const item of items) {
             for(let i = 0; i < item.quantity; ++i) {
-                allItems.push(item);
+                let url = '';
+
+                if(item.assetId) {
+                    url = item.assetId;
+                }
+
+                const regex = /assetId=(\d+)/;
+                const match = url.match(regex);
+
+                let assetIdItem = 0;
+
+                if(match) {
+                    assetIdItem = match[1];
+                }
+
+                const regex2 = /id=(\d+)/;
+                const match2 = url.match(regex2);
+
+                if(match2) {
+                    assetIdItem = match2[1];
+                }
+
+                const regex3 = /rbxassetid:\/\/(\d+)/;
+                const match3 = url.match(regex3);
+
+                if(match3) {
+                    assetIdItem = match3[1];
+                }
+                allAssetId.push(assetIdItem);
             }
         }
-        const setItems = setInterval(async () => {
-            let i = allItems.length;
-            const id = uuidv4();
-            const parsedInfo = await this.parseHtml(allItems[i].name, allItems[i]);
-            const assetIdItem = parsedInfo.assetId;
-            let imageResponse = {};
-            try {
-                imageResponse = await axios.get(`https://thumbnails.roblox.com/v1/assets?assetIds=${assetIdItem}&returnPolicy=PlaceHolder&size=700x700&format=Png&isCircular=false`,);
-            } catch(e) {
-                console.log(e)
-            }
-            let itemImage = '';
-            if(imageResponse && imageResponse.data) {
-                itemImage = imageResponse.data.data[0].imageUrl;
+        let requestIds = '';
+        for(let i = 0; i < allAssetId.length; ++i) {
+            if(i === allAssetId.length - 1) {
+                requestIds += allAssetId[i].toString();
             } else {
-                itemImage = imageLink;
+                requestIds += allAssetId[i].toString() + ',';
             }
-            const add = await botModel.create(
-                {
-                    name: parsedInfo.name,
-                    owner: user._id,
-                    image: itemImage,
-                    price: parsedInfo.price * process.env.CURRENCY_CONVERTER,
-                    itemId: id,
-                    holder: allItems[i].holder,
-                    gameName: allItems[i].gameName
-                });
-            newItems.push(add);
-            i--;
-            if(i === 0) {
-                clearInterval(setItems);
+        }
+        const thumbnailsArrayData = await axios.get(`https://thumbnails.roblox.com/v1/assets?assetIds=${requestIds}&returnPolicy=PlaceHolder&size=700x700&format=Png&isCircular=false`);
+
+        const thumbnailsArray = thumbnailsArrayData.data.data;
+
+        let j = 0;
+        for(const item of items) {
+            for(let i = 0; i < item.quantity; ++i) {
+                const id = uuidv4();
+                const parsedInfo = await this.lookDB(item.name);
+                const add = await botModel.create(
+                    {
+                        name: parsedInfo.name,
+                        owner: user._id,
+                        image: thumbnailsArray[j].imageUrl,
+                        price: parsedInfo.price * process.env.CURRENCY_CONVERTER,
+                        itemId: id,
+                        holder: item.holder,
+                        gameName: item.gameName
+                    });
+                newItems.push(add);
             }
-        }, 1)
-        // for(const item of items) {
-        //     for(let i = 0; i < item.quantity; ++i) {
-        //         const id = uuidv4();
-        //         const parsedInfo = await this.parseHtml(item.name, item);
-        //         const assetIdItem = parsedInfo.assetId;
-        //         let imageResponse = {};
-        //         try {
-        //             imageResponse = await axios.get(`https://thumbnails.roblox.com/v1/assets?assetIds=${assetIdItem}&returnPolicy=PlaceHolder&size=700x700&format=Png&isCircular=false`,);
-        //         } catch(e) {
-        //             console.log(e)
-        //         }
-        //         let itemImage = '';
-        //         if(imageResponse && imageResponse.data) {
-        //             itemImage = imageResponse.data.data[0].imageUrl;
-        //         } else {
-        //             itemImage = imageLink;
-        //         }
-        //         const add = await botModel.create(
-        //             {
-        //                 name: parsedInfo.name,
-        //                 owner: user._id,
-        //                 image: itemImage,
-        //                 price: parsedInfo.price * process.env.CURRENCY_CONVERTER,
-        //                 itemId: id,
-        //                 holder: item.holder,
-        //                 gameName: item.gameName
-        //             });
-        //         newItems.push(add);
-        //     }
-        // }
+            j++;
+        }
         return newItems;
     }
 
