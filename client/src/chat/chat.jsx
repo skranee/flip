@@ -195,7 +195,7 @@ function Chat() {
         } else {
             if(mes.length && mes.trim().length) {
                 for(const word of banWords) {
-                    if(mes.includes(word)) {
+                    if(mes.replace(/\s/g, '').toLowerCase().includes(word.replace(/\s/g, '').toLowerCase())) {
                         setMes('');
                         globalStore.setErrorMessage('Cussing is not allowed');
                         globalStore.setErrorWindow(true);
