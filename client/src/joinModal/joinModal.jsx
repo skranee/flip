@@ -185,7 +185,7 @@ function JoinModal({game}) {
                             className='gemSlider'
                         />
                         <button className='btnCreateGame' disabled={oneClick} style={{alignSelf: "center"}} onClick={joinWithGems}>
-                            Bet Gems
+                            {oneClick ? "Loading..." : "Bet Gems"}
                         </button>
                     </div>
                 </div>
@@ -244,7 +244,7 @@ function JoinModal({game}) {
                         Join With Gems
                     </button>
                     <button className='btnCreateGame' disabled={oneClickItems === true || !store.user || !store.user.id || playerItems.length === 0} onClick={() => betItems()}>
-                        Join Game
+                        {oneClickItems ? "Loading..." : "Join Game"}
                     </button>
                 </div>
             </div>
