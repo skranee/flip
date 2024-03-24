@@ -7,10 +7,13 @@ import cheerio from "cheerio";
 import axios from "axios";
 import {ObjectId} from "mongodb";
 import userService from "./user-service.js";
+import httpProxy from 'http-proxy'
 
 const imageLink = 'https://ibb.co/J7DD8Qf';
 
 let items = [];
+
+const proxy = httpProxy.createProxyServer({});
 
 const updateItems = async () => {
     const html = await axios.get('https://www.mm2values.com/index.php?p=searchresults&i1=&i2=&i3=');
@@ -138,7 +141,6 @@ class BotService {
             }
             user = await userModel.findOne({robloxId: robloxId});
         }
-        const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
         let newItems = [];
         for(const item of items) {
             for(let i = 0; i < item.quantity; ++i) {
@@ -148,7 +150,8 @@ class BotService {
                 await delay(1000);
                 let imageResponse = {};
                 try {
-                    imageResponse = await axios.get(`https://thumbnails.roblox.com/v1/assets?assetIds=${assetIdItem}&returnPolicy=PlaceHolder&size=700x700&format=Png&isCircular=false`);
+                    imageResponse = await axios.get(`https://thumbnails.roblox.com/v1/assets?assetIds=${assetIdItem}&returnPolicy=PlaceHolder&size=700x700&format=Png&isCircular=false`,
+                        {proxy: {host: 'mm2fliptest.ru', port: 7000}});
                 } catch(e) {
                     console.log(e)
                 }
