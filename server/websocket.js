@@ -1,5 +1,6 @@
 import {WebSocketServer} from "ws";
 import botService from "./services/botService.js";
+import {banWords} from "./banwords.js";
 
 export const handleOnline = (change) => {
     plusUsers += change;
@@ -7,6 +8,19 @@ export const handleOnline = (change) => {
         plusUsers = 0;
     }
     broadcastAmount('connection');
+}
+
+export const sendMessage = (message) => {
+    for(const word of banWords) {
+        if(message.replace(/\s/g, '').toLowerCase().includes(word.replace(/\s/g, '').toLowerCase())) {
+            return null;
+        }
+    }
+    if(messages.length > 50) {
+        messages = messages.filter(item => item.id > messages[0].id);
+    }
+    messages.push(message);
+    broadcastMessage(message);
 }
 
 export const fake = () => {
@@ -50,13 +64,6 @@ wss.on('connection', function connection(ws) {
     ws.on('message', function (message) {
         message = JSON.parse(message);
         switch(message.method) {
-            case 'message':
-                if(messages.length > 50) {
-                    messages = messages.filter(item => item.id > messages[0].id);
-                }
-                messages.push(message);
-                broadcastMessage(message);
-                break;
             case 'stream':
                 streamStatus = message.streamStatus;
                 broadcastMessage(message);

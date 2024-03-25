@@ -6,6 +6,7 @@ import ApiError from "../exceptions/api-error.js";
 import historyModel from "../models/history-model.js";
 import transactionModel from "../models/transaction-model.js";
 import rewardModel from "../models/reward-model.js";
+import {sendMessage} from "../websocket.js";
 
 class UserService {
     async getUser(username) {
@@ -138,6 +139,11 @@ class UserService {
     async getPayments(userId) {
         const payments = await transactionModel.find({user: userId});
         return payments;
+    }
+
+    async sendMessage(message) {
+        sendMessage(message);
+        return null;
     }
 }
 

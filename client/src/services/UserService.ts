@@ -39,4 +39,8 @@ export default class UserService {
     static async get24hours(): Promise<AxiosResponse> {
         return $api.get('/24hours');
     }
+
+    static async sendMessage(message: object): Promise<AxiosResponse> {
+        return $api.post('/sendMessage', {message});
+    }
 }

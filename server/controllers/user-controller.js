@@ -1,4 +1,3 @@
-import axios from "axios";
 import userService from "../services/user-service.js";
 
 class UserController {
@@ -143,6 +142,16 @@ class UserController {
             const userId = req.query.userId;
             const payments = await userService.getPayments(userId);
             return res.json(payments);
+        } catch(e) {
+            next(e);
+        }
+    }
+
+    async sendMessage(req, res, next) {
+        try {
+            const {message} = req.body;
+            const send = await userService.sendMessage(message);
+            return res.json(send);
         } catch(e) {
             next(e);
         }

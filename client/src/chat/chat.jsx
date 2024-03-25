@@ -35,7 +35,7 @@ function Chat() {
 
     useEffect(() => {
         let pingInterval;
-        socket.current = new WebSocket("wss://mm2fliptest.ru");
+        socket.current = new WebSocket("wss://mm2fliptest.ru/ws");
         function heartbeat() {
             socket.current.send(JSON.stringify({ type: 'pong' }));
         }
@@ -244,7 +244,7 @@ function Chat() {
                     method: 'message'
                 }
                 setMes('');
-                socket.current.send(JSON.stringify(message));
+                await store.sendMessage(message);
                 if(messages.length > 49) {
                     messages.splice(0, 1);
                 }

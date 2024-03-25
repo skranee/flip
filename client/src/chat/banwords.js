@@ -662,6 +662,7 @@ export const banWords = [
     "twatwaffle",
 
     "twit",
+
     "va-j-j",
 
     "vag",
@@ -677,4 +678,10 @@ export const banWords = [
     "bloxpvp",
 
     "bloxybet",
+
+    "bloxpvp.com",
+
+    ".gg",
+
+    "omar"
 ]

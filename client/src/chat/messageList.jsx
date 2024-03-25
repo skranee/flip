@@ -46,7 +46,6 @@ function MessageList({ messages }) {
                                 {item.user.role === 'admin' && <FaCrown className='iconRoleChat' style={{color: color(item.user)}} />}
                                 {item.user.role === 'developer' && <RiMacbookFill className='iconRoleChat' style={{color: color(item.user)}}/>}
                                 <span style={{color: color(item.user)}}>{item.user.username}</span>
-                                <span> {item.time} </span>
                             </div>
                             <span className='message'>{item.message}</span>
                         </div>

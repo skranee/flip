@@ -700,4 +700,16 @@ export default class Store {
             console.log(e.response?.data?.message);
         }
     }
+
+    async sendMessage(message: object) {
+        try {
+            if(!this.isAuth) {
+                return null;
+            }
+            const send = await UserService.sendMessage(message);
+            return send;
+        } catch(e: any) {
+            console.log(e.response?.data?.message);
+        }
+    }
 }
