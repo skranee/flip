@@ -11,8 +11,9 @@ export const handleOnline = (change) => {
 }
 
 export const sendMessage = (message) => {
+    const mes = message.message;
     for(const word of banWords) {
-        if(message.replace(/\s/g, '').toLowerCase().includes(word.replace(/\s/g, '').toLowerCase())) {
+        if(mes.replace(/\s/g, '').toLowerCase().includes(word.replace(/\s/g, '').toLowerCase())) {
             return null;
         }
     }
