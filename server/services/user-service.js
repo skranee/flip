@@ -9,7 +9,6 @@ import rewardModel from "../models/reward-model.js";
 
 class UserService {
     async getUser(username) {
-        //getting user
         const userInfo = await axios.post('https://users.roblox.com/v1/usernames/users',{
             "usernames": [
                 `${username}`

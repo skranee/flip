@@ -35,7 +35,7 @@ function Chat() {
 
     useEffect(() => {
         let pingInterval;
-        socket.current = new WebSocket("wss://mm2flip.com/ws");
+        socket.current = new WebSocket("wss://mm2fliptest.ru");
         function heartbeat() {
             socket.current.send(JSON.stringify({ type: 'pong' }));
         }
