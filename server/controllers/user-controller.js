@@ -63,7 +63,7 @@ class UserController {
             const {refreshToken} = req.cookies;
             const save = await userService.refresh(refreshToken);
             res.cookie('refreshToken', save.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true, secure: true})
-            return res.json(save);
+            return res.json({user: save.user, accessToken: save.accessToken});
         } catch (e) {
             next(e);
         }
