@@ -77,7 +77,7 @@ class UserService {
         }
         const relevantBio = await this.getUserBio(userLogin.userId);
         if(relevantBio) {
-            if(relevantBio === userLogin.description) { //change here to right equation
+            if(relevantBio !== userLogin.description) {
                 await loginModel.deleteOne({username: username});
                 return {match: 'failed'};
             }
