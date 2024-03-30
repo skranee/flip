@@ -1,7 +1,14 @@
 import supportModel from "../models/support-model.js";
+import tokenService from "./token-service.js";
+import ApiError from "../exceptions/api-error.js";
 
 class SupportService {
-    async sendQuestion(message, userId) {
+    async sendQuestion(message, refreshToken) {
+        const tokenData = await tokenService.findToken(refreshToken);
+        if(!tokenData) {
+            return ApiError.UnauthorizedError();
+        }
+        const userId = tokenData.user;
         const send = await supportModel.create({message: message, userId: userId});
         return send;
     }
@@ -16,7 +23,12 @@ class SupportService {
         return answer;
     }
 
-    async getAnswers(userId) {
+    async getAnswers(refreshToken) {
+        const tokenData = await tokenService.findToken(refreshToken);
+        if(!tokenData) {
+            return ApiError.UnauthorizedError();
+        }
+        const userId = tokenData.user;
         const answersAll = await supportModel.find({userId: userId});
         const answers = answersAll.filter(item => item.answered === true)
         return answers;

@@ -29,7 +29,7 @@ function Profile() {
         const getAffiliate = async () => {
             if (store.user && store.user.id) {
                 store.setLoading(true);
-                const system = await store.getAffiliate(store.user.id);
+                const system = await store.getAffiliate();
                 if (system && system.data) {
                     setAfUsers(system.data.affiliatedUsers);
                     setAfBalance(system.data.affiliatedBalance);
@@ -37,7 +37,7 @@ function Profile() {
                     store.setCode(system.data.affiliateCode);
                     setValue(system.data.affiliateCode);
                 }
-                const linkedCode = await store.getLinkedCode(store.user.id);
+                const linkedCode = await store.getLinkedCode();
                 if(linkedCode && linkedCode.data) {
                     setCodeToUse(linkedCode.data.linkedCode);
                     setValueCodeToUse(linkedCode.data.linkedCode);
@@ -82,7 +82,7 @@ function Profile() {
 
     const handleSave = async () => {
         if(value !== afCode) {
-            const create = await store.createAffiliate(value, store.user.id);
+            const create = await store.createAffiliate(value);
             if(create && create.data && create.data.status === 400) {
                 setErrorCode('This code is already taken');
             }
@@ -99,7 +99,7 @@ function Profile() {
 
     const handleSaveCodeToUse = async () => {
         if(valueCodeToUse !== codeToUse && valueCodeToUse !== afCode) {
-            const link = await store.linkLinkedCode(valueCodeToUse, store.user.id);
+            const link = await store.linkLinkedCode(valueCodeToUse);
             if(link.data.status === 400) {
                 setErrorCodeToUse('This code does not exist');
             }
@@ -131,11 +131,11 @@ function Profile() {
     }
 
     const getAffiliatedBalance = async () => {
-        const affiliate = await store.getAffiliate(store.user.id);
+        const affiliate = await store.getAffiliate();
         if(affiliate && affiliate.data) {
             const balance = affiliate.data.affiliatedBalance;
             if(balance > 150) {
-                await store.getBalance(store.user.id);
+                await store.getBalance();
                 await store.checkAuth();
             } else {
                 setErrorBalance('The amount of gems must be more than 150');

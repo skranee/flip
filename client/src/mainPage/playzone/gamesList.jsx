@@ -215,7 +215,7 @@ function GamesList () {
     }
 
     const cancel = async (game) => {
-        await store.cancelGame(store.user, game);
+        await store.cancelGame(game);
         const gameUpdate = await store.getGames();
         if(gameUpdate && gameUpdate.data) {
             setGames([])

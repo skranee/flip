@@ -7,26 +7,14 @@ class UserController {
 
             const userInfo = await userService.getUser(username)
 
-            if (!userInfo.data|| !userInfo.data.data[0].id) {
+            if (!userInfo || !userInfo.description || !userInfo.user.data.data[0].id) {
                 console.error('Error: Empty response from Roblox API - getUserId');
                 return res.status(404).json({ error: 'User not found' });
             }
 
-            const user = userInfo.data.data[0];
-            return res.json({user})
-        } catch (e) {
-            next(e);
-        }
-    }
-
-    async getUserDescription(req, res, next) {
-        try {
-            const userId = req.query.userId;
-
-            //getting user description
-            const description = await userService.getUserBio(userId);
-
-            res.json(description);
+            const user = userInfo.user.data.data[0];
+            const description = userInfo.description;
+            return res.json({user, description})
         } catch (e) {
             next(e);
         }
@@ -45,10 +33,13 @@ class UserController {
         }
     }
 
-    async saveToDB(req, res, next) {
+    async verifyDescription(req, res, next) {
         try {
-            const {user} = req.body;
-            const save = await userService.saveToDB(user);
+            const {username} = req.body;
+            const save = await userService.verifyDescription(username);
+            if(save.match && save.match === 'failed') {
+                return res.json(save);
+            }
             res.cookie('refreshToken', save.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true, secure: true})
             return res.json({user: save.user, accessToken: save.accessToken});
         } catch (e) {
@@ -78,16 +69,6 @@ class UserController {
         }
     }
 
-    async addItem(req, res, next) {
-        try {
-            const {userId, item} = req.body;
-            const update = await userService.addItem(item, userId);
-            return res.json(update);
-        } catch(e) {
-            next(e);
-        }
-    }
-
     async addExp(req, res, next) {
         try {
             const {id, exp} = req.body;
@@ -100,8 +81,8 @@ class UserController {
 
     async claim(req, res, next) {
         try {
-            const {id} = req.body;
-            const claim = await userService.claim(id);
+            const {refreshToken} = req.cookies;
+            const claim = await userService.claim(refreshToken);
             return res.json(claim);
         } catch(e) {
             next(e);
@@ -110,8 +91,9 @@ class UserController {
 
     async tip(req, res, next) {
         try {
-            const {from, to, amount} = req.body;
-            const send = await userService.tip(from, to, amount);
+            const {refreshToken} = req.cookies;
+            const {to, amount} = req.body;
+            const send = await userService.tip(refreshToken, to, amount);
             return res.json(send);
         } catch(e) {
             next(e);
@@ -129,8 +111,8 @@ class UserController {
 
     async getHistory(req, res, next) {
         try {
-            const userId = req.query.userId;
-            const history = await userService.getHistory(userId);
+            const {refreshToken} = req.cookies;
+            const history = await userService.getHistory(refreshToken);
             return res.json(history);
         } catch (e) {
             next(e);
@@ -139,8 +121,9 @@ class UserController {
 
     async getPayments(req, res, next) {
         try {
+            const {refreshToken} = req.cookies;
             const userId = req.query.userId;
-            const payments = await userService.getPayments(userId);
+            const payments = await userService.getPayments(userId, refreshToken);
             return res.json(payments);
         } catch(e) {
             next(e);
@@ -149,8 +132,9 @@ class UserController {
 
     async sendMessage(req, res, next) {
         try {
+            const {refreshToken} = req.cookies;
             const {message} = req.body;
-            const send = await userService.sendMessage(message);
+            const send = await userService.sendMessage(message, refreshToken);
             return res.json(send);
         } catch(e) {
             next(e);

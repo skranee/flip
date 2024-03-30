@@ -206,7 +206,6 @@ function Chat() {
                     if(mes.substring(1, 4) === 'tip') {
                         const params = mes.split(' ');
                         if(params[1] && params[2]) {
-                            const sender = store.user.username;
                             const receiver = params[1];
                             if(receiver === store.user.username) {
                                 globalStore.setErrorMessage('You can not tip yourself');
@@ -219,7 +218,7 @@ function Chat() {
                                 globalStore.setErrorWindow(true);
                                 return null;
                             }
-                            const tip = await store.tip(sender, receiver, amount);
+                            const tip = await store.tip(receiver, amount);
                             if(tip && tip.data && tip.data.status && tip.data.status === 400) {
                                 globalStore.setErrorMessage('Check your balance or receiver username');
                                 globalStore.setErrorWindow(true);
@@ -239,8 +238,6 @@ function Chat() {
                         minute: 'numeric',
                         hour12: true
                     }).format(new Date()),
-                    user: user,
-                    avatar: localStorage.getItem('avatarUrl'),
                     method: 'message'
                 }
                 setMes('');

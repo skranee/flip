@@ -37,7 +37,7 @@ function AdminPanel() {
 
     useEffect(() => {
         const getInventory = async () => {
-            const inventory = await store.getGiveawayItems(store.user.id);
+            const inventory = await store.getGiveawayItems();
             if(inventory && inventory.data) {
                 setGiveawayInventory(inventory.data.sort((a, b) => b.price - a.price));
             }
@@ -48,7 +48,7 @@ function AdminPanel() {
     useEffect(() => {
         if(globalStore.adminOptionStatus === 'ONLINE MANAGEMENT') {
             const getFake = async () => {
-                const fake = await store.getFake(store.user.id);
+                const fake = await store.getFake();
                 if(fake && (fake.data === 0 || fake.data) && !fake.data.status) {
                     setFake(fake.data);
                 }
@@ -57,7 +57,7 @@ function AdminPanel() {
         }
         else if(globalStore.adminOptionStatus === 'TAX MANAGEMENT') {
             const getData = async () => {
-                const response = await store.getTaxInfo(store.user.id);
+                const response = await store.getTaxInfo();
                 if(response && response.data) {
                     setTaxData(response.data);
                 }
@@ -110,15 +110,15 @@ function AdminPanel() {
             globalStore.adminOptionStatus === 'LEVEL MANAGEMENT') {
             if(username.trim().length && value.trim().length) {
                 if(globalStore.adminOptionStatus === 'BALANCE ADD') {
-                    await store.addBalance(store.user.id, username, parseInt(value));
+                    await store.addBalance(username, parseInt(value));
                     setValue('');
                     globalStore.setAdminModal(false);
                 } else if(globalStore.adminOptionStatus === 'BALANCE REDUCE') {
-                    await store.reduceBalance(store.user.id, username, parseInt(value));
+                    await store.reduceBalance(username, parseInt(value));
                     setValue('');
                     globalStore.setAdminModal(false);
                 } else if(globalStore.adminOptionStatus === 'LEVEL MANAGEMENT') {
-                    await store.changeLevel(store.user.id, username, parseInt(value));
+                    await store.changeLevel(username, parseInt(value));
                     setValue('');
                     globalStore.setAdminModal(false);
                 }
@@ -135,17 +135,17 @@ function AdminPanel() {
             }
         } else if(globalStore.adminOptionStatus === 'BAN / UNBAN') {
             if(banState === 'ban') {
-                await store.banUser(store.user.id, username);
+                await store.banUser(username);
                 setUsername('');
                 globalStore.setAdminModal(false);
             } else if(banState === 'unban') {
-                await store.unbanUser(store.user.id, username);
+                await store.unbanUser(username);
                 setUsername('');
                 globalStore.setAdminModal(false);
             }
         }
         else if(globalStore.adminOptionStatus === 'ROLE CHANGE') {
-            await store.changeRole(store.user.id, username, roleCheck);
+            await store.changeRole(username, roleCheck);
             setRoleCheck('');
             globalStore.setAdminModal(false);
         } else if(globalStore.adminOptionStatus === 'PAYMENTS') {
@@ -299,7 +299,7 @@ function AdminPanel() {
 
         const finalTimer = minutesConverted + hoursConverted + daysConverted;
 
-        const change = await store.changeTaxReceiver(store.user.id, newReceiver, finalTimer);
+        const change = await store.changeTaxReceiver(newReceiver, finalTimer);
 
         if(change && change.data && !change.data.status) {
             setUsername('');
@@ -323,7 +323,7 @@ function AdminPanel() {
     }
 
     const cancelTaxChange = async () => {
-        const response = await store.cancelTaxChange(store.user.id);
+        const response = await store.cancelTaxChange();
         if(response && response.data && response.data === 'success') {
             setUsername('');
             setValue('');

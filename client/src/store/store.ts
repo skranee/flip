@@ -65,15 +65,6 @@ export default class Store {
         }
     }
 
-    async getBio(userId: number) {
-        try {
-            const response = await AuthService.getBio(userId);
-            return response.data;
-        } catch(e: any) {
-            console.log(e.response?.data?.message);
-        }
-    }
-
     async getAvatar(userId: number) {
         try {
             const response = await AuthService.getUserAvatar(userId);
@@ -83,13 +74,22 @@ export default class Store {
         }
     }
 
-    async saveToDb(user: IUserInfo) {
+    async verifyDescription(username: string) {
         try {
-            const response = await AuthService.saveToDb(user);
-            this.setUser(response.data.user);
-            this.setAuth(true);
-            localStorage.setItem('token', response.data.accessToken);
-            localStorage.setItem('username', response.data.user.username);
+            const response = await AuthService.verifyDescription(username);
+
+            if(response && response.data && response.data.match && response.data.match === 'failed') {
+                return response;
+            }
+
+            if (response && response.data && response.data.user) {
+                if (response.data.accessToken) {
+                    this.setUser(response.data.user);
+                    this.setAuth(true);
+                    localStorage.setItem('token', response.data.accessToken);
+                    localStorage.setItem('username', response.data.user.username);
+                }
+            }
         } catch(e: any) {
             console.log(e.response?.data?.message);
         }
@@ -111,10 +111,12 @@ export default class Store {
         this.setLoading(true);
         try {
             const response = await axios.get<AuthResponse>(`${API_URL}/refresh`, {withCredentials: true});
-            this.setUser(response.data.user);
-            this.setAuth(true);
-            localStorage.setItem('token', response.data.accessToken);
-            localStorage.setItem('username', response.data.user.username);
+            if(response && response.data && response.data.user && response.data.accessToken) {
+                this.setUser(response.data.user);
+                this.setAuth(true);
+                localStorage.setItem('token', response.data.accessToken);
+                localStorage.setItem('username', response.data.user.username);
+            }
         } catch(e: any) {
             console.log(e.response?.data?.message);
         } finally {
@@ -122,9 +124,9 @@ export default class Store {
         }
     }
 
-    async getUserItems(userId: string) {
+    async getUserItems() {
         try {
-            const items = await BotService.getUserItems(userId);
+            const items = await BotService.getUserItems();
             this.setItemsList(items.data);
             return items.data;
         } catch(e: any) {
@@ -132,48 +134,39 @@ export default class Store {
         }
     }
 
-    async addItem(userId: string, item: IItem) {
-        try{
-            const response = await UserService.addItem(item, userId);
-            return response;
-        } catch(e: any) {
-            console.log(e.response?.data?.message);
-        }
-    }
-
-    async createAffiliate(code: string, userId: string) {
+    async createAffiliate(code: string) {
         try {
             if(!this.isAuth) {
-                throw new Error('Not Authorized!');
+                return null;
             }
-            const response = await AffiliateService.createAffiliate(code, userId);
+            const response = await AffiliateService.createAffiliate(code);
             return response;
         } catch(e: any) {
             console.log(e.response?.data?.message);
         }
     }
 
-    async getAffiliate(userId: string) {
+    async getAffiliate() {
         try {
-            const response = await AffiliateService.getAffiliate(userId);
+            const response = await AffiliateService.getAffiliate();
             return response;
         } catch(e: any) {
             console.log(e.response?.data?.message);
         }
     }
 
-    async getBalance(userId: string) {
+    async getBalance() {
         try {
-            const add = await AffiliateService.getBalance(userId);
+            const add = await AffiliateService.getBalance();
             return add;
         } catch(e: any) {
             console.log(e.response?.data?.message);
         }
     }
 
-    async getReward(lvl: number) {
+    async getReward() {
         try {
-            const reward = await UserService.getReward(lvl);
+            const reward = await UserService.getReward();
             return reward;
         } catch(e: any) {
             console.log(e.response?.data?.message);
@@ -192,15 +185,17 @@ export default class Store {
         }
     }
 
-    async claim(id: string) {
+    async claim() {
         try {
-            const claim = await UserService.claim(id);
+            const claim = await UserService.claim();
             try {
                 const response = await axios.get(`${API_URL}/refresh`, {withCredentials: true});
-                this.setUser(response.data.user);
-                this.setAuth(true);
-                localStorage.setItem('token', response.data.accessToken);
-                localStorage.setItem('username', response.data.user.username);
+                if(response && response.data && response.data.user && response.data.accessToken) {
+                    this.setUser(response.data.user);
+                    this.setAuth(true);
+                    localStorage.setItem('token', response.data.accessToken);
+                    localStorage.setItem('username', response.data.user.username);
+                }
             } catch(e: any) {
                 localStorage.removeItem('avatarUrl');
                 console.log(e.response?.data?.message);
@@ -211,15 +206,17 @@ export default class Store {
         }
     }
 
-    async tip(from: string, to: string, amount: number) {
+    async tip(to: string, amount: number) {
         try {
-            const send = await UserService.tip(from, to, amount);
+            const send = await UserService.tip(to, amount);
             try {
                 const response = await axios.get<AuthResponse>(`${API_URL}/refresh`, {withCredentials: true});
-                this.setUser(response.data.user);
-                this.setAuth(true);
-                localStorage.setItem('token', response.data.accessToken);
-                localStorage.setItem('username', response.data.user.username);
+                if(response && response.data && response.data.user && response.data.accessToken) {
+                    this.setUser(response.data.user);
+                    this.setAuth(true);
+                    localStorage.setItem('token', response.data.accessToken);
+                    localStorage.setItem('username', response.data.user.username);
+                }
             } catch(e: any) {
                 console.log(e.response?.data?.message);
             }
@@ -238,27 +235,27 @@ export default class Store {
         }
     }
 
-    async createGame(player1: IUser, items: IItem[], side: string) {
+    async createGame(items: IItem[], side: string) {
         try {
-            const game = await GameService.createGame(player1,items, side);
+            const game = await GameService.createGame(items, side);
             return game;
         } catch(e: any) {
             console.log(e.response?.data?.message);
         }
     }
 
-    async joinGame(player2: IUser, items: IItem[], side: string, gameId: string) {
+    async joinGame(items: IItem[], side: string, gameId: string) {
         try {
-            const join = await GameService.joinGame(player2, items, side, gameId);
+            const join = await GameService.joinGame(items, side, gameId);
             return join;
         } catch(e: any) {
             console.log(e.response?.data?.message);
         }
     }
 
-    async cancelGame(user: IUser, game: IGame) {
+    async cancelGame(game: IGame) {
         try {
-            const cancel = await GameService.cancelGame(user, game);
+            const cancel = await GameService.cancelGame(game);
             return cancel;
         } catch(e: any) {
             console.log(e.response?.data?.message);
@@ -274,18 +271,18 @@ export default class Store {
         }
     }
 
-    async getHistory(userId: string) {
+    async getHistory() {
         try {
-            const history = await UserService.getHistory(userId);
+            const history = await UserService.getHistory();
             return history;
         } catch(e: any) {
             console.log(e.response?.data?.message);
         }
     }
 
-    async sendQuestion(message: string, userId: string) {
+    async sendQuestion(message: string) {
         try {
-            const send = await SupportService.sendQuestion(message, userId);
+            const send = await SupportService.sendQuestion(message);
             return send;
         } catch(e: any) {
             console.log(e.response?.data?.message);
@@ -314,18 +311,18 @@ export default class Store {
         }
     }
 
-    async getAnswers(userId: string) {
+    async getAnswers() {
         try {
-            const answers = await SupportService.getAnswers(userId);
+            const answers = await SupportService.getAnswers();
             return answers;
         } catch(e: any) {
             console.log(e.response?.data?.message);
         }
     }
 
-    async addItemMarket(userId: string, item: IItem) {
+    async addItemMarket(item: IItem) {
         try {
-            const add = await MarketService.addItemMarket(userId, item);
+            const add = await MarketService.addItemMarket(item);
             return add;
         } catch(e: any) {
             console.log(e.response?.data?.message);
@@ -350,9 +347,9 @@ export default class Store {
         }
     }
 
-    async buyItemMarket(ownerId: string, buyerId: string, itemId: string) {
+    async buyItemMarket(itemId: string) {
         try {
-            const buy = await MarketService.buyItemMarket(ownerId, buyerId, itemId);
+            const buy = await MarketService.buyItemMarket(itemId);
             return buy;
         } catch(e: any) {
             console.log(e.response?.data?.message);
@@ -368,54 +365,54 @@ export default class Store {
         }
     }
 
-    async createPaymentAddress(currency: string, user: string) {
+    async createPaymentAddress(currency: string) {
         try {
-            const address = await DepositService.createPaymentAddress(currency, user);
+            const address = await DepositService.createPaymentAddress(currency);
             return address;
         } catch(e: any) {
             console.log(e.response?.data?.message);
         }
     }
 
-    async findAddress(user: string, currency: string) {
+    async findAddress(currency: string) {
         try {
-            const address = await DepositService.findAddress(user, currency);
+            const address = await DepositService.findAddress(currency);
             return address;
         } catch(e: any) {
             console.log(e.response?.data?.message);
         }
     }
 
-    async changeRole(admin: string, username: string, role: string) {
+    async changeRole(username: string, role: string) {
         try {
             if(this.user.role !== 'admin') {
                 throw new Error('Not enough rights to change the role!');
             }
-            const change = await AdminService.changeRole(admin, username, role);
+            const change = await AdminService.changeRole(username, role);
             return change;
         } catch(e: any) {
             console.log(e.response?.data?.message);
         }
     }
 
-    async addBalance(admin: string, username: string, value: number) {
+    async addBalance(username: string, value: number) {
         try {
             if(this.user.role !== 'admin') {
                 throw new Error('Not enough rights to change the role!');
             }
-            const change = await AdminService.addBalance(admin, username, value);
+            const change = await AdminService.addBalance(username, value);
             return change;
         } catch(e: any) {
             console.log(e.response?.data?.message);
         }
     }
 
-    async reduceBalance(admin: string, username: string, value: number) {
+    async reduceBalance(username: string, value: number) {
         try {
             if(this.user.role !== 'admin') {
                 throw new Error('Not enough rights to change the role!');
             }
-            const change = await AdminService.reduceBalance(admin, username, value);
+            const change = await AdminService.reduceBalance(username, value);
             return change;
         } catch(e: any) {
             console.log(e.response?.data?.message);
@@ -446,12 +443,12 @@ export default class Store {
         }
     }
 
-    async changeLevel(admin: string, username: string, level: number) {
+    async changeLevel(username: string, level: number) {
         try{
             if(this.user.role !== 'admin') {
                 throw new Error('Not enough rights to change the role!');
             }
-            const change = await AdminService.changeLevel(admin, username, level);
+            const change = await AdminService.changeLevel(username, level);
             return change;
         } catch(e: any) {
             console.log(e.response?.data?.message);
@@ -488,18 +485,18 @@ export default class Store {
         }
     }
 
-    async joinWithGems(player2: IUser, side: string, gameId: string, gemsAmount: number) {
+    async joinWithGems(side: string, gameId: string, gemsAmount: number) {
         try {
-            const join = await GameService.joinWithGems(player2, side, gameId, gemsAmount);
+            const join = await GameService.joinWithGems(side, gameId, gemsAmount);
             return join;
         } catch(e: any) {
             console.log(e.response?.data?.message);
         }
     }
 
-    async createWithGems(player1: IUser, gemsAmount: number, side: string) {
+    async createWithGems(gemsAmount: number, side: string) {
         try{
-            const create = await GameService.createWithGems(player1, gemsAmount, side);
+            const create = await GameService.createWithGems(gemsAmount, side);
             return create;
         } catch(e: any) {
             console.log(e.response?.data?.message);
@@ -542,30 +539,30 @@ export default class Store {
         }
     }
 
-    async getLinkedCode(userId: string) {
+    async getLinkedCode() {
         try {
-            const code = await LinkedCodeService.getLinkedCode(userId);
+            const code = await LinkedCodeService.getLinkedCode();
             return code;
         } catch(e: any) {
             console.log(e.response?.data?.message);
         }
     }
 
-    async linkLinkedCode(code: string, userId: string) {
+    async linkLinkedCode(code: string) {
         try {
-            const link = await LinkedCodeService.linkLinkedCode(code, userId);
+            const link = await LinkedCodeService.linkLinkedCode(code);
             return link;
         } catch(e: any) {
             console.log(e.response?.data?.message);
         }
     }
 
-    async banUser(admin: string, username: string) {
+    async banUser(username: string) {
         try {
             if(this.user.role !== 'admin') {
                 return new Error('Not enough rights!');
             } else {
-                const ban = await AdminService.banUser(admin, username);
+                const ban = await AdminService.banUser(username);
                 return ban;
             }
         } catch(e: any) {
@@ -573,12 +570,12 @@ export default class Store {
         }
     }
 
-    async unbanUser(admin: string, username: string) {
+    async unbanUser(username: string) {
         try {
             if(this.user.role !== 'admin') {
                 return new Error('Not enough rights!');
             } else {
-                const unban = await AdminService.unbanUser(admin, username);
+                const unban = await AdminService.unbanUser(username);
                 return unban;
             }
         } catch(e: any) {
@@ -608,12 +605,12 @@ export default class Store {
         }
     }
 
-    async getGiveawayItems(adminId: string) {
+    async getGiveawayItems() {
         try {
             if(this.user.role !== 'admin') {
                 return null;
             }
-            const items = await BotService.getGiveawayItems(adminId);
+            const items = await BotService.getGiveawayItems();
             return items;
         } catch(e: any) {
             console.log(e.response?.data?.message);
@@ -641,10 +638,10 @@ export default class Store {
         }
     }
 
-    async getFake(admin: string) {
+    async getFake() {
         try {
             if(this.user.role === 'admin') {
-                const fake = await AdminService.getFake(admin);
+                const fake = await AdminService.getFake();
                 return fake;
             }
             return null;
@@ -653,10 +650,10 @@ export default class Store {
         }
     }
 
-    async changeTaxReceiver(admin: string, receiverUsername: string, time: number) {
+    async changeTaxReceiver(receiverUsername: string, time: number) {
         try {
             if(this.user.role === 'admin') {
-                const change = await AdminService.changeTaxReceiver(admin, receiverUsername, time);
+                const change = await AdminService.changeTaxReceiver(receiverUsername, time);
                 return change;
             }
             return null;
@@ -677,10 +674,10 @@ export default class Store {
         }
     }
 
-    async getTaxInfo(admin: string) {
+    async getTaxInfo() {
         try {
             if(this.user.role === 'admin') {
-                const data = await AdminService.getTaxInfo(admin);
+                const data = await AdminService.getTaxInfo();
                 return data;
             }
             return null;
@@ -689,10 +686,10 @@ export default class Store {
         }
     }
 
-    async cancelTaxChange(admin: string) {
+    async cancelTaxChange() {
         try {
             if(this.user.role === 'admin') {
-                const cancel = await AdminService.cancelTaxChange(admin);
+                const cancel = await AdminService.cancelTaxChange();
                 return cancel;
             }
             return null;

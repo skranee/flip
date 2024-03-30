@@ -48,7 +48,7 @@ function NavigationPanel () {
     }
 
     const openDeposit = async () => {
-        await store.getUserItems(store.user.id);
+        await store.getUserItems();
         globalStore.setDepositOpen(true);
     }
 

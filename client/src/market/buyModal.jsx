@@ -9,7 +9,7 @@ function BuyModal({item}) {
 
     const buy = async () => {
         if(store.user.balance >= item.price) {
-            await store.buyItemMarket(item.owner, store.user.id, item.itemId);
+            await store.buyItemMarket(item.itemId);
         } else {
             return Error('Not enough balance');
         }

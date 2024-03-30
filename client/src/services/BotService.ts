@@ -8,12 +8,12 @@ export default class BotService {
         return $api.get(`/withdraw`);
     }
 
-    static async getUserItems(userId: string): Promise<AxiosResponse<IItem[]>> {
-        return $api.get(`/getUserItems?userId=${userId}`);
+    static async getUserItems(): Promise<AxiosResponse<IItem[]>> {
+        return $api.get(`/getUserItems`);
     }
 
-    static async getGiveawayItems(adminId: string): Promise<AxiosResponse<IItem[]>> {
-        return $api.get(`/giveawayItems?adminId=${adminId}`);
+    static async getGiveawayItems(): Promise<AxiosResponse<IItem[]>> {
+        return $api.get(`/giveawayItems`);
     }
 
     static async startGiveaway(adminId: string, items: IItem[]): Promise<AxiosResponse<IItem[]>> {

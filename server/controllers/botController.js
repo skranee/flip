@@ -32,8 +32,8 @@ class BotController {
 
     async getUserItems(req, res, next) {
         try {
-            const userId = req.query.userId;
-            const items = await botService.getUserItems(userId);
+            const {refreshToken} = req.cookies;
+            const items = await botService.getUserItems(refreshToken);
             return res.json(items);
         } catch(e) {
             next(e);
@@ -42,8 +42,8 @@ class BotController {
 
     async getGiveawayItems(req, res, next) {
         try {
-            const adminId = req.query.adminId;
-            const items = await botService.getGiveawayItems(adminId);
+            const {refreshToken} = req.cookies;
+            const items = await botService.getGiveawayItems(refreshToken);
             return res.json(items);
         } catch(e) {
             next(e);

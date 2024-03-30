@@ -13,7 +13,7 @@ function Playzone () {
     useEffect(() => {
         if(store.user && store.user.id && store.isAuth) {
             const his = async () => {
-                const response = await store.getHistory(store.user.id);
+                const response = await store.getHistory();
                 if(response && response.data) {
                     setHistory(response.data.reverse());
                 }
@@ -42,7 +42,7 @@ function Playzone () {
     }
 
     const handleHistory = async () => {
-        const response = await store.getHistory(store.user.id);
+        const response = await store.getHistory();
         if(response && response.data) {
             setHistory(response.data.reverse());
         }

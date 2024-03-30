@@ -47,22 +47,9 @@ function LoginModal () {
                     return;
                 }
 
-                const randomWords = ['penguin', 'living', 'seaside', 'funny', 'fish', 'fresh', 'jumping', 'famous', 'smiling', 'wave', 'hat', 'city', 'hills', 'beautiful', 'friendly', 'dog', 'water', 'dance', 'light', 'lion']
-
-                const generateRandom = () => {
-                    let randomString = '';
-                    let randomNumber = (Math.round(Math.random() * 1000) % 3) + (Math.round(Math.random() * 1000) % 4) + 9;
-                    for(let i = 0; i < randomNumber; ++i) {
-                        const wordNumber = Math.round(Math.random() * 1000) % randomWords.length;
-                        randomString += randomWords[wordNumber];
-                        if(i !== randomNumber - 1) {
-                            randomString += ' ';
-                        }
-                    }
-                    setVerifyBio(randomString);
+                if(userData && userData.data && userData.data.description) {
+                    setVerifyBio(userData.data.description);
                 }
-
-                generateRandom();
 
                 setUserId(user.id);
                 setUserInfo(user);
@@ -78,18 +65,18 @@ function LoginModal () {
 
     const handleVerify = async () => {
         try {
-            const bio = await store.getBio(userId);
-            await getAvatar()
-            if(verifyBio === bio) {
-                store.setAuth(true);
-                globalStore.setLogOpen(false);
-                await store.saveToDb(userInfo);
-            } else {
+            const response = await store.verifyDescription(username);
+
+            if(response && response.data && response.data.match && response.data.match === 'failed') {
                 setVerStatus('Your description does not match');
                 setUsername('');
                 setVerify(false);
                 localStorage.removeItem('username');
                 localStorage.removeItem('avatarUrl');
+            } else {
+                await getAvatar()
+                store.setAuth(true);
+                globalStore.setLogOpen(false);
             }
         } catch (error) {
             console.error('The description does not match!', error)

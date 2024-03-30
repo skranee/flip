@@ -12,9 +12,8 @@ function Rewards() {
     useEffect(() => {
         const getReward = async () => {
             store.setLoading(true);
-            const lvl = Math.ceil((store.user.lvl + 1) / 5) * 5;
-            if(lvl) {
-                const rew = await store.getReward(lvl);
+            if(store.user) {
+                const rew = await store.getReward();
                 if(rew && rew.data) {
                     setReward(rew.data);
                 }

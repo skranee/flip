@@ -6,6 +6,7 @@ import userModel from "../models/user-model.js";
 import transactionModel from "../models/transaction-model.js";
 import linkedCodeService from "./linkedCodeService.js";
 import affiliateService from "./affiliateService.js";
+import tokenService from "./token-service.js";
 
 class DepositService {
 
@@ -36,10 +37,18 @@ class DepositService {
         }
     }
 
-    async createPaymentAddress(key, currency, user) {
-        if(key !== process.env.API_KEY) {
-            return ApiError.BadRequest('Not allowed');
+    async createPaymentAddress(currency, refreshToken) {
+        const tokenData = await tokenService.findToken(refreshToken);
+        if(!tokenData) {
+            return ApiError.UnauthorizedError();
         }
+        const user = tokenData.user.toString();
+
+        const check = await cryptoAddressModel.findOne({user: user, currency: currency});
+        if(check) {
+            return ApiError.BadRequest('Already Exists')
+        }
+
         const accountId = await this.getAccountId(currency);
         function generateSignature(method, requestPath, body, timestamp) {
             const message = `${timestamp}${method}${requestPath}${JSON.stringify(body)}`;
@@ -70,7 +79,13 @@ class DepositService {
         return address;
     }
 
-    async findAddress(user, curr) {
+    async findAddress(refreshToken, curr) {
+        const tokenData = await tokenService.findToken(refreshToken);
+        if(!tokenData) {
+            return ApiError.UnauthorizedError();
+        }
+        const user = tokenData.user.toString();
+
         const note = await cryptoAddressModel.findOne({user: user, currency: curr});
         if(!note) {
             return null;

@@ -77,7 +77,7 @@ function LeftPanel () {
     }
 
     const claim = async () => {
-        await store.claim(store.user.id);
+        await store.claim();
         setBonus(true);
     }
 

@@ -1,5 +1,7 @@
 import rewardModel from "../models/reward-model.js";
 import ApiError from "../exceptions/api-error.js";
+import tokenService from "./token-service.js";
+import userModel from "../models/user-model.js";
 
 class RewardService {
     async addReward(name, lvl, gemsAmount) {
@@ -11,7 +13,17 @@ class RewardService {
         return create;
     }
 
-    async getReward(level) {
+    async getReward(refreshToken) {
+        const tokenData = await tokenService.findToken(refreshToken);
+        if(!tokenData) {
+            return ApiError.UnauthorizedError();
+        }
+        const user = await userModel.findOne({_id: tokenData.user});
+        if(!user) {
+            return ApiError.BadRequest('Unexpected error');
+        }
+        const lvl = user.lvl;
+        const level = Math.ceil((lvl + 1) / 5) * 5;
         const reward = await rewardModel.findOne({lvl: level});
         return reward;
     }

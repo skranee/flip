@@ -3,8 +3,9 @@ import supportService from "../services/supportService.js";
 class SupportController {
     async sendQuestion(req, res, next) {
         try {
-            const {message, userId} = req.body;
-            const send = await supportService.sendQuestion(message, userId);
+            const {refreshToken} = req.cookies;
+            const {message} = req.body;
+            const send = await supportService.sendQuestion(message, refreshToken);
             return res.json(send);
         } catch(e) {
             next(e);
@@ -32,8 +33,8 @@ class SupportController {
 
     async getAnswers(req, res, next) {
         try {
-            const userId = req.query.userId;
-            const answers = await supportService.getAnswers(userId);
+            const {refreshToken} = req.cookies;
+            const answers = await supportService.getAnswers(refreshToken);
             return res.json(answers);
         } catch(e) {
             next(e);

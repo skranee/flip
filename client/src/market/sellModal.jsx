@@ -10,7 +10,7 @@ function SellModal({item}) {
     }
 
     const sell = async () => {
-        await store.addItemMarket(store.user.id, item);
+        await store.addItemMarket(item);
         globalStore.setSellItemOpen(false);
         window.location.reload();
     }

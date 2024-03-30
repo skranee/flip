@@ -7,6 +7,8 @@ import historyModel from "../models/history-model.js";
 import transactionModel from "../models/transaction-model.js";
 import rewardModel from "../models/reward-model.js";
 import {sendMessage} from "../websocket.js";
+import loginModel from "../models/login-model.js";
+import {Schema} from "mongoose";
 
 class UserService {
     async getUser(username) {
@@ -17,15 +19,48 @@ class UserService {
             "excludeBannedUsers": true
         });
 
-        return userInfo;
+        const randomWords = ['penguin', 'living', 'seaside', 'funny', 'fish', 'fresh', 'jumping', 'famous', 'smiling', 'wave', 'hat', 'city', 'hills', 'beautiful', 'friendly', 'dog', 'water', 'dance', 'light', 'lion']
+
+        const generateRandom = () => {
+            let randomString = '';
+            let randomNumber = (Math.round(Math.random() * 1000) % 3) + (Math.round(Math.random() * 1000) % 4) + 9;
+            for(let i = 0; i < randomNumber; ++i) {
+                const wordNumber = Math.round(Math.random() * 1000) % randomWords.length;
+                randomString += randomWords[wordNumber];
+                if(i !== randomNumber - 1) {
+                    randomString += ' ';
+                }
+            }
+            return randomString;
+        }
+
+        const candidate = await loginModel.findOne({username: username});
+        if(candidate) {
+            return {
+                user: userInfo,
+                description: candidate.description
+            }
+        }
+
+        const description = generateRandom();
+        if(userInfo && userInfo.data.data[0]) {
+            await loginModel.create({
+                username: userInfo.data.data[0].name,
+                description: description,
+                userId: userInfo.data.data[0].id
+            });
+        }
+
+        return {
+            user: userInfo,
+            description: description
+        };
     }
 
     async getUserBio(userId) {
         const userInfoResponse = await axios.get(`https://users.roblox.com/v1/users/${userId}`);
 
-        const userBio = userInfoResponse.data.description;
-
-        return userBio;
+        return userInfoResponse.data.description;
     }
 
     async getAvatar(userId) {
@@ -35,18 +70,30 @@ class UserService {
         return avatar;
     }
 
-    async saveToDB(userInfo) {
-        const username = userInfo.name;
-        const candidate = await userModel.findOne({username: username});
+    async verifyDescription(username) {
+        const userLogin = await loginModel.findOne({username: username});
+        if(!userLogin) {
+            return ApiError.BadRequest('No such login sessions');
+        }
+        const relevantBio = await this.getUserBio(userLogin.userId);
+        if(relevantBio) {
+            if(relevantBio === userLogin.description) { //change here to right equation
+                await loginModel.deleteOne({username: username});
+                return {match: 'failed'};
+            }
+        }
+        const candidate = await userModel.findOne({username: userLogin.username});
         if(candidate) {
             const user = candidate;
             const userDto = new UserDto(user);
 
             const tokens = tokenService.generateTokens({...userDto});
             await tokenService.saveToken(userDto.id, tokens.refreshToken);
+
+            await loginModel.deleteOne({username: username});
             return {...tokens, user: userDto};
         } else {
-            const avatar = await this.getAvatar(userInfo.id);
+            const avatar = await this.getAvatar(userLogin.userId);
             const today = new Date();
 
             const month = today.toLocaleString('en-US', { month: 'long' });
@@ -54,11 +101,13 @@ class UserService {
             const year = today.getFullYear();
 
             const formattedDate = `${month} ${day}, ${year}`;
-            const user = await userModel.create({username: userInfo.name, regDate: formattedDate, robloxId: userInfo.id, avatar: avatar});
+            const user = await userModel.create({username: userLogin.username, regDate: formattedDate, robloxId: userLogin.userId, avatar: avatar});
             const userDto = new UserDto(user);
 
             const tokens = tokenService.generateTokens({...userDto});
             await tokenService.saveToken(userDto.id, tokens.refreshToken);
+
+            await loginModel.deleteOne({username: username});
             return {...tokens, user: userDto};
         }
     }
@@ -85,11 +134,6 @@ class UserService {
         return {...tokens, user: userDto};
     }
 
-    async addItem(item, userId) {
-        const update = await userModel.findOneAndUpdate({robloxId: userId}, {$push: {itemsList: item}});
-        return update;
-    }
-
     async addExp(id, exp) {
         const user = await userModel.findById(id);
         const currExp = user.experience;
@@ -103,46 +147,111 @@ class UserService {
         return update;
     }
 
-    async claim(id) {
-        const claim = await userModel.updateOne({_id: id}, {gotReward: true});
+    async claim(refreshToken) {
+        const tokenData = await tokenService.findToken(refreshToken);
+        if(!tokenData) {
+            return ApiError.UnauthorizedError();
+        }
+        const id = tokenData.user;
+
+        await userModel.updateOne({_id: id}, {gotReward: true});
         const user = await userModel.findOne({_id: id});
         const lvl = user.lvl;
         const reward = await rewardModel.findOne({lvl: lvl});
-        const getBalance = await userModel.updateOne({_id: id}, {$inc: {balance: reward.gemsAmount}});
-        return claim;
+        await userModel.updateOne({_id: id}, {$inc: {balance: reward.gemsAmount}});
+        return 'success';
     }
 
-    async tip(from, to, amount) {
+    async tip(refreshToken, to, amount) {
+        const tokenData = await tokenService.findToken(refreshToken);
+        if(!tokenData) {
+            return ApiError.UnauthorizedError();
+        }
+
+        const userId = tokenData.user;
+        const user = await userModel.findOne({_id: userId});
+        if(!user) {
+            return ApiError.BadRequest('Unexpected error');
+        }
+
+        const from = user.username;
         const sender = await userModel.findOne({username: from});
         const receiver = await userModel.findOne({username: to});
+
         if(sender && sender.balance < amount) {
             return ApiError.BadRequest('Not enough balance!');
         } else if(!receiver) {
             return ApiError.BadRequest('The receiver does not exist!');
         }
-        const decrease = await userModel.updateOne({username: from}, {$inc: {balance: -amount}});
-        const increase = await userModel.updateOne({username: to}, {$inc: {balance: amount}});
-        return increase;
+
+        await userModel.updateOne({username: from}, {$inc: {balance: -amount}});
+        await userModel.updateOne({username: to}, {$inc: {balance: amount}});
+
+        return 'success';
     }
 
     async getLeaders() {
         const users = await userModel.find();
-        const leaders = users.sort((a, b) => b.totalWagered - a.totalWagered).slice(0, 20);
-        return leaders;
+        const leaders = users.sort((a, b) => b.totalWagered - a.totalWagered).slice(0, 15);
+        return leaders.map(leader => ({
+            username: leader.username,
+            avatar: leader.avatar,
+            totalWagered: leader.totalWagered,
+            gamesPlayed: leader.gamesPlayed,
+            lvl: leader.lvl
+        }));
     }
 
-    async getHistory(userId) {
-        const history = await historyModel.find({$or: [{player1: userId}, {player2: userId}]}).populate('player1').populate('player2');
+    async getHistory(refreshToken) {
+        const tokenData = await tokenService.findToken(refreshToken);
+        if(!tokenData) {
+            return ApiError.UnauthorizedError();
+        }
+        const userId = tokenData.user;
+        const history = await historyModel.find({$or: [{player1: userId}, {player2: userId}]}).
+        populate('player1', 'avatar').
+        populate('player2', 'avatar');
         return history;
     }
 
-    async getPayments(userId) {
+    async getPayments(userId, refreshToken) {
+        const tokenData = await tokenService.findToken(refreshToken);
+        if(!tokenData) {
+            return ApiError.UnauthorizedError();
+        }
+        const id = tokenData.user.toString();
+
+        const user = await userModel.findOne({_id: id});
+
+        if(id !== userId && (!user || user.role !== 'admin')) {
+            return ApiError.BadRequest('Not allowed!');
+        }
+
         const payments = await transactionModel.find({user: userId});
         return payments;
     }
 
-    async sendMessage(message) {
-        sendMessage(message);
+    async sendMessage(mes, refreshToken) {
+        const tokenData = await tokenService.findToken(refreshToken);
+        if(!tokenData) {
+            return ApiError.UnauthorizedError();
+        }
+        const userId = tokenData.user.toString();
+        const user = await userModel.findOne({_id: userId});
+        if(!user) {
+            return ApiError.BadRequest('Not allowed');
+        }
+
+        const fullMessage = {
+            message: mes.message,
+            id: mes.id,
+            time: mes.time,
+            user: user,
+            avatar: user.avatar,
+            method: mes.method
+        }
+
+        sendMessage(fullMessage);
         return null;
     }
 }

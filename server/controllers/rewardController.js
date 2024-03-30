@@ -13,8 +13,8 @@ class RewardController {
 
     async getReward(req, res, next) {
         try {
-            const {lvl} = req.body;
-            const reward = await rewardService.getReward(lvl);
+            const {refreshToken} = req.cookies;
+            const reward = await rewardService.getReward(refreshToken);
             return res.json(reward);
         } catch(e) {
             next(e);

@@ -58,14 +58,14 @@ function Support() {
 
     const handleSend = async () => {
         if(inputMessage.trim().length) {
-            await store.sendQuestion(inputMessage, store.user.id);
+            await store.sendQuestion(inputMessage);
             setInputMessage('');
             setDisabled(true);
         }
     }
 
     const openAnswers = async () => {
-        const response = await store.getAnswers(store.user.id);
+        const response = await store.getAnswers();
         if(response && response.data) {
             setAnswers(response.data);
         }

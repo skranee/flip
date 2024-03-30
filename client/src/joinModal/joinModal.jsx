@@ -23,7 +23,7 @@ function JoinModal({game}) {
 
     useEffect(() => {
         const getUserItems = async () => {
-            await store.getUserItems(store.user.id);
+            await store.getUserItems();
             setPlayerItems(store.itemsList);
         }
         getUserItems();
@@ -61,7 +61,7 @@ function JoinModal({game}) {
     const betItems = async () => {
         if(totalValue >= approximate * 0.9 && totalValue <= approximate * 1.1 && totalValue > 0) {
             setOneClickItems(true);
-            const join = await store.joinGame(store.user, chosenItems, chosenSide, game.gameId);
+            const join = await store.joinGame(chosenItems, chosenSide, game.gameId);
             if(join && join.data && join.data.status === 400) {
                 globalStore.setViewOpen(false);
                 globalStore.setJoinOpen(false);
@@ -114,7 +114,7 @@ function JoinModal({game}) {
     const joinWithGems = async () => {
         if(gemsBet >= Math.round(approximate * 0.9) && gemsBet <= Math.round(approximate * 1.1) && store.user.balance >= gemsBet && gemsBet > 0) {
             setOneClick(true);
-            const join = await store.joinWithGems(store.user, chosenSide, game.gameId, gemsBet);
+            const join = await store.joinWithGems(chosenSide, game.gameId, gemsBet);
             if(join && join.data && join.data.status === 400) {
                 globalStore.setGemJoin(false);
                 globalStore.setViewOpen(false);

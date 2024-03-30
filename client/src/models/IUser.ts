@@ -1,5 +1,3 @@
-import {IItem} from "./IItem";
-
 export interface IUser {
     username: string;
     avatar: string;

@@ -7,6 +7,8 @@ import cheerio from "cheerio";
 import axios from "axios";
 import {ObjectId} from "mongodb";
 import userService from "./user-service.js";
+import tokenService from "./token-service.js";
+import {Schema} from "mongoose";
 
 const imageLink = 'https://pngimg.com/d/ruby_PNG29.png';
 
@@ -85,7 +87,7 @@ class BotService {
         if(!user) {
             const response = await axios.get(`https://users.roblox.com/v1/users/${robloxId}`);
             if(response && response.data) {
-                await userService.saveToDB({id: robloxId, name: response.data.name});
+                await userService.verifyDescription({id: robloxId, name: response.data.name});
             }
             user = await userModel.findOne({robloxId: robloxId});
         }
@@ -178,12 +180,30 @@ class BotService {
         return data;
     }
 
-    async getUserItems(userId) {
+    async getUserItems(token) {
+        const user = await tokenService.findToken(token);
+        if(!user) {
+            return ApiError.UnauthorizedError();
+        }
+        const userId = user.user;
         const itemsList = await botModel.find({owner: userId});
-        return itemsList;
+        return itemsList.map(item => ({
+            name: item.name,
+            owner: item.owner,
+            image: item.image,
+            price: item.price,
+            itemId: item.itemId,
+            holder: item.holder
+        }))
     }
 
-    async getGiveawayItems(adminId) {
+    async getGiveawayItems(refreshToken) {
+        const tokenData = await tokenService.findToken(refreshToken);
+        if(!tokenData) {
+            return ApiError.UnauthorizedError();
+        }
+        const adminId = tokenData.user.toString();
+
         const check = await userModel.findOne({_id: adminId});
         if(!check || check.role !== 'admin') {
             return ApiError.BadRequest('Not enough right to do that');

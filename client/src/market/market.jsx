@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Context} from "../index";
 import coin from '../imgs/currImg.png'
 import { SlMagnifier } from "react-icons/sl";
@@ -19,7 +19,7 @@ function Market() {
     useEffect(() => {
         const getItems = async () => {
             if(store.user && store.user.id) {
-                await store.getUserItems(store.user.id);
+                await store.getUserItems();
             }
         }
         getItems();
@@ -79,7 +79,7 @@ function Market() {
     }
 
     const openSell = async () => {
-        await store.getUserItems(store.user.id);
+        await store.getUserItems();
         globalStore.setSellOpen(true);
     }
 

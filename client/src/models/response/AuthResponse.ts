@@ -9,7 +9,8 @@ export interface getUserResponse {
 }
 
 export interface AuthResponse {
-    accessToken: string;
-    refreshToken: string;
-    user: IUser;
+    accessToken?: string;
+    refreshToken?: string;
+    user?: IUser;
+    match?: string;
 }

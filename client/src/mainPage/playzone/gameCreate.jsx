@@ -20,7 +20,7 @@ function GameCreate() {
 
     useEffect(() => {
         const getUserItems = async () => {
-            await store.getUserItems(store.user.id);
+            await store.getUserItems();
             setPlayerItems(store.itemsList);
         }
         getUserItems();
@@ -43,7 +43,7 @@ function GameCreate() {
     }
     const createGame = async () => {
         setOneClickItems(true);
-        const game = await store.createGame(store.user, chosenItems, chosenSide);
+        const game = await store.createGame(chosenItems, chosenSide);
         if(game.data && game.data.status && game.data.status === 400) {
             globalStore.setErrorMessage('Can not create game with nothing');
             globalStore.setCreateOpen(false);
@@ -66,7 +66,7 @@ function GameCreate() {
 
     const createWithGems = async () => {
         setOneClickGems(true);
-        const create = await store.createWithGems(store.user, gemsBet, chosenSide);
+        const create = await store.createWithGems(gemsBet, chosenSide);
         if(create.data && create.data.status && create.data.status === 400) {
             globalStore.setErrorMessage('Can not create game with nothing');
             globalStore.setCreateOpen(false);

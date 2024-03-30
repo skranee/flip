@@ -3,8 +3,9 @@ import affiliateService from "../services/affiliateService.js";
 class affiliateController {
     async createAffiliate(req, res, next) {
         try {
-            const {key, code, userId} = req.body;
-            const create = await affiliateService.createAffiliate(key, code, userId);
+            const {refreshToken} = req.cookies;
+            const {code} = req.body;
+            const create = await affiliateService.createAffiliate(code, refreshToken);
             return res.json(create);
         } catch(e) {
             next(e);
@@ -13,8 +14,8 @@ class affiliateController {
 
     async getBalance(req, res, next) {
         try {
-            const {userId} = req.body;
-            const add = await affiliateService.getBalance(userId);
+            const {refreshToken} = req.cookies;
+            const add = await affiliateService.getBalance(refreshToken);
             return res.json(add);
         } catch(e) {
             next(e);
@@ -23,8 +24,8 @@ class affiliateController {
 
     async getAffiliate(req, res, next) {
         try {
-            const userId = req.query.userId;
-            const system = await affiliateService.getAffiliate(userId);
+            const {refreshToken} = req.cookies;
+            const system = await affiliateService.getAffiliate(refreshToken);
             return res.json(system);
         } catch(e) {
             next(e);
@@ -43,8 +44,8 @@ class affiliateController {
 
     async linkCode(req, res, next) {
         try {
-            const {key, code} = req.body;
-            const link = await affiliateService.linkCode(key, code);
+            const {code} = req.body;
+            const link = await affiliateService.linkCode(code);
             return res.json(link);
         } catch(e) {
             next(e);

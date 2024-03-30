@@ -8,28 +8,24 @@ import IPayment from "../models/IPayment";
 
 
 export default class UserService {
-    static async addItem(item: IItem, userId: string): Promise<AxiosResponse> {
-        return $api.put('/addItem', {item, userId});
+    static async getReward(): Promise<AxiosResponse<RewardResponse>> {
+        return $api.post(`/getReward`);
     }
 
-    static async getReward(lvl: number): Promise<AxiosResponse<RewardResponse>> {
-        return $api.post(`/getReward`, {lvl});
+    static async claim(): Promise<AxiosResponse> {
+        return $api.put('/claim');
     }
 
-    static async claim(id: string): Promise<AxiosResponse> {
-        return $api.put('/claim', {id});
-    }
-
-    static async tip(from: string, to: string, amount: number): Promise<AxiosResponse> {
-        return $api.patch('/tip', {from, to, amount});
+    static async tip(to: string, amount: number): Promise<AxiosResponse> {
+        return $api.patch('/tip', {to, amount});
     }
 
     static async getLeaders(): Promise<AxiosResponse<IUser[]>> {
         return $api.get('/leaders');
     }
 
-    static async getHistory(userId: string): Promise<AxiosResponse<IHistory[]>> {
-        return $api.get(`/history?userId=${userId}`)
+    static async getHistory(): Promise<AxiosResponse<IHistory[]>> {
+        return $api.get(`/history`)
     }
 
     static async getPayments(userId: string): Promise<AxiosResponse<IPayment[]>> {

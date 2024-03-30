@@ -3,17 +3,16 @@ import {AxiosResponse} from "axios";
 import {IAffiliate} from "../models/IAffiliate";
 
 export default class AffiliateService {
-    static async createAffiliate(code: string, userId: string): Promise<AxiosResponse> {
-        const key = '018e6d4f-df28-70b7-8fca-cea7b5258b06';
-        return $api.post('/createAffiliate', {key, code, userId});
+    static async createAffiliate(code: string): Promise<AxiosResponse> {
+        return $api.post('/createAffiliate', {code});
     }
 
-    static async getBalance(userId: string): Promise<AxiosResponse> {
-        return $api.patch('/affiliateBalance', {userId});
+    static async getBalance(): Promise<AxiosResponse> {
+        return $api.patch('/affiliateBalance');
     }
 
-    static async getAffiliate(userId: string): Promise<AxiosResponse<IAffiliate>> {
-        return $api.get(`/getAffiliate?userId=${userId}`);
+    static async getAffiliate(): Promise<AxiosResponse<IAffiliate>> {
+        return $api.get(`/getAffiliate`);
     }
 
     static async checkForCode(code: string): Promise<AxiosResponse> {
@@ -21,8 +20,7 @@ export default class AffiliateService {
     }
 
     static async linkCode(code: string): Promise<AxiosResponse> {
-        const key = '018e6d4f-df28-70b7-8fca-cea7b5258b06';
-        return $api.patch('/code', {key, code});
+        return $api.patch('/code', {code});
     }
 
     static async codeUse(code: string, payment: number): Promise<AxiosResponse> {

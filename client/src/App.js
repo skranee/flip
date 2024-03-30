@@ -5,7 +5,7 @@ import FaqBeneath from "./faqBeneath";
 import Chat from "./chat/chat";
 import {Context} from "./index";
 import NavigationPanel from "./mainPage/navigation/navigation";
-import {redirect, Route, Routes, useNavigate} from "react-router-dom";
+import {Route, Routes, useNavigate} from "react-router-dom";
 import Profile from "./profile/profile";
 import Market from "./market/market";
 import Rewards from "./rewards/rewards";
@@ -55,6 +55,18 @@ function App() {
     }, [])
 
     useEffect(() => {
+        // function getCookie(name) {
+        //     const nameLenPlus = (name.length + 1);
+        //     return document.cookie
+        //         .split(';')
+        //         .map(c => c.trim())
+        //         .filter(cookie => {
+        //             return cookie.substring(0, nameLenPlus) === `${name}=`;
+        //         })
+        //         .map(cookie => {
+        //             return decodeURIComponent(cookie.substring(nameLenPlus));
+        //         })[0] || null;
+        // }
         if(localStorage.getItem('token')) {
             store.checkAuth();
         }

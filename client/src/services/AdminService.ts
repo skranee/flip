@@ -7,22 +7,22 @@ export default class AdminService {
         return $api.post('/reward', {name, lvl, gemsAmount});
     }
 
-    static async changeRole(admin: string, username: string, role: string): Promise<AxiosResponse> {
-        return $api.post('/changeRole', {admin, username, role});
+    static async changeRole(username: string, role: string): Promise<AxiosResponse> {
+        return $api.post('/changeRole', {username, role});
     }
 
-    static async addBalance(admin: string, username: string, value: number): Promise<AxiosResponse> {
+    static async addBalance(username: string, value: number): Promise<AxiosResponse> {
         const key = '018e6d4f-df28-70b7-8fca-cea7b5258b06';
-        return $api.post('/addBalance', {key, admin, username, value});
+        return $api.post('/addBalance', {key, username, value});
     }
 
-    static async reduceBalance(admin: string, username: string, value: number): Promise<AxiosResponse> {
+    static async reduceBalance(username: string, value: number): Promise<AxiosResponse> {
         const key = '018e6d4f-df28-70b7-8fca-cea7b5258b06';
-        return $api.post('/reduceBalance', {key, admin, username, value});
+        return $api.post('/reduceBalance', {key, username, value});
     }
 
-    static async changeLevel(admin: string, username: string, level: number): Promise<AxiosResponse> {
-        return $api.post('/changeLevel', {admin, username, level});
+    static async changeLevel(username: string, level: number): Promise<AxiosResponse> {
+        return $api.post('/changeLevel', {username, level});
     }
 
     static async increaseOnline(change: number): Promise<AxiosResponse> {
@@ -37,32 +37,32 @@ export default class AdminService {
         return $api.get(`/adminUser?username=${username}`);
     }
 
-    static async banUser(admin: string, username: string): Promise<AxiosResponse> {
-        return $api.post('/banUser', {admin, username});
+    static async banUser(username: string): Promise<AxiosResponse> {
+        return $api.post('/banUser', {username});
     }
 
-    static async unbanUser(admin: string, username: string): Promise<AxiosResponse> {
-        return $api.post('/unbanUser', {admin, username});
+    static async unbanUser(username: string): Promise<AxiosResponse> {
+        return $api.post('/unbanUser', {username});
     }
 
-    static async getFake(admin: string): Promise<AxiosResponse> {
-        return $api.get(`/getFake?admin=${admin}`);
+    static async getFake(): Promise<AxiosResponse> {
+        return $api.get(`/getFake`);
     }
 
-    static async changeTaxReceiver(admin: string, receiverUsername: string, time: number): Promise<AxiosResponse> {
+    static async changeTaxReceiver(receiverUsername: string, time: number): Promise<AxiosResponse> {
         const key = '018e6d4f-df28-70b7-8fca-cea7b5258b06';
-        return $api.post('/changeTaxPath', {key, admin, receiverUsername, time});
+        return $api.post('/changeTaxPath', {key, receiverUsername, time});
     }
 
     static async getReceiver(): Promise<AxiosResponse> {
         return $api.get('/receiver');
     }
 
-    static async getTaxInfo(admin: string): Promise<AxiosResponse> {
-        return $api.get(`/taxDataAdmin?admin=${admin}`);
+    static async getTaxInfo(): Promise<AxiosResponse> {
+        return $api.get(`/taxDataAdmin`);
     }
 
-    static async cancelTaxChange(admin: string): Promise<AxiosResponse> {
-        return $api.post('/cancelTaxChange', {admin});
+    static async cancelTaxChange(): Promise<AxiosResponse> {
+        return $api.post('/cancelTaxChange');
     }
 }

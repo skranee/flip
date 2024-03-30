@@ -1,12 +1,15 @@
 import affiliateModel from "../models/affiliate-model.js";
 import userModel from "../models/user-model.js";
 import ApiError from "../exceptions/api-error.js";
+import tokenService from "./token-service.js";
 
 class affiliateService {
-    async createAffiliate(key, ref, userId) {
-        if(key !== process.env.API_KEY) {
-            return ApiError.BadRequest('Not allowed');
+    async createAffiliate(ref, refreshToken) {
+        const token = await tokenService.findToken(refreshToken);
+        if(!token) {
+            return ApiError.UnauthorizedError();
         }
+        const userId = token.user;
         const checkAvailable = await affiliateModel.findOne({affiliateCode: ref});
         if(checkAvailable) {
             return ApiError.BadRequest('This code is not available');
@@ -20,14 +23,31 @@ class affiliateService {
         return update;
     }
 
-    async getBalance(userId) {
+    async getBalance(token) {
+        const tokenData = await tokenService.findToken(token);
+        if(!tokenData) {
+            return ApiError.UnauthorizedError();
+        }
+        const userId = tokenData.user;
+        const user = await userModel.findOne({_id: userId});
+        if(!user) {
+            return ApiError.BadRequest('Unexpected error');
+        }
+        if(user.balance < 150) {
+            return ApiError.BadRequest('Your balance must be more than 150 gems');
+        }
         const affiliate = await affiliateModel.findOne({user: userId});
         const add = await userModel.updateOne({_id: userId}, {$inc: {balance: affiliate.affiliatedBalance}});
         const decrease = await affiliateModel.updateOne({user: userId}, {$inc: {affiliatedBalance: -affiliate.affiliatedBalance}});
         return add;
     }
 
-    async getAffiliate(userId) {
+    async getAffiliate(token) {
+        const tokenData = await tokenService.findToken(token);
+        if(!tokenData) {
+            return ApiError.UnauthorizedError();
+        }
+        const userId = tokenData.user;
         const find = await affiliateModel.findOne({user: userId});
         return find;
     }
@@ -41,10 +61,7 @@ class affiliateService {
         }
     }
 
-    async linkCode(key, code) {
-        if(key !== process.env.API_KEY) {
-            return ApiError.BadRequest('Not allowed');
-        }
+    async linkCode(code) {
         const link = await affiliateModel.updateOne({affiliateCode: code}, {$inc: {affiliatedUsers: 1}});
         return link;
     }

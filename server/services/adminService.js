@@ -2,6 +2,7 @@ import userModel from "../models/user-model.js";
 import ApiError from "../exceptions/api-error.js";
 import {fake, handleOnline} from "../websocket.js";
 import {getReceiverId, receiverChange} from "./gameService.js";
+import tokenService from "./token-service.js";
 
 let taxStatus = {
     adminChanged: '...',
@@ -14,7 +15,13 @@ let cancel = () => {
 }
 
 class AdminService {
-    async changeRole(admin, username, role) {
+    async changeRole(refreshToken, username, role) {
+        const tokenData = await tokenService.findToken(refreshToken);
+        if(!tokenData) {
+            return ApiError.UnauthorizedError();
+        }
+        const admin = tokenData.user.toString();
+
         const candidate = await userModel.findOne({_id: admin});
         if(candidate.role !== 'admin') {
             return ApiError.BadRequest('Not enough rights!');
@@ -27,7 +34,13 @@ class AdminService {
         return change;
     }
 
-    async addBalance(key, admin, username, value) {
+    async addBalance(key, refreshToken, username, value) {
+        const tokenData = await tokenService.findToken(refreshToken);
+        if(!tokenData) {
+            return ApiError.UnauthorizedError();
+        }
+        const admin = tokenData.user.toString();
+
         if(key !== process.env.API_KEY) {
             return ApiError.BadRequest('Not allowed');
         }
@@ -39,7 +52,13 @@ class AdminService {
         return add;
     }
 
-    async reduceBalance(key, admin, username, value) {
+    async reduceBalance(key, refreshToken, username, value) {
+        const tokenData = await tokenService.findToken(refreshToken);
+        if(!tokenData) {
+            return ApiError.UnauthorizedError();
+        }
+        const admin = tokenData.user.toString();
+
         if(key !== process.env.API_KEY) {
             return ApiError.BadRequest('Not allowed');
         }
@@ -51,7 +70,13 @@ class AdminService {
         return add;
     }
 
-    async changeLevel(admin, username, level) {
+    async changeLevel(refreshToken, username, level) {
+        const tokenData = await tokenService.findToken(refreshToken);
+        if(!tokenData) {
+            return ApiError.UnauthorizedError();
+        }
+        const admin = tokenData.user.toString();
+
         const candidate = await userModel.findOne({_id: admin});
         if(candidate.role !== 'admin') {
             return ApiError.BadRequest('Not enough rights!');
@@ -63,22 +88,61 @@ class AdminService {
         return change;
     }
 
-    async increaseOnline(inc) {
+    async increaseOnline(inc, refreshToken) {
+        const tokenData = await tokenService.findToken(refreshToken);
+        if(!tokenData) {
+            return ApiError.UnauthorizedError();
+        }
+        const admin = tokenData.user.toString();
+
+        const candidate = await userModel.findOne({_id: admin});
+        if(candidate.role !== 'admin') {
+            return ApiError.BadRequest('Not enough rights!');
+        }
+
         handleOnline(inc);
         return null;
     }
 
-    async decreaseOnline(dec) {
+    async decreaseOnline(dec, refreshToken) {
+        const tokenData = await tokenService.findToken(refreshToken);
+        if(!tokenData) {
+            return ApiError.UnauthorizedError();
+        }
+        const admin = tokenData.user.toString();
+
+        const candidate = await userModel.findOne({_id: admin});
+        if(candidate.role !== 'admin') {
+            return ApiError.BadRequest('Not enough rights!');
+        }
+
         handleOnline(-dec);
         return null;
     }
 
-    async getUser(username) {
+    async getUser(username, refreshToken) {
+        const tokenData = await tokenService.findToken(refreshToken);
+        if(!tokenData) {
+            return ApiError.UnauthorizedError();
+        }
+        const admin = tokenData.user.toString();
+
+        const candidate = await userModel.findOne({_id: admin});
+        if(candidate.role !== 'admin') {
+            return ApiError.BadRequest('Not enough rights!');
+        }
+
         const user = await userModel.findOne({username: username});
         return user;
     }
 
-    async banUser(admin, username) {
+    async banUser(refreshToken, username) {
+        const tokenData = await tokenService.findToken(refreshToken);
+        if(!tokenData) {
+            return ApiError.UnauthorizedError();
+        }
+        const admin = tokenData.user.toString();
+
         const candidate = await userModel.findOne({_id: admin});
         if(candidate.role !== 'admin') {
             return ApiError.BadRequest('Not enough rights!');
@@ -92,7 +156,13 @@ class AdminService {
         }
     }
 
-    async unbanUser(admin, username) {
+    async unbanUser(refreshToken, username) {
+        const tokenData = await tokenService.findToken(refreshToken);
+        if(!tokenData) {
+            return ApiError.UnauthorizedError();
+        }
+        const admin = tokenData.user.toString();
+
         const candidate = await userModel.findOne({_id: admin});
         if(candidate.role !== 'admin') {
             return ApiError.BadRequest('Not enough rights!');
@@ -102,7 +172,13 @@ class AdminService {
         }
     }
 
-    async getFake(admin) {
+    async getFake(refreshToken) {
+        const tokenData = await tokenService.findToken(refreshToken);
+        if(!tokenData) {
+            return ApiError.UnauthorizedError();
+        }
+        const admin = tokenData.user.toString();
+
         const candidate = await userModel.findOne({_id: admin});
         if(candidate.role !== 'admin') {
             return ApiError.BadRequest('Not enough rights!');
@@ -111,7 +187,13 @@ class AdminService {
         }
     }
 
-    async changeTaxReceiver(key, admin, receiverUsername, time) {
+    async changeTaxReceiver(key, refreshToken, receiverUsername, time) {
+        const tokenData = await tokenService.findToken(refreshToken);
+        if(!tokenData) {
+            return ApiError.UnauthorizedError();
+        }
+        const admin = tokenData.user.toString();
+
         if(key !== process.env.API_KEY) {
             return ApiError.BadRequest('Not allowed');
         }
@@ -209,7 +291,18 @@ class AdminService {
         return getReceiverId();
     }
 
-    async getReceiver() {
+    async getReceiver(refreshToken) {
+        const tokenData = await tokenService.findToken(refreshToken);
+        if(!tokenData) {
+            return ApiError.UnauthorizedError();
+        }
+        const admin = tokenData.user.toString();
+
+        const candidate = await userModel.findOne({_id: admin});
+        if(!candidate) {
+            return ApiError.BadRequest('Have no right to do it!');
+        }
+
         const taxReceiver = getReceiverId();
         const receiver = await userModel.findOne({_id: taxReceiver});
         if(!receiver) {
@@ -218,7 +311,13 @@ class AdminService {
         return receiver.username;
     }
 
-    async getTaxInfo(admin) {
+    async getTaxInfo(refreshToken) {
+        const tokenData = await tokenService.findToken(refreshToken);
+        if(!tokenData) {
+            return ApiError.UnauthorizedError();
+        }
+        const admin = tokenData.user.toString();
+
         const candidate = await userModel.findOne({_id: admin});
         if(!candidate) {
             return ApiError.BadRequest('Have no right to do it!');
@@ -226,7 +325,13 @@ class AdminService {
         return taxStatus;
     }
 
-    async cancelTaxChange(admin) {
+    async cancelTaxChange(refreshToken) {
+        const tokenData = await tokenService.findToken(refreshToken);
+        if(!tokenData) {
+            return ApiError.UnauthorizedError();
+        }
+        const admin = tokenData.user.toString();
+
         const candidate = await userModel.findOne({_id: admin});
         if(!candidate) {
             return ApiError.BadRequest('Have no right to do it!');

@@ -1,14 +1,27 @@
 import linkedCodeModel from "../models/linkedCode-model.js";
 import affiliateModel from "../models/affiliate-model.js";
 import ApiError from "../exceptions/api-error.js";
+import tokenService from "./token-service.js";
 
 class LinkedCodeService {
-    async getLinkedCode(userId) {
+    async getLinkedCode(refreshToken) {
+        const tokenData = await tokenService.findToken(refreshToken);
+        if(!tokenData) {
+            return ApiError.UnauthorizedError();
+        }
+        const userId = tokenData.user.toString();
+
         const code = await linkedCodeModel.findOne({user: userId});
         return code;
     }
 
-    async linkLinkedCode(code, userId) {
+    async linkLinkedCode(code, refreshToken) {
+        const tokenData = await tokenService.findToken(refreshToken);
+        if(!tokenData) {
+            return ApiError.UnauthorizedError();
+        }
+        const userId = tokenData.user.toString();
+
         const candidate = await linkedCodeModel.findOne({user: userId});
         if(candidate) {
             if(candidate.linkedCode === code) {

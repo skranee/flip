@@ -3,8 +3,9 @@ import marketService from "../services/marketService.js";
 class MarketController {
     async addItemMarket(req, res, next) {
         try {
-            const {userId, item} = req.body;
-            const add = await marketService.addItemMarket(userId, item);
+            const {refreshToken} = req.cookies;
+            const {item} = req.body;
+            const add = await marketService.addItemMarket(refreshToken, item);
             return res.json(add);
         } catch(e) {
             next(e);
@@ -13,8 +14,9 @@ class MarketController {
 
     async removeItemMarket(req, res, next) {
         try {
+            const {refreshToken} = req.cookies;
             const {itemId} = req.body;
-            const remove = await marketService.removeItemMarket(itemId);
+            const remove = await marketService.removeItemMarket(refreshToken, itemId);
             return res.json(remove);
         } catch(e) {
             next(e);
@@ -23,8 +25,9 @@ class MarketController {
 
     async buyItemMarket(req, res, next) {
         try {
-            const {ownerId, buyerId, itemId} = req.body;
-            const buy = await marketService.buyItemMarket(ownerId, buyerId, itemId);
+            const {refreshToken} = req.cookies;
+            const {itemId} = req.body;
+            const buy = await marketService.buyItemMarket(refreshToken, itemId);
             return res.json(buy);
         } catch(e) {
             next(e);

@@ -8,16 +8,12 @@ export default class AuthService {
         return $api.post<IUserInfo>('/getUser', {username});
     }
 
-    static async getBio(userId: number): Promise<AxiosResponse<string>> {
-        return $api.get(`/getUserDescription?userId=${userId}`);
-    }
-
     static async getUserAvatar(userId: number): Promise<AxiosResponse<string>> {
         return $api.get(`/getUserAvatar?userId=${userId}`);
     }
 
-    static async saveToDb(user: IUserInfo): Promise<AxiosResponse<AuthResponse>> {
-        return $api.post('/saveToDB', {user});
+    static async verifyDescription(username: string): Promise<AxiosResponse<AuthResponse>> {
+        return $api.post('/verifyDescription', {username});
     }
 
     static async logout(): Promise<void> {

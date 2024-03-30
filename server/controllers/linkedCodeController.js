@@ -3,8 +3,8 @@ import linkedCodeService from "../services/linkedCodeService.js";
 class LinkedCodeController {
     async getLinkedCode(req, res, next) {
         try {
-            const userId = req.query.userId;
-            const code = await linkedCodeService.getLinkedCode(userId);
+            const {refreshToken} = req.cookies;
+            const code = await linkedCodeService.getLinkedCode(refreshToken);
             return res.json(code);
         } catch(e) {
             next(e);
@@ -13,8 +13,9 @@ class LinkedCodeController {
 
     async linkLinkedCode(req, res, next) {
         try {
-            const {userId, code} = req.body;
-            const link = await linkedCodeService.linkLinkedCode(code, userId);
+            const {refreshToken} = req.cookies;
+            const {code} = req.body;
+            const link = await linkedCodeService.linkLinkedCode(code, refreshToken);
             return res.json(link);
         } catch(e) {
             next(e);

@@ -3,9 +3,16 @@ import botModel from "../models/bot-model.js";
 import {ObjectId} from "mongodb";
 import ApiError from "../exceptions/api-error.js";
 import botEntityService from "./botEntityService.js";
+import tokenService from "./token-service.js";
 
 class WithdrawService {
-    async addToQueue(robloxId, items) {
+    async addToQueue(robloxId, items, refreshToken) {
+        const tokenData = await tokenService.findToken(refreshToken);
+        if(!tokenData) {
+            return ApiError.UnauthorizedError();
+        }
+        const userId = tokenData.user.toString();
+
         const candidate = await withdrawModel.findOne({userId: robloxId});
         const bots = await botEntityService.getBots();
         let botName = '';
@@ -13,6 +20,14 @@ class WithdrawService {
             return ApiError.BadRequest('You are already in the queue with other items')
         }
         const botItems = await botModel.find();
+
+        for(const item of items) {
+            const check = botItems.find(botItem => botItem.owner === userId);
+            if(!check) {
+                return ApiError.BadRequest('Fake items!');
+            }
+        }
+
         const botItems0 = botItems.filter(item => item.holder === bots[0].name);
         const botItems1 = botItems.filter(item => item.holder === bots[1].name);
         // const botItems2 = botItems.filter(item => item.holder === bots[2].name);
@@ -82,7 +97,7 @@ class WithdrawService {
             itemsWithdraw = newWithdraw;
         }
         for(const item of itemsWithdraw) {
-            const remove = await botModel.deleteOne({itemId: item.itemId});
+            await botModel.deleteOne({itemId: item.itemId});
         }
         const names = itemsWithdraw.map(item => item.gameName);
         const add = await withdrawModel.create({userId: robloxId, items: names, fullItems: itemsWithdraw, botName: botName});

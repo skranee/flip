@@ -21,7 +21,9 @@ $api.interceptors.response.use((config) => {
         originalRequest._isRetry = true;
         try {
             const response = await axios.get<AuthResponse>(`${API_URL}/refresh`, {withCredentials: true});
-            localStorage.setItem('token', response.data.accessToken);
+            if(response && response.data && response.data.accessToken) {
+                localStorage.setItem('token', response.data.accessToken);
+            }
             return $api.request(originalRequest);
         } catch(e) {
             console.log('not authorized')

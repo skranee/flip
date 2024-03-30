@@ -3,8 +3,8 @@ import {AxiosResponse} from "axios";
 import {IItem} from "../models/IItem";
 
 export default class MarketService {
-    static async addItemMarket(userId: string, item: IItem): Promise <AxiosResponse> {
-        return $api.post('/market', {userId, item});
+    static async addItemMarket(item: IItem): Promise <AxiosResponse> {
+        return $api.post('/market', {item});
     }
 
     static async getItemsMarket(): Promise <AxiosResponse<IItem[]>> {
@@ -15,7 +15,7 @@ export default class MarketService {
         return $api.post('/marketRemove', {itemId});
     }
 
-    static async buyItemMarket(ownerId: string, buyerId: string, itemId: string): Promise <AxiosResponse> {
-        return $api.put('/market', {ownerId, buyerId, itemId});
+    static async buyItemMarket(itemId: string): Promise <AxiosResponse> {
+        return $api.put('/market', {itemId});
     }
 }

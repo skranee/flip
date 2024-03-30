@@ -431,8 +431,6 @@ export const banWords = [
 
         "hell",
 
-        "ho",
-
         "hoe",
 
         "homo",
