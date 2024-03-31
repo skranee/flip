@@ -679,6 +679,12 @@ export const banWords = [
 
     "bloxpvp.com",
 
+    "bIoxpvp.com",
+
+    "bl0xpvp.com",
+
+    "omar",
+
     ".gg",
 
     "omar"
