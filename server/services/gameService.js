@@ -251,7 +251,7 @@ class GameService {
             if(game.items1 && game.items1.length > 0) {
                 const itemsFirst = game.items1;
                 const totalValue = itemsFirst.reduce((a, b) => a + b.price, 0);
-                if(Math.round(totalValue * 0.9) >= gemsAmount || Math.round(totalValue * 1.1) <= gemsAmount) {
+                if(Math.round(totalValue * 0.9) > gemsAmount || Math.round(totalValue * 1.1) < gemsAmount) {
                     return ApiError.BadRequest('Not allowed');
                 }
 
