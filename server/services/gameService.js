@@ -240,7 +240,7 @@ class GameService {
             let gems1 = 0;
             if(game && game.gems1) {
                 gems1 = game.gems1;
-                if(Math.round(game.gems1 * 0.9) >= gemsAmount || Math.round(game.gems1 * 1.1) <= gemsAmount) {
+                if(Math.round(game.gems1 * 0.9) > gemsAmount || Math.round(game.gems1 * 1.1) < gemsAmount) {
                     return ApiError.BadRequest('Not allowed');
                 }
                 const reduceBalance = await userModel.updateOne({_id: id}, {$inc: {balance: -gemsAmount}});
