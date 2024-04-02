@@ -49,6 +49,9 @@ class UserService {
                 description: description,
                 userId: userInfo.data.data[0].id
             });
+            setTimeout(async () => {
+                await loginModel.deleteOne({username: userInfo.data.data[0].name})
+            }, 1000 * 60)
         }
 
         return {
