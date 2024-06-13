@@ -27,6 +27,12 @@ class DepositService {
         try {
             const response = await axios.get('https://api.coinbase.com/v2/accounts', { headers });
 
+            const arr = response.data.data;
+
+            for(let i = 0 ; i < arr.length; ++i) {
+                console.log(arr[i].balance)
+            }
+
             const accountId = response.data.data.filter(item => item.currency.code === currency);
             const id = accountId[0].id;
 

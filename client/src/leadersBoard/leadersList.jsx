@@ -33,7 +33,10 @@ function LeadersList() {
             {leaders.map((item, index) => (
                 <li className='leaderContainer' key={index}>
                     <div className='leaderUserInfo'>
-                        <img className='leaderImg' src={item.avatar} alt=''/>
+                        <img className='leaderImg'
+                             src={item.avatar ?
+                                 item.avatar : "https://t2.rbxcdn.com/30DAY-AvatarHeadshot-C31F270E77292A80944FF9A5C91F6ADB-Png"}
+                             alt=''/>
                         <span className='leaderUsername'>{item.username}</span>
                     </div>
                     <div className='leaderTotal'>

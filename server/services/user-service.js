@@ -80,14 +80,16 @@ class UserService {
         }
         const relevantBio = await this.getUserBio(userLogin.userId);
         if(relevantBio) {
-            if(relevantBio !== userLogin.description) {
+            if(relevantBio === userLogin.description) { //change
                 await loginModel.deleteOne({username: username});
                 return {match: 'failed'};
             }
         }
         const candidate = await userModel.findOne({username: userLogin.username});
         if(candidate) {
-            const user = candidate;
+            const avatar = await this.getAvatar(userLogin.userId);
+            await userModel.updateOne({username: username}, {avatar: avatar});
+            const user = await userModel.findOne({username: username});
             const userDto = new UserDto(user);
 
             const tokens = tokenService.generateTokens({...userDto});
