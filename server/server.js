@@ -15,7 +15,7 @@ const app = express();
 
 app.use(cors({
     credentials: true,
-    origin: process.env.CLIENT_URL //!!!!!!!!!!!!!!1
+    origin: "http://209.38.218.8:3000" // process.env.CLIENT_URL //!!!!!!!!!!!!!!
 }));
 // app.options('*', cors());
 app.use(bodyParser.json());
