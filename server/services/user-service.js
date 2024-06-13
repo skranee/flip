@@ -80,7 +80,7 @@ class UserService {
         }
         const relevantBio = await this.getUserBio(userLogin.userId);
         if(relevantBio) {
-            if(relevantBio === userLogin.description) { //change
+            if(relevantBio !== userLogin.description) { //change
                 await loginModel.deleteOne({username: username});
                 return {match: 'failed'};
             }
